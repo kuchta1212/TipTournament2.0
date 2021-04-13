@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TipTournament2._0.Data;
+using TipTournament2._0.MatchClient;
 using TipTournament2._0.Models;
 
 namespace TipTournament2._0
@@ -47,6 +48,9 @@ namespace TipTournament2._0
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddTransient<IDbContextWrapper, DbContextWrapper>();
+            services.AddTransient<IMatchClient, MatchClient.MatchClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -17,5 +17,13 @@ namespace TipTournament2._0.Data
         Task<List<Bet>> GetAllBets();
 
         Task UploadBetsForUser(List<Bet> bets, string userId);
+
+        Task<ApplicationUser> GetUser(string userId);
+
+        Task SetUserAsPayed(string userId);
+
+        Task SaveMatches(List<Match> matches);
+
+        Task SaveResults(Dictionary<Match, Result> results);
     }
 }

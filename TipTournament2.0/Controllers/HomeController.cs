@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using TipTournament2._0.Data;
-using TipTournament2._0.Models;
-
-namespace TipTournament2._0.Controllers
+﻿namespace TipTournament2._0.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using TipTournament2._0.Data;
+    using TipTournament2._0.Models;
+
     [AllowAnonymous]
     [ApiController]
-    [Route("home")]
+    [Route("")]
     public class HomeController : Controller
     {
         private readonly IDbContextWrapper context;
@@ -50,13 +50,25 @@ namespace TipTournament2._0.Controllers
 
             return users.Select(x => new { key = x, value = bets.Where(b => b.User == x) }).ToDictionary(e => e.key, e => e.value);
         }
-        
-        
+                
         [HttpPost("bets")]
         public async Task UploadBets([FromBody]List<Bet> bets)
         {
             var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-            return await this.context.UploadBetsForUser(bets, userId);
+            await this.context.UploadBetsForUser(bets, userId);
+        }
+
+        [HttpGet("user/payed")]
+        public async Task<bool> DidPayed()
+        {
+            var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var user = await this.context.GetUser(userId);
+                return user.Payed;
+            }
+
+            return false;
         }
     }
 }
