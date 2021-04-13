@@ -28,6 +28,27 @@ namespace TipTournament2._0.MatchClient
         public async Task<List<Match>> LoadMatches()
         {
             var matches = new List<Match>();
+            var data = await this.LoadData();
+
+            foreach(var record in data)
+            {
+                var match = new Match()
+                { 
+                    HomeTeam = record.HomeTeam,
+                    AwayTeam = record.AwayTeam,
+                    Link = record.Link,
+                    StartTime = DateTime.ParseExact(record.Date, "dd. M. yyyy", CultureInfo.InvariantCulture)
+                        .AddHours(int.Parse(record.TimeOrResult.Split(':')[0]))
+                        .AddMinutes(int.Parse(record.TimeOrResult.Split(':')[1]))
+                };
+                matches.Add(match);
+            }
+            return matches;
+        }
+
+        private async Task<List<HtmlRecord>> LoadData()
+        {
+            var records = new List<HtmlRecord>();
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(Uri);
 
@@ -38,54 +59,53 @@ namespace TipTournament2._0.MatchClient
 
                 var bytes = await response.Content.ReadAsByteArrayAsync();
                 var html = Encoding.UTF8.GetString(bytes);
-  
+
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(html);
                 var htmlNode = htmlDocument.GetElementbyId("table-los");
                 var groups = htmlNode.SelectNodes("//tr[@class='r1']");
-                foreach(var group in groups)
+                foreach (var group in groups)
                 {
-                    var match = new Match();
+                    var record = new HtmlRecord();
                     var index = 0;
-                    foreach(var item in group.ChildNodes)
+                    foreach (var item in group.ChildNodes)
                     {
-                        if(item.Name != "td")
+                        if (item.Name != "td")
                         {
                             continue;
                         }
 
                         if (item.HasClass("tal") && index == 0)
                         {
-                            match.StartTime = DateTime.ParseExact(item.InnerHtml, "dd. M. yyyy", CultureInfo.InvariantCulture);
+                            record.Date = item.InnerHtml;
                         }
 
                         if (item.HasClass("tac") && index == 1)
                         {
-                            match.HomeTeam = item.InnerText;
+                            record.HomeTeam = item.InnerText;
                         }
-                        
+
                         if (item.HasClass("tac") && index == 2)
                         {
-                            match.AwayTeam = item.InnerText;
+                            record.AwayTeam = item.InnerText;
                         }
 
                         if (item.HasClass("tac") && index == 3)
                         {
-                            //time
-                            var time = item.InnerText;
-                            match.StartTime = match.StartTime.AddHours(int.Parse(time.Split(':')[0])).AddMinutes(int.Parse(time.Split(':')[1]));
-                            match.Link = item.ChildNodes.First().Attributes.First().Value;
+ 
+                            record.TimeOrResult = item.InnerText;
+                            record.Link = item.ChildNodes.First().Attributes.First().Value;
                         }
                         index++;
                     }
-                    matches.Add(match);
-                    if(matches.Count == 36)
+                    records.Add(record);
+                    if (records.Count == 36)
                     {
                         break;
                     }
                 }
             }
-            return matches;
+            return records;
         }
     }
 }
