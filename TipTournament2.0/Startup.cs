@@ -11,7 +11,6 @@ namespace TipTournament2._0
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Swashbuckle.Swagger;
     using TipTournament2._0.Calculator;
     using TipTournament2._0.Coordinator;
     using TipTournament2._0.Data;
