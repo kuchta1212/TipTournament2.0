@@ -15,6 +15,13 @@
         private readonly IDbContextWrapper dbContextWrapper;
         private readonly IBetResultMaker betResultMaker;
 
+        public ResultCoordinator(IMatchClient matchClient, IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker)
+        {
+            this.matchClient = matchClient;
+            this.dbContextWrapper = dbContextWrapper;
+            this.betResultMaker = betResultMaker;
+        }
+
         public async Task<int> Coordinate()
         {
             var matches = await this.LoadNewResults();

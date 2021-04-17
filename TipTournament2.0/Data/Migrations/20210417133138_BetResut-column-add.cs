@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace TipTournament2._0.Data.Migrations
+﻿namespace TipTournament2._0.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class BetResutcolumnadd : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
