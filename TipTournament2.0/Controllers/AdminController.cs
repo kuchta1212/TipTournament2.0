@@ -11,8 +11,8 @@
     using TipTournament2._0.MatchClient;
     using TipTournament2._0.Models;
 
-    [AllowAnonymous]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     [Route("admin")]
 
     public class AdminController : Controller

@@ -10,7 +10,6 @@
     using TipTournament2._0.Data;
     using TipTournament2._0.Models;
 
-    [AllowAnonymous]
     [ApiController]
     [Route("")]
     public class HomeController : Controller
@@ -50,7 +49,7 @@
 
             return users.Select(x => new { key = x, value = bets.Where(b => b.User == x) }).ToDictionary(e => e.key, e => e.value);
         }
-                
+
         [HttpPost("bets")]
         public void UploadBets([FromBody]List<Bet> bets)
         {
