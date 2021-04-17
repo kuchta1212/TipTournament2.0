@@ -16,10 +16,10 @@
         [ForeignKey("AspNetUsers")]
         public ApplicationUser User { get; set; }
 
-        [ForeignKey("Match")]
+        [ForeignKey("Matches")]
         public Match Match { get; set; }
 
-        [ForeignKey("Result")]
+        [ForeignKey("Results")]
         public Result Tip { get; set; }
     }
 }

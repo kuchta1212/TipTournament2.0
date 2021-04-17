@@ -19,7 +19,7 @@
 
         public DateTime StartTime { get; set; }
         
-        [ForeignKey("Result")]
+        [ForeignKey("Results")]
         public Result Result { get; set; }
 
         public bool Ended { get; set; }
