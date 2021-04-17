@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using TipTournament2._0.Coordinator;
     using TipTournament2._0.Data;
     using TipTournament2._0.MatchClient;
     using TipTournament2._0.Models;
@@ -18,43 +19,43 @@
     {
         private readonly IDbContextWrapper context;
         private readonly IMatchClient matchClient;
+        private readonly IResultCoordinator resultCoordinator;
 
-        public AdminController(IDbContextWrapper context, IMatchClient matchClient)
+        public AdminController(IDbContextWrapper context, IMatchClient matchClient, IResultCoordinator resultCoordinator)
         {
             this.matchClient = matchClient;
             this.context = context;
+            this.resultCoordinator = resultCoordinator;
         }
 
         [HttpGet]
-        public async Task<AdminScreenModel> Index()
+        public AdminScreenModel Index()
         {
             return new AdminScreenModel()
             {
-                Users = await this.context.GetUsers()
+                Users = this.context.GetUsers()
             };            
         }
 
         [HttpPost("{userId}/payed")]
-        public async Task UserPayed([FromRoute]string userId)
+        public void UserPayed([FromRoute]string userId)
         {
-            await this.context.SetUserAsPayed(userId);
+            this.context.SetUserAsPayed(userId);
         }
 
         [HttpGet("matches/load")]
         public async Task<int> ImportMatches()
         {
             var matches = await this.matchClient.LoadMatches();
-            await this.context.SaveMatches(matches);
+            this.context.SaveMatches(matches);
 
             return matches.Count;
         }
 
         [HttpGet("matches/check")]
-        public async Task<int> CheckForUpdates()
+        public Task<int> CheckForUpdates()
         {
-            var results = await this.matchClient.CheckForUdpates();
-            await this.context.SaveResults(results);
-            return results.Count;
+            return this.resultCoordinator.Coordinate();
         }
         
     }

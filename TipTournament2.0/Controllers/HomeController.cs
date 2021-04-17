@@ -23,48 +23,48 @@
         }
 
         [HttpGet]
-        public async Task<HomeScreenModel> Index()
+        public HomeScreenModel Index()
         {
             var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
             var screen = new HomeScreenModel()
             {
-                Bets = await this.context.GetBetsForUser(userId),
-                Matches = await this.context.GetMatches(),
-                Users = await this.context.GetUsers()
+                Bets = this.context.GetBetsForUser(userId),
+                Matches = this.context.GetMatches(),
+                Users = this.context.GetUsers()
             };
 
             return screen;
         }
 
         [HttpGet("matches")]
-        public Task<List<Match>> GetMatches() 
+        public List<Match> GetMatches() 
         {
             return this.context.GetMatches();
         }
 
         [HttpGet("bets/all")]
-        public async Task<Dictionary<ApplicationUser, IEnumerable<Bet>>> GetAllBets()
+        public Dictionary<ApplicationUser, IEnumerable<Bet>> GetAllBets()
         {
-            var bets = await this.context.GetAllBets();
-            var users = await this.context.GetUsers();
+            var bets = this.context.GetAllBets();
+            var users = this.context.GetUsers();
 
             return users.Select(x => new { key = x, value = bets.Where(b => b.User == x) }).ToDictionary(e => e.key, e => e.value);
         }
                 
         [HttpPost("bets")]
-        public async Task UploadBets([FromBody]List<Bet> bets)
+        public void UploadBets([FromBody]List<Bet> bets)
         {
             var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-            await this.context.UploadBetsForUser(bets, userId);
+            this.context.UploadBets(bets, userId);
         }
 
         [HttpGet("user/payed")]
-        public async Task<bool> DidPayed()
+        public bool DidPayed()
         {
             var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
             if (!string.IsNullOrEmpty(userId))
             {
-                var user = await this.context.GetUser(userId);
+                var user = this.context.GetUser(userId);
                 return user.Payed;
             }
 

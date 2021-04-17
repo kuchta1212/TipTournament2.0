@@ -22,9 +22,9 @@
             return HomeTeam > AwayTeam;
         }
 
-        public bool IsDraw()
+        public override string ToString()
         {
-            return HomeTeam == AwayTeam;
+            return $"{this.HomeTeam}:{this.AwayTeam}";
         }
     }
 }

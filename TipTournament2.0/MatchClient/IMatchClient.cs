@@ -12,6 +12,6 @@ namespace TipTournament2._0.MatchClient
 
         Task<Result> GetResult(Match match);
 
-        Task<Dictionary<Match, Result>> CheckForUdpates();
+        Task<List<Match>> CheckForUpdates(List<Match> notEndedMatches);
     }
 }

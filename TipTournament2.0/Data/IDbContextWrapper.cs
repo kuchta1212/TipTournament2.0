@@ -1,29 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TipTournament2._0.Models;
-
-namespace TipTournament2._0.Data
+﻿namespace TipTournament2._0.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using TipTournament2._0.Models;
+
     public interface IDbContextWrapper
     {
-        Task<List<Match>> GetMatches();
+        List<Match> GetMatches();
 
-        Task<List<Bet>> GetBetsForUser(string userId);
+        List<Bet> GetBetsForUser(string userId);
 
-        Task<List<ApplicationUser>> GetUsers();
+        List<ApplicationUser> GetUsers();
 
-        Task<List<Bet>> GetAllBets();
+        List<Bet> GetAllBets();
 
-        Task UploadBetsForUser(List<Bet> bets, string userId);
+        void UploadBets(List<Bet> bets, string userUd);
 
-        Task<ApplicationUser> GetUser(string userId);
+        ApplicationUser GetUser(string userId);
 
-        Task SetUserAsPayed(string userId);
+        void SetUserAsPayed(string userId);
 
-        Task SaveMatches(List<Match> matches);
+        void SaveMatches(List<Match> matches);
 
-        Task SaveResults(Dictionary<Match, Result> results);
+        void SaveResults(List<Match> matchesWithResults);
+
+        List<Match> GetNotEndedMatches();
+
+        List<Bet> GetBetsForMatches(List<Match> matches);
+
+        void UpdateBets(List<Bet> bets);
+
+        List<ApplicationUser> GetAllUsers();
     }
 }

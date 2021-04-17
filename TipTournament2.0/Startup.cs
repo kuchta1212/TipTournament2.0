@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TipTournament2._0.Calculator;
+using TipTournament2._0.Coordinator;
 using TipTournament2._0.Data;
 using TipTournament2._0.MatchClient;
 using TipTournament2._0.Models;
@@ -51,6 +53,8 @@ namespace TipTournament2._0
 
             services.AddTransient<IDbContextWrapper, DbContextWrapper>();
             services.AddTransient<IMatchClient, MatchClient.MatchClient>();
+            services.AddTransient<IBetResultMaker, BetResultMaker>();
+            services.AddTransient<IResultCoordinator, ResultCoordinator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

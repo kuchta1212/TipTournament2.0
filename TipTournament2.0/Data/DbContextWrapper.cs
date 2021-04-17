@@ -1,56 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TipTournament2._0.Models;
-
-namespace TipTournament2._0.Data
+﻿namespace TipTournament2._0.Data
 {
+    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using TipTournament2._0.Models;
+
     public class DbContextWrapper : IDbContextWrapper
     {
-        public Task<List<Bet>> GetAllBets()
+        private readonly ApplicationDbContext dbContext;
+
+        public DbContextWrapper(ApplicationDbContext dbContext)
         {
-            throw new NotImplementedException();
+            this.dbContext = dbContext;
         }
 
-        public Task<List<Bet>> GetBetsForUser(string userId)
+        public List<Bet> GetAllBets()
         {
-            throw new NotImplementedException();
+            return dbContext.Bets.ToList();
         }
 
-        public Task<List<Match>> GetMatches()
+        public List<Bet> GetBetsForUser(string userId)
         {
-            throw new NotImplementedException();
+            return dbContext.Bets
+                .Include(b => b.User)
+                .Where(b => b.User.Id == userId).ToList();
         }
 
-        public Task<ApplicationUser> GetUser(string userId)
+        public List<Match> GetMatches()
         {
-            throw new NotImplementedException();
+            return dbContext.Matches.ToList();
         }
 
-        public Task<List<ApplicationUser>> GetUsers()
+        public ApplicationUser GetUser(string userId)
         {
-            throw new NotImplementedException();
+            return this.dbContext.Players.FirstOrDefault(x => x.Id == userId);
         }
 
-        public Task SaveMatches(List<Match> matches)
+        public List<ApplicationUser> GetUsers()
         {
-            throw new NotImplementedException();
+            return this.dbContext.Players.ToList();
         }
 
-        public Task SaveResults(Dictionary<Match, Result> results)
+        public void SaveMatches(List<Match> matches)
         {
-            throw new NotImplementedException();
+            this.dbContext.AddRange(matches);
+            this.dbContext.SaveChanges();
         }
 
-        public Task SetUserAsPayed(string userId)
+        public void SaveResults(List<Match> matchesWithResults)
         {
-            throw new NotImplementedException();
+            this.dbContext.UpdateRange(matchesWithResults);
         }
 
-        public Task UploadBetsForUser(List<Bet> bets, string userId)
+        public void SetUserAsPayed(string userId)
         {
-            throw new NotImplementedException();
+            var user = this.GetUser(userId);
+            user.Payed = true;
+            this.dbContext.Update(user);
+        }
+
+        public void UploadBets(List<Bet> bets, string userId)
+        {
+            var user = this.GetUser(userId);
+            bets.ForEach(b => b.User = user);
+            this.dbContext.AddRange(bets);
+            this.dbContext.SaveChanges();
+        }
+
+        public List<Match> GetNotEndedMatches()
+        {
+            return this.dbContext.Matches.Where(m => !m.Ended).ToList();
+        }
+
+        public List<Bet> GetBetsForMatches(List<Match> matches)
+        {
+            return this.dbContext.Bets
+                .Include(b => b.Match)
+                .Include(b => b.Tip)
+                .Where(b => matches.Contains(b.Match))
+                .ToList();
+        }
+
+        public void UpdateBets(List<Bet> bets)
+        {
+            this.dbContext.UpdateRange(bets);
+        }
+
+        public List<ApplicationUser> GetAllUsers()
+        {
+            return this.dbContext.Players.ToList();
         }
     }
 }
