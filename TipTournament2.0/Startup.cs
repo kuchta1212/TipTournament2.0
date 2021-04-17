@@ -1,22 +1,23 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using TipTournament2._0.Calculator;
-using TipTournament2._0.Coordinator;
-using TipTournament2._0.Data;
-using TipTournament2._0.MatchClient;
-using TipTournament2._0.Models;
-
 namespace TipTournament2._0
 {
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.HttpsPolicy;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI;
+    using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Swashbuckle.Swagger;
+    using TipTournament2._0.Calculator;
+    using TipTournament2._0.Coordinator;
+    using TipTournament2._0.Data;
+    using TipTournament2._0.MatchClient;
+    using TipTournament2._0.Models;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
