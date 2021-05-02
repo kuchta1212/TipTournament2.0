@@ -22,23 +22,24 @@
         }
 
         [HttpGet]
-        public HomeScreenModel Index()
+        public IActionResult Index()
         {
-            var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-            var screen = new HomeScreenModel()
-            {
-                Bets = this.context.GetBetsForUser(userId),
-                Matches = this.context.GetMatches(),
-                Users = this.context.GetUsers()
-            };
+            //var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
+            //var screen = new HomeScreenModel()
+            //{
+            //    Bets = this.context.GetBetsForUser(userId),
+            //    Matches = this.context.GetMatches(),
+            //    Users = this.context.GetUsers()
+            //};
 
-            return screen;
+            //return screen;
+            return new OkObjectResult(new HomeScreenModel());
         }
 
         [HttpGet("matches")]
-        public List<Match> GetMatches() 
+        public IActionResult GetMatches() 
         {
-            return this.context.GetMatches();
+            return new OkObjectResult(this.context.GetMatches());
         }
 
         [HttpGet("bets/all")]
