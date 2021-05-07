@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-export class Home extends Component {
+export class Home extends React.Component {
   static displayName = Home.name;
 
-  render () {
+  public render () {
     return (
       <div>
         <h1>Hello, world!</h1>

@@ -1,10 +1,26 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import authService from './api-authorization/AuthorizeService'
 
-export class FetchData extends Component {
+interface FetchDataProps {
+
+}
+
+interface FetchDataState {
+    forecasts: Forecast[],
+    loading: boolean
+}
+
+interface Forecast {
+    date: string,
+    temperatureC: string,
+    temperatureF: string,
+    summary: string,
+}
+
+export class FetchData extends React.Component<FetchDataProps, FetchDataState> {
   static displayName = FetchData.name;
 
-  constructor(props) {
+  constructor(props: FetchDataProps) {
     super(props);
     this.state = { forecasts: [], loading: true };
   }
@@ -13,7 +29,7 @@ export class FetchData extends Component {
     this.populateWeatherData();
   }
 
-  static renderForecastsTable(forecasts) {
+  static renderForecastsTable(forecasts: Forecast[]) {
     return (
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
@@ -38,7 +54,7 @@ export class FetchData extends Component {
     );
   }
 
-  render() {
+  public render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
       : FetchData.renderForecastsTable(this.state.forecasts);
@@ -52,7 +68,7 @@ export class FetchData extends Component {
     );
   }
 
-  async populateWeatherData() {
+  private async populateWeatherData() {
     const token = await authService.getAccessToken();
     const response = await fetch('weatherforecast', {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }

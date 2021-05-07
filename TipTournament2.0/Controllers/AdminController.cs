@@ -13,7 +13,7 @@
 
     [ApiController]
     [Authorize(Roles = "Admin")]
-    [Route("admin")]
+    [Route("api/admin")]
 
     public class AdminController : Controller
     {

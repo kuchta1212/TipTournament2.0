@@ -32,6 +32,57 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="ClientApp\src\components\api\Api.ts" />
+    <None Remove="ClientApp\src\components\api\ApiFactory.ts" />
+    <None Remove="ClientApp\src\components\api\HttpClient.ts" />
+    <None Remove="ClientApp\src\components\api\IApi.d.ts" />
+    <None Remove="ClientApp\src\components\api\ResponseConvertor.ts" />
+    <None Remove="ClientApp\src\components\Data.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\Matches.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\MatchRow.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\UserBetRow.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\UserBets.tsx" />
+    <None Remove="ClientApp\src\typings\index.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\components\api-admin\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\components\api\ApiFactory.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\api\HttpClient.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\api\IApi.d.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\api\Api.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\api\ResponseConvertor.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBetRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBets.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\MatchRow.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\Matches.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\MainPage.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\typings\index.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ClientApp\src\components\api\Api - Copy.js">
+      <DependentUpon>Api.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\api\Api - Copy.js.map">
+      <DependentUpon>Api.js.map</DependentUpon>
+    </None>
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

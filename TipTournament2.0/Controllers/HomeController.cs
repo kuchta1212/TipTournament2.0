@@ -11,7 +11,7 @@
     using TipTournament2._0.Models;
 
     [ApiController]
-    [Route("")]
+    [Route("api")]
     public class HomeController : Controller
     {
         private readonly IDbContextWrapper context;
@@ -21,24 +21,71 @@
             this.context = context;
         }
 
-        [HttpGet]
-        public HomeScreenModel Index()
+        [HttpGet("data")]
+        [AllowAnonymous]
+        public IActionResult GetData()
         {
-            var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-            var screen = new HomeScreenModel()
+            //var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
+            var matches = this.context.GetMatches();
+            var testBets = new List<Bet>()
             {
-                Bets = this.context.GetBetsForUser(userId),
-                Matches = this.context.GetMatches(),
-                Users = this.context.GetUsers()
+                new Bet()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Match = matches[0],
+                    Tip = new Result()
+                    {
+                        HomeTeam = 2,
+                        AwayTeam = 1
+                    }
+                },
+                new Bet()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Match = matches[1],
+                    Tip = new Result()
+                    {
+                        HomeTeam = 1,
+                        AwayTeam = 1
+                    }
+                },
+                new Bet()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Match = matches[2],
+                    Tip = new Result()
+                    {
+                        HomeTeam = 2,
+                        AwayTeam = 2
+                    }
+                },
+                new Bet()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Match = matches[3],
+                    Tip = new Result()
+                    {
+                        HomeTeam = 2,
+                        AwayTeam = 3
+                    }
+                }
             };
 
-            return screen;
+            var screen = new HomeScreenModel()
+            {
+                Bets = testBets,  //this.context.GetBetsForUser(userId),
+                Matches = matches,
+                //Users = this.context.GetUsers()
+            };
+
+            return new OkObjectResult(screen);
         }
 
         [HttpGet("matches")]
-        public List<Match> GetMatches() 
+        [AllowAnonymous]
+        public IActionResult GetMatches() 
         {
-            return this.context.GetMatches();
+            return new OkObjectResult(this.context.GetMatches());
         }
 
         [HttpGet("bets/all")]

@@ -25,15 +25,14 @@
         public IActionResult Index()
         {
             //var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-            //var screen = new HomeScreenModel()
-            //{
+            var screen = new HomeScreenModel()
+            {
             //    Bets = this.context.GetBetsForUser(userId),
-            //    Matches = this.context.GetMatches(),
+                Matches = this.context.GetMatches(),
             //    Users = this.context.GetUsers()
-            //};
+            };
 
-            //return screen;
-            return new OkObjectResult(new HomeScreenModel());
+            return new OkObjectResult(screen);
         }
 
         [HttpGet("matches")]
