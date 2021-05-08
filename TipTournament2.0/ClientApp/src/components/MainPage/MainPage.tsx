@@ -1,10 +1,10 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { IApi} from "../api/IApi"
 import { MainData } from "../../typings/index"
 import authService from '../api-authorization/AuthorizeService'
 import { Matches } from "./Matches"
 import { UserBets } from "./UserBets"
+import { Ranking } from "./Ranking"
 
 interface MainPageState {
     data: MainData,
@@ -53,8 +53,8 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
             <div className="container body-content">
                 <div className="row">
                     <Matches matches={ data.matches } />
-                    <UserBets bets={ data.userBets} />
-                    {/*<Ranking />*/}
+                    <UserBets bets={data.bets} />
+                    <Ranking ranking={data.users} />
                 </div>
             </div>
         );

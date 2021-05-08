@@ -1,7 +1,7 @@
 ﻿export interface MainData {
     matches: Match[];
     users: User[];
-    userBets: Bet[]
+    bets: Bet[]
 }
 
 export interface Match {
@@ -15,8 +15,8 @@ export interface Match {
 }
 
 export interface Result {
-    home: number;
-    away: number;
+    homeTeam: number;
+    awayTeam: number;
 }
 
 export interface Bet {
@@ -35,6 +35,7 @@ export enum BetResult {
 }
 
 export interface User {
+    userName: string;
     points: number;
     payed: boolean;
 }

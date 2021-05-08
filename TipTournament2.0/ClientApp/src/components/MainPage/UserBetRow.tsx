@@ -35,7 +35,7 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
     private renderPlayedMatchBet() {
         return (
             <React.Fragment>
-                <td>{this.props.bet.tip.home} : {this.props.bet.tip.away}</td>
+                <td>{this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}</td>
                 <td>{this.props.bet.betResult}</td>
             </React.Fragment>
         );
@@ -44,7 +44,7 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
     private renderNotPlayedMatchBet() {
         return (
             <React.Fragment>
-                <td>{this.props.bet.tip.home} : {this.props.bet.tip.away}</td>
+                <td>{this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}</td>
                 <td />
             </React.Fragment>
         );

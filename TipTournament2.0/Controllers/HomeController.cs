@@ -75,7 +75,7 @@
             {
                 Bets = testBets,  //this.context.GetBetsForUser(userId),
                 Matches = matches,
-                //Users = this.context.GetUsers()
+                Users = this.context.GetUsers()
             };
 
             return new OkObjectResult(screen);

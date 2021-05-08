@@ -28,7 +28,7 @@ export class MatchRow extends React.Component<MatchRowProps> {
             <React.Fragment>
                 <td>{this.props.match.homeTeam}</td>
                 <td>{this.props.match.awayTeam}</td>
-                <td>{this.props.match.result.home} : {this.props.match.result.away}</td>
+                <td>{this.props.match.result.homeTeam} : {this.props.match.result.awayTeam}</td>
                 <td><a href={this.props.match.link}>Záznam</a></td>
             </React.Fragment>
         );

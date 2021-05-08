@@ -15,10 +15,10 @@ export default class App extends Component {
 
   render () {
     return (
-      <Layout>
-        <Route exact path='/' component={MainPage} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/home' component={Home} />
+       <Layout>
+        <AuthorizeRoute exact path='/' component={MainPage} />
+        {/*<Route path='/counter' component={Counter} />*/}
+        {/*<Route path='/home' component={Home} />*/}
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

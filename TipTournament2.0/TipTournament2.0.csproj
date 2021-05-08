@@ -41,8 +41,10 @@
     <None Remove="ClientApp\src\components\Data.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Matches.tsx" />
     <None Remove="ClientApp\src\components\MainPage\MatchRow.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\Ranking.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserBets.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\UserRow.tsx" />
     <None Remove="ClientApp\src\typings\index.ts" />
   </ItemGroup>
 
@@ -60,6 +62,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\api\Api.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\api\ResponseConvertor.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\Ranking.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBets.tsx">
       <SubType>Code</SubType>
@@ -71,6 +74,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\MainPage.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\typings\index.ts" />
   </ItemGroup>
 
