@@ -38,6 +38,9 @@
     <None Remove="ClientApp\src\components\api\HttpClient.ts" />
     <None Remove="ClientApp\src\components\api\IApi.d.ts" />
     <None Remove="ClientApp\src\components\api\ResponseConvertor.ts" />
+    <None Remove="ClientApp\src\components\Bets\AllBets.tsx" />
+    <None Remove="ClientApp\src\components\Bets\Bets.tsx" />
+    <None Remove="ClientApp\src\components\Bets\MatchBetRow.tsx" />
     <None Remove="ClientApp\src\components\Data.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Matches.tsx" />
     <None Remove="ClientApp\src\components\MainPage\MatchRow.tsx" />
@@ -62,6 +65,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\api\Api.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\api\ResponseConvertor.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\AllBets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\Bets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\MatchBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\Ranking.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBets.tsx">

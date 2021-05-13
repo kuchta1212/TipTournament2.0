@@ -11,6 +11,7 @@
     using TipTournament2._0.Models;
 
     [ApiController]
+    [Authorize]
     [Route("api")]
     public class HomeController : Controller
     {
@@ -22,10 +23,9 @@
         }
 
         [HttpGet("data")]
-        [AllowAnonymous]
         public IActionResult GetData()
         {
-            //var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
+            var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
             var matches = this.context.GetMatches();
             var testBets = new List<Bet>()
             {

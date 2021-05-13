@@ -36,14 +36,13 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
 
         return (
             <div>
-                <h1 id="tabelLabel" >Hlavní část</h1>
+                <h1 id="tabelLabel" >Hlavni cast</h1>
                 {contents}
             </div>
         );
     }
 
     private async getData() {
-        //const token = await authService.getAccessToken();
         const data = await getApi().getData();
         this.setState({ data: data, loading: false });
     }

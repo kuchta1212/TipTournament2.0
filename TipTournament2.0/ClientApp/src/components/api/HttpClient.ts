@@ -1,24 +1,25 @@
-﻿
+﻿import authService from './../api-authorization/AuthorizeService'
+
 export const requestInitDefaults = {
     credentials: 'same-origin'
 } as RequestInit;
 
-export function getPostRequestInitRequired() {
+export async function getPostRequestInitRequired() {
     return {
         method: 'POST',
-        headers: getHeaders()
+        headers: await getHeaders()
     } as RequestInit;
 }
 
-export function getGetRequestInitRequired() {
+export async function getGetRequestInitRequired() {
     return {
         method: 'GET',
-        headers: getHeaders()
+        headers: await getHeaders()
     } as RequestInit;
 }
 
-export function getPostRequestJsonInitRequired() {
-    var headers = getHeaders();
+export async function getPostRequestJsonInitRequired() {
+    var headers = await getHeaders();
     headers.delete('Content-Type');
     headers.append('Content-Type', 'application/json');
     return {
@@ -27,25 +28,22 @@ export function getPostRequestJsonInitRequired() {
     } as RequestInit;
 }
 
-export function get(
+export async function get(
     url: string,
-    options?: RequestInit
 ): Promise<Response> {
+    const getGetRequestInit = await getGetRequestInitRequired()
     return fetch(url, {
         ...requestInitDefaults,
-        ...options,
-        ...getGetRequestInitRequired()
+        ...getGetRequestInit
     });
 }
 
 export function post(
     url: string,
     body?: object,
-    options?: RequestInit
 ): Promise<Response> {
     return fetch(url, {
         ...requestInitDefaults,
-        ...options,
         ...getPostRequestInitRequired(),
         body: JSON.stringify(body)
     });
@@ -64,8 +62,9 @@ export function postJson(
     });
     }
 
-function getHeaders() {
+async function getHeaders() {
     const headers = new Headers();
-    //headers.append('Authorization', `Bearer ${getAdalToken()}`);
+    const token = await authService.getAccessToken();
+    headers.append('Authorization', `Bearer ${token}`);
     return headers;
 }
