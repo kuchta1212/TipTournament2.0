@@ -1,24 +1,17 @@
 ﻿import authService from './../api-authorization/AuthorizeService'
 
-export const requestInitDefaults = {
+const requestInitDefaults = {
     credentials: 'same-origin'
 } as RequestInit;
 
-export async function getPostRequestInitRequired() {
-    return {
-        method: 'POST',
-        headers: await getHeaders()
-    } as RequestInit;
-}
-
-export async function getGetRequestInitRequired() {
+async function getGetRequestInitRequired() {
     return {
         method: 'GET',
         headers: await getHeaders()
     } as RequestInit;
 }
 
-export async function getPostRequestJsonInitRequired() {
+async function getPostRequestInitRequired() {
     var headers = await getHeaders();
     headers.delete('Content-Type');
     headers.append('Content-Type', 'application/json');
@@ -38,29 +31,17 @@ export async function get(
     });
 }
 
-export function post(
+export async function post(
     url: string,
     body?: object,
 ): Promise<Response> {
+    const getPostRequestInit = await getPostRequestInitRequired()
     return fetch(url, {
         ...requestInitDefaults,
-        ...getPostRequestInitRequired(),
+        ...getPostRequestInit,
         body: JSON.stringify(body)
     });
 }
-
-export function postJson(
-    url: string,
-    body?: object,
-    options?: RequestInit
-): Promise<Response> {
-    return fetch(url, {
-        ...requestInitDefaults,
-        ...options,
-        ...getPostRequestJsonInitRequired(),
-        body: JSON.stringify(body)
-    });
-    }
 
 async function getHeaders() {
     const headers = new Headers();

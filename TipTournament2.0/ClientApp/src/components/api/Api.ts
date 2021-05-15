@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Bet, AllBets } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet } from "../../typings";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
 import { convert } from "./ResponseConvertor"
@@ -7,7 +7,7 @@ const API_URL = '/api';
 
 export class Api implements IApi {
 
-    getData(userId: string): Promise<MainData> {
+    getData(): Promise<MainData> {
         return convert<MainData>(get(`${API_URL}/data/`));
     }
 
@@ -15,14 +15,20 @@ export class Api implements IApi {
         return convert<Match[]>(get(`${API_URL}/matches/`));
     }
 
+    getBets(): Promise<Bet[]> {
+        return convert<Bet[]>(get(`${API_URL}/bets`))
+    }
+
+
     getAllBets(): Promise<AllBets[]> {
         return convert<AllBets[]>(get(`${API_URL}/bets/all/`));
     }
 
-    uploadBets(bets: Bet[], userId: string): Promise<void> {
-        return convert<void>(post(`${API_URL}/bets/`, bets));
+    uploadTip(tip: Result, matchId: string): Promise<void> {
+        return convert<void>(post(`${API_URL}/tip/`, { tip: tip, matchId: matchId }));
     }
-    getDidPayed(userId: string): Promise<boolean> {
+
+    getDidPayed(): Promise<boolean> {
         return convert<boolean>(get(`${API_URL}/user/payed/`));
     }
 

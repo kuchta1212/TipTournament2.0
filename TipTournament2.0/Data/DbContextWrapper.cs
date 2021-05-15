@@ -25,12 +25,14 @@
         {
             return dbContext.Bets
                 .Include(b => b.User)
+                .Include(b => b.Match)
                 .Where(b => b.User.Id == userId).ToList();
         }
 
         public List<Match> GetMatches()
         {
-            return dbContext.Matches.ToList();
+            var matches = dbContext.Matches.ToList();
+            return matches;
         }
 
         public ApplicationUser GetUser(string userId)
@@ -61,11 +63,40 @@
             this.dbContext.Update(user);
         }
 
-        public void UploadBets(List<Bet> bets, string userId)
+        public void UploadTips(Dictionary<string, Result> tips, string userId)
+        {
+            //var user = this.GetUser(userId);
+            //bets.ForEach(b => b.User = user);
+            //this.dbContext.AddRange(bets);
+            //this.dbContext.SaveChanges();
+        }
+
+        public void UploadTip(Result tip, string matchId, string userId)
         {
             var user = this.GetUser(userId);
-            bets.ForEach(b => b.User = user);
-            this.dbContext.AddRange(bets);
+            var match = this.GetMatch(matchId);
+
+            var existingBet = this.dbContext.Bets.Include(b => b.Tip).FirstOrDefault(b => b.Match.Id == matchId && b.User.Id == userId);
+            if(existingBet != null)
+            {
+                var existingTip = existingBet.Tip;
+                existingTip.HomeTeam = tip.HomeTeam;
+                existingTip.AwayTeam = tip.AwayTeam;
+                this.dbContext.Update(existingTip);
+            }
+            else
+            {
+                var bet = new Bet()
+                {
+                    Match = match,
+                    Result = BetResult.NOTHING,
+                    Tip = tip,
+                    User = user
+                };
+
+                this.dbContext.Add(bet);
+            }
+
             this.dbContext.SaveChanges();
         }
 
@@ -91,6 +122,11 @@
         public List<ApplicationUser> GetAllUsers()
         {
             return this.dbContext.Players.ToList();
+        }
+
+        private Match GetMatch(string matchId)
+        {
+            return this.dbContext.Matches.FirstOrDefault(x => x.Id == matchId);
         }
     }
 }

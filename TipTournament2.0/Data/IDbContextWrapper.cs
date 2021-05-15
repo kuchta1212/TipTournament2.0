@@ -16,7 +16,9 @@
 
         List<Bet> GetAllBets();
 
-        void UploadBets(List<Bet> bets, string userUd);
+        void UploadTips(Dictionary<string, Result> tips, string userId);
+
+        void UploadTip(Result tip, string matchId, string userId);
 
         ApplicationUser GetUser(string userId);
 

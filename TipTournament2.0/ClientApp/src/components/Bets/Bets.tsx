@@ -1,12 +1,12 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match } from "../../typings/index"
-import authService from '../api-authorization/AuthorizeService'
+import { Match, Bet } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 
 interface BetsState {
     matches: Match[],
+    bets: Bet[],
     loading: boolean
 }
 
@@ -20,42 +20,43 @@ export class Bets extends React.Component<BetsProps, BetsState> {
         super(props);
         this.state = {
             matches: {} as Match[],
+            bets: {} as Bet[],
             loading: true
         }
     }
 
     public componentDidMount() {
-        this.getMatches();
+        this.getData();
     }
 
     public render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : this.renderBetsTable(this.state.matches);
+            : this.renderBetsTable(this.state.matches, this.state.bets);
 
         return (
             <div>
-                <h1 id="tabelLabel" >Hlavní část</h1>
+                <h1 id="tabelLabel" >Sazky</h1>
                 {contents}
             </div>
         );
     }
 
-    private async getMatches() {
-        //const token = await authService.getAccessToken();
+    private async getData() {
         const matches = await getApi().getMatches();
-        this.setState({ matches: matches, loading: false });
+        const bets = await getApi().getBets()
+        this.setState({ matches: matches, bets:bets, loading: false });
     }
 
-    private renderBetsTable(data: Match[]) {
+    private renderBetsTable(matches: Match[], bets: Bet[]) {
         return (
             <Table>
                 <thead>
                 </thead>
                 <tbody>
-                    {data.map((match, index) => (
+                    {matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchBetRow match={match} />
+                            <MatchBetRow match={match} bet={bets.find(b => !!b.match && b.match.id == match.id)} />
                         </tr>)
                     )}
                 </tbody>

@@ -25,56 +25,11 @@
         [HttpGet("data")]
         public IActionResult GetData()
         {
-            var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-            var matches = this.context.GetMatches();
-            var testBets = new List<Bet>()
-            {
-                new Bet()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Match = matches[0],
-                    Tip = new Result()
-                    {
-                        HomeTeam = 2,
-                        AwayTeam = 1
-                    }
-                },
-                new Bet()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Match = matches[1],
-                    Tip = new Result()
-                    {
-                        HomeTeam = 1,
-                        AwayTeam = 1
-                    }
-                },
-                new Bet()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Match = matches[2],
-                    Tip = new Result()
-                    {
-                        HomeTeam = 2,
-                        AwayTeam = 2
-                    }
-                },
-                new Bet()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Match = matches[3],
-                    Tip = new Result()
-                    {
-                        HomeTeam = 2,
-                        AwayTeam = 3
-                    }
-                }
-            };
-
+            var userId = this.GetUserId();
             var screen = new HomeScreenModel()
             {
-                Bets = testBets,  //this.context.GetBetsForUser(userId),
-                Matches = matches,
+                Bets = this.context.GetBetsForUser(userId),
+                Matches = this.context.GetMatches(),
                 Users = this.context.GetUsers()
             };
 
@@ -82,10 +37,16 @@
         }
 
         [HttpGet("matches")]
-        [AllowAnonymous]
         public IActionResult GetMatches() 
         {
             return new OkObjectResult(this.context.GetMatches());
+        }
+
+        [HttpGet("bets")]
+        public IActionResult GetBets()
+        {
+            var userId = this.GetUserId();
+            return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
         [HttpGet("bets/all")]
@@ -97,17 +58,24 @@
             return users.Select(x => new { key = x, value = bets.Where(b => b.User == x) }).ToDictionary(e => e.key, e => e.value);
         }
 
-        [HttpPost("bets")]
-        public void UploadBets([FromBody]List<Bet> bets)
+        //[HttpPost("tips")]
+        //public void UploadTips([FromBody]Dictionary<string, Result> tips)
+        //{
+        //    var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
+        //    this.context.UploadTips(tips, userId);
+        //}
+
+        [HttpPost("tip")]
+        public void UploadTip([FromBody] UploadTipRequest request)
         {
-            var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-            this.context.UploadBets(bets, userId);
+            var userId = this.GetUserId();
+            this.context.UploadTip(request.Tip, request.MatchId, userId);
         }
 
         [HttpGet("user/payed")]
         public bool DidPayed()
         {
-            var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
+            var userId = this.GetUserId();
             if (!string.IsNullOrEmpty(userId))
             {
                 var user = this.context.GetUser(userId);
@@ -115,6 +83,11 @@
             }
 
             return false;
+        }
+
+        private string GetUserId()
+        {
+            return this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
 import { MainData } from "../../typings/index"
-import authService from '../api-authorization/AuthorizeService'
 import { Matches } from "./Matches"
 import { UserBets } from "./UserBets"
 import { Ranking } from "./Ranking"
@@ -31,8 +30,8 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
 
     public render() {
         let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
-            : this.renderDataTable(this.state.data);
+                ? <p><em>Loading...</em></p>
+                : this.renderDataTable(this.state.data);
 
         return (
             <div>

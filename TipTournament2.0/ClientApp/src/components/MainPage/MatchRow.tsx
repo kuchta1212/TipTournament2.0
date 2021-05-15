@@ -1,9 +1,5 @@
 ﻿import * as React from 'react';
-import { getApi } from "../api/ApiFactory"
-import { IApi} from "../api/IApi"
 import { Match } from "../../typings/index"
-import authService from '../api-authorization/AuthorizeService'
-
 
 interface MatchRowProps {
     match: Match

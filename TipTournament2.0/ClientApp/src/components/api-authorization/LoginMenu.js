@@ -3,6 +3,7 @@ import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
+import { getApi } from '../api/ApiFactory';
 
 export class LoginMenu extends Component {
     constructor(props) {
@@ -10,6 +11,7 @@ export class LoginMenu extends Component {
 
         this.state = {
             isAuthenticated: false,
+            didPayed: false,
             userName: null
         };
     }
@@ -25,14 +27,16 @@ export class LoginMenu extends Component {
 
     async populateState() {
         const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
+        const didPayed = await getApi().getDidPayed();
         this.setState({
             isAuthenticated,
+            didPayed,
             userName: user && user.name
         });
     }
 
     render() {
-        const { isAuthenticated, userName } = this.state;
+        const { isAuthenticated, didPayed, userName } = this.state;
         if (!isAuthenticated) {
             const registerPath = `${ApplicationPaths.Register}`;
             const loginPath = `${ApplicationPaths.Login}`;
@@ -40,14 +44,19 @@ export class LoginMenu extends Component {
         } else {
             const profilePath = `${ApplicationPaths.Profile}`;
             const logoutPath = { pathname: `${ApplicationPaths.LogOut}`, state: { local: true } };
-            return this.authenticatedView(userName, profilePath, logoutPath);
+            return this.authenticatedView(userName, didPayed, profilePath, logoutPath);
         }
     }
 
-    authenticatedView(userName, profilePath, logoutPath) {
+    authenticatedView(userName, didPayed, profilePath, logoutPath) {
+        const didPayedLabel = didPayed ? "Zaplaceno" : "NEZAPLACENO";
+        const didPayedClassName = didPayed ? "text-success" : "text-danger";
         return (<Fragment>
             <NavItem>
                 <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {userName}</NavLink>
+            </NavItem>
+            <NavItem>
+                <NavLink className={didPayedClassName}>{didPayedLabel}</NavLink>
             </NavItem>
             <NavItem>
                 <NavLink tag={Link} className="text-dark" to={logoutPath}>Logout</NavLink>
