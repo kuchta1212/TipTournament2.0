@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User } from "../../typings";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
 import { convert } from "./ResponseConvertor"
@@ -15,14 +15,12 @@ export class Api implements IApi {
         return convert<Match[]>(get(`${API_URL}/matches/`));
     }
 
-    getBets(): Promise<Bet[]> {
-        return convert<Bet[]>(get(`${API_URL}/bets`))
+    getBets(user: User | undefined): Promise<Bet[]> {
+        return !!user
+            ? convert<Bet[]>(get(`${API_URL}/bets/${user.id}`))
+            : convert<Bet[]>(get(`${API_URL}/bets/`));
     }
 
-
-    getAllBets(): Promise<AllBets[]> {
-        return convert<AllBets[]>(get(`${API_URL}/bets/all/`));
-    }
 
     uploadTip(tip: Result, matchId: string): Promise<void> {
         return convert<void>(post(`${API_URL}/tip/`, { tip: tip, matchId: matchId }));
@@ -32,4 +30,7 @@ export class Api implements IApi {
         return convert<boolean>(get(`${API_URL}/user/payed/`));
     }
 
+    getUsers(): Promise<User[]> {
+        return convert<User[]>(get(`${API_URL}/users/`));
+    }
 }

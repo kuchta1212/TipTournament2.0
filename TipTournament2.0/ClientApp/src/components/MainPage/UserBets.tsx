@@ -1,8 +1,5 @@
 ﻿import * as React from 'react';
-import { getApi } from "../api/ApiFactory"
-import { IApi} from "../api/IApi"
 import { Bet } from "../../typings/index"
-import authService from '../api-authorization/AuthorizeService'
 import { UserBetRow } from "./UserBetRow"
 import { Table } from 'reactstrap';
 

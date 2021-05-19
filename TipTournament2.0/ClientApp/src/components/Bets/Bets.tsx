@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, Bet } from "../../typings/index"
+import { Match, Bet, User } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 
@@ -11,7 +11,7 @@ interface BetsState {
 }
 
 interface BetsProps {
-
+    user: User | undefined,
 }
 
 export class Bets extends React.Component<BetsProps, BetsState> {
@@ -44,7 +44,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
 
     private async getData() {
         const matches = await getApi().getMatches();
-        const bets = await getApi().getBets()
+        const bets = await getApi().getBets(this.props.user)
         this.setState({ matches: matches, bets:bets, loading: false });
     }
 
@@ -56,7 +56,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                 <tbody>
                     {matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchBetRow match={match} bet={bets.find(b => !!b.match && b.match.id == match.id)} />
+                            <MatchBetRow match={match} bet={bets.find(b => !!b.match && b.match.id == match.id)} isReadOnly={!!this.props.user} />
                         </tr>)
                     )}
                 </tbody>

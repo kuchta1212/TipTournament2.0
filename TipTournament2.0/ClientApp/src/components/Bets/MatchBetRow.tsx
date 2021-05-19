@@ -9,18 +9,19 @@ interface MatchBetRowState {
 
 interface MatchBetRowProps {
     match: Match,
-    bet: Bet | undefined
+    bet: Bet | undefined,
+    isReadOnly: boolean
 }
 
 export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowState> {
-
-    private homeTip: number = 0;
-    private awayTip: number = 0;
-
     constructor(props: MatchBetRowProps) {
         super(props);
 
-        this.state = { tip: { homeTeam: 0, awayTeam: 0 }, setted: false }
+        if (!this.props.bet) {
+            this.state = { tip: { homeTeam: 0, awayTeam: 0 }, setted: false }
+        } else {
+            this.state = { tip: { homeTeam: this.props.bet.tip.homeTeam, awayTeam: this.props.bet.tip.awayTeam }, setted: true }
+        }
     }
 
     public render() {
@@ -32,10 +33,10 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
     private renderSettedBet() {
         return (
             <React.Fragment>
-                <td>{this.props.match.homeTeam}</td>
+                <td>{this.props.match.homeTeam} <span>\ue721</span></td>
                 <td>{this.props.match.awayTeam}</td>
                 <td>{this.state.tip.homeTeam} : {this.state.tip.awayTeam}</td>
-                <td><button onClick={ () => this.modify()}>Upravit</button></td>
+                {!this.props.isReadOnly ? <td><button onClick={() => this.modify()}>Upravit</button></td> : <td/>} 
             </React.Fragment>
         );
     }
@@ -45,46 +46,28 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
             <React.Fragment>
                 <td>{this.props.match.homeTeam}</td>
                 <td>{this.props.match.awayTeam}</td>
-                <td><input type="number" min="0" max="99" placeholder="0" onChange={(event) => this.setHomeTip(event.target.value)} /></td>
-                <td><input type="number" min="0" max="99" placeholder="0" onChange={(event) => this.setAwayTip(event.target.value)} /></td>
-                <td><button onClick={ () => this.saveTip()}>Ulozit</button></td>
+                <td><input type="number" min="0" max="99" value={!!this.state.tip.homeTeam ? this.state.tip.homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
+                <td><input type="number" min="0" max="99" value={!!this.state.tip.awayTeam ? this.state.tip.awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
+                {!this.props.isReadOnly ? <td><button onClick={() => this.uploadTip()}>Ulozit</button></td> : <td/>}
             </React.Fragment>
         );
     }
 
     private setHomeTip(tip: string) {
-        this.homeTip = Number(tip);
+        this.setState({ tip: { homeTeam: Number(tip), awayTeam: this.state.tip.awayTeam }, setted: false });
     }
 
     private setAwayTip(tip: string) {
-        this.awayTip = Number(tip);
-    }
-
-    private saveTip() {
-        console.log(` Home: ${this.homeTip}, Away: ${this.awayTip}`);
-        this.setState({
-            tip: {
-                homeTeam: this.homeTip,
-                awayTeam: this.awayTip
-            },
-            setted: true
-        });
-        this.uploadTip();
+        this.setState({ tip: { homeTeam: this.state.tip.homeTeam, awayTeam: Number(tip) }, setted: false });
     }
 
     private uploadTip() {
-        console.log(this.state.tip);
+        this.setState({tip: this.state.tip, setted: true})
         getApi().uploadTip(this.state.tip, this.props.match.id);
     }
 
     private modify() {
-        this.setState({
-            tip: {
-                homeTeam: this.homeTip,
-                awayTeam: this.awayTip
-            },
-            setted: false
-        });
+        this.setState({ tip: this.state.tip, setted: false });
     }
 }
 

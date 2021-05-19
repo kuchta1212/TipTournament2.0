@@ -18,7 +18,7 @@ export default class App extends Component {
        <Layout>
         <AuthorizeRoute exact path='/' component={MainPage} />
         <AuthorizeRoute exact path="/tips" component={Bets} />
-        <AuthorizeRoute exact path="/bets-all" component={AllBets} />
+        <AuthorizeRoute exact path="/bets/all" component={AllBets} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

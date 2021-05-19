@@ -49,14 +49,20 @@
             return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
-        [HttpGet("bets/all")]
-        public Dictionary<ApplicationUser, IEnumerable<Bet>> GetAllBets()
+        [HttpGet("bets/{userId}")]
+        public IActionResult GetBets([FromRoute] string userId)
         {
-            var bets = this.context.GetAllBets();
-            var users = this.context.GetUsers();
-
-            return users.Select(x => new { key = x, value = bets.Where(b => b.User == x) }).ToDictionary(e => e.key, e => e.value);
+            return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
+
+        //[HttpGet("bets/all")]
+        //public IActionResult GetAllBets()
+        //{
+        //    var bets = this.context.GetAllBets();
+        //    var users = this.context.GetUsers();
+
+        //    return new OkObjectResult(users.Select(x => new { key = x, value = bets.Where(b => b.User == x) }).ToDictionary(e => e.key, e => e.value));
+        //}
 
         //[HttpPost("tips")]
         //public void UploadTips([FromBody]Dictionary<string, Result> tips)
@@ -66,23 +72,30 @@
         //}
 
         [HttpPost("tip")]
-        public void UploadTip([FromBody] UploadTipRequest request)
+        public IActionResult UploadTip([FromBody] UploadTipRequest request)
         {
             var userId = this.GetUserId();
             this.context.UploadTip(request.Tip, request.MatchId, userId);
+            return new OkResult();
+        }
+
+        [HttpGet("users")]
+        public IActionResult GetUsers()
+        {
+            return new OkObjectResult(this.context.GetAllUsers().Select(u => UiUser.FromApplicationUser(u)).ToList());
         }
 
         [HttpGet("user/payed")]
-        public bool DidPayed()
+        public IActionResult DidPayed()
         {
             var userId = this.GetUserId();
             if (!string.IsNullOrEmpty(userId))
             {
                 var user = this.context.GetUser(userId);
-                return user.Payed;
+                return new OkObjectResult(user.Payed);
             }
 
-            return false;
+            return new OkObjectResult(false);
         }
 
         private string GetUserId()

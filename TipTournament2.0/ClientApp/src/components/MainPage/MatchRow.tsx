@@ -22,7 +22,7 @@ export class MatchRow extends React.Component<MatchRowProps> {
     private renderPlayedMatch() {
         return (
             <React.Fragment>
-                <td>{this.props.match.homeTeam}</td>
+                <td>{this.props.match.homeTeam} <span>'\ue721'</span></td>
                 <td>{this.props.match.awayTeam}</td>
                 <td>{this.props.match.result.homeTeam} : {this.props.match.result.awayTeam}</td>
                 <td><a href={this.props.match.link}>Záznam</a></td>

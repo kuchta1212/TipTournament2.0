@@ -35,6 +35,7 @@ export enum BetResult {
 }
 
 export interface User {
+    id: string;
     userName: string;
     points: number;
     payed: boolean;

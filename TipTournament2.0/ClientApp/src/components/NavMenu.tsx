@@ -43,7 +43,7 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
                   <NavLink tag={Link} className="text-dark" to="/tips">Sazky</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/bets-all">Vsechny sazky</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/bets/all">Vsechny sazky</NavLink>
                 </NavItem>
                 <LoginMenu>
                 </LoginMenu>
