@@ -53,13 +53,13 @@ export class LoginMenu extends Component {
         const didPayedClassName = didPayed ? "text-success" : "text-danger";
         return (<Fragment>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {userName}</NavLink>
+                <NavLink className="text-dark" >Nazdar {userName}</NavLink>
             </NavItem>
             <NavItem>
                 <NavLink className={didPayedClassName}>{didPayedLabel}</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={logoutPath}>Logout</NavLink>
+                <NavLink tag={Link} className="text-dark" to={logoutPath}>Odhlásit se</NavLink>
             </NavItem>
         </Fragment>);
 
