@@ -9,8 +9,6 @@ export class MatchRow extends React.Component<MatchRowProps> {
 
     constructor(props: MatchRowProps) {
         super(props);
-
-        console.log(props.match);
     }
 
     public render() {

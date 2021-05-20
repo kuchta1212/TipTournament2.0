@@ -38,24 +38,25 @@
         }
 
         [HttpPost("{userId}/payed")]
-        public void UserPayed([FromRoute]string userId)
+        public IActionResult UserPayed([FromRoute]string userId, bool payed)
         {
-            this.context.SetUserAsPayed(userId);
+            this.context.SetUserPaymentInfo(userId, payed);
+            return new OkResult();
         }
 
         [HttpGet("matches/load")]
-        public async Task<int> ImportMatches()
+        public async Task<IActionResult> ImportMatches()
         {
             var matches = await this.matchClient.LoadMatches();
             this.context.SaveMatches(matches);
 
-            return matches.Count;
+            return new OkObjectResult(matches.Count);
         }
 
         [HttpGet("matches/check")]
-        public Task<int> CheckForUpdates()
+        public IActionResult CheckForUpdates()
         {
-            return this.resultCoordinator.Coordinate();
+            return new OkObjectResult(this.resultCoordinator.Coordinate());
         }
         
     }

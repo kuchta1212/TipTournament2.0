@@ -57,10 +57,10 @@
             this.dbContext.UpdateRange(matchesWithResults);
         }
 
-        public void SetUserAsPayed(string userId)
+        public void SetUserPaymentInfo(string userId, bool payed)
         {
             var user = this.GetUser(userId);
-            user.Payed = true;
+            user.Payed = payed;
             this.dbContext.Update(user);
         }
 

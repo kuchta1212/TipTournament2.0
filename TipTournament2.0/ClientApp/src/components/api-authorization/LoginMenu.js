@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+﻿import React, { Component, Fragment } from 'react';
 import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
@@ -59,7 +59,7 @@ export class LoginMenu extends Component {
                 <NavLink className={didPayedClassName}>{didPayedLabel}</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={logoutPath}>Odhl�sit se</NavLink>
+                <NavLink tag={Link} className="text-dark" to={logoutPath}>Odhlásit se</NavLink>
             </NavItem>
         </Fragment>);
 
@@ -68,10 +68,10 @@ export class LoginMenu extends Component {
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
+                <NavLink tag={Link} className="text-dark" to={registerPath}>Registrovat se</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={loginPath}>Login</NavLink>
+                <NavLink tag={Link} className="text-dark" to={loginPath}>Přihlásit se</NavLink>
             </NavItem>
         </Fragment>);
     }

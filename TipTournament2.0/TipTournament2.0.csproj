@@ -33,9 +33,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\components\Admin\AdminPage.tsx" />
+    <None Remove="ClientApp\src\components\Admin\MatchLoader.tsx" />
+    <None Remove="ClientApp\src\components\Admin\UpdateChecker.tsx" />
+    <None Remove="ClientApp\src\components\Admin\UserOverview.tsx" />
+    <None Remove="ClientApp\src\components\Admin\UserRow.tsx" />
+    <None Remove="ClientApp\src\components\api\AdminApi.ts" />
     <None Remove="ClientApp\src\components\api\Api.ts" />
     <None Remove="ClientApp\src\components\api\ApiFactory.ts" />
     <None Remove="ClientApp\src\components\api\HttpClient.ts" />
+    <None Remove="ClientApp\src\components\api\IAdminApi.d.ts" />
     <None Remove="ClientApp\src\components\api\IApi.d.ts" />
     <None Remove="ClientApp\src\components\api\ResponseConvertor.ts" />
     <None Remove="ClientApp\src\components\Bets\AllBets.tsx" />
@@ -53,14 +60,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\components\api-admin\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\UserRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\UserOverview.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\UpdateChecker.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\MatchLoader.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\AdminPage.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\api\AdminApi.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\api\ApiFactory.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\api\HttpClient.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\api\IAdminApi.d.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\api\IApi.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -87,6 +101,54 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29 - Copy.js">
+      <DependentUpon>AdminPage - Copy (2).js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29 - Copy.js.map">
+      <DependentUpon>AdminPage - Copy (2).js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29.js">
+      <DependentUpon>AdminPage.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29.js.map">
+      <DependentUpon>AdminPage.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %283%29.js">
+      <DependentUpon>AdminPage.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %283%29.js.map">
+      <DependentUpon>AdminPage.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy %282%29.js">
+      <DependentUpon>AdminPage - Copy.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy %282%29.js.map">
+      <DependentUpon>AdminPage - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy - Copy.js">
+      <DependentUpon>AdminPage - Copy - Copy.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy - Copy.js.map">
+      <DependentUpon>AdminPage - Copy - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy.js">
+      <DependentUpon>AdminPage - Copy.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy.js.map">
+      <DependentUpon>AdminPage - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy.js">
+      <DependentUpon>AdminPage.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\Admin\AdminPage - Copy.js.map">
+      <DependentUpon>AdminPage.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\api\Api - Copy - Copy.js">
+      <DependentUpon>Api.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\api\Api - Copy - Copy.js.map">
+      <DependentUpon>Api.js.map</DependentUpon>
+    </None>
     <None Update="ClientApp\src\components\api\Api - Copy.js">
       <DependentUpon>Api.js</DependentUpon>
     </None>

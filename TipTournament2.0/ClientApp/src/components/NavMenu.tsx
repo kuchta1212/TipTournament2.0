@@ -40,10 +40,10 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/tips">Sazky</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/tips">Sázky</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/bets/all">Vsechny sazky</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/bets/all">Všechny sázky</NavLink>
                 </NavItem>
                 <LoginMenu>
                 </LoginMenu>

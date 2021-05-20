@@ -22,7 +22,7 @@
 
         ApplicationUser GetUser(string userId);
 
-        void SetUserAsPayed(string userId);
+        void SetUserPaymentInfo(string userId, bool payed);
 
         void SaveMatches(List<Match> matches);
 
