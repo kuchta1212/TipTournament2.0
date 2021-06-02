@@ -34,7 +34,7 @@ export class UserOverview extends React.Component<UserOverviewProps, UserOvervie
 
         return (
             <div>
-                <h1 id="tabelLabel" >Sazky</h1>
+                <h1 id="tabelLabel" >Hráči</h1>
                 {contents}
             </div>
         );
@@ -47,7 +47,7 @@ export class UserOverview extends React.Component<UserOverviewProps, UserOvervie
 
     private renderUsersTable(users: User[]) {
         return (
-            <Table>
+            <Table className="table table-striped opacity-table">
                 <thead>
                 </thead>
                 <tbody>
