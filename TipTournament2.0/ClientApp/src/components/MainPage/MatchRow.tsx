@@ -1,5 +1,6 @@
 ﻿import * as React from 'react';
-import { Match } from "../../typings/index"
+import { Match } from "../../typings/index";
+import { TeamCell } from "./../TeamCell"
 
 interface MatchRowProps {
     match: Match
@@ -20,8 +21,8 @@ export class MatchRow extends React.Component<MatchRowProps> {
     private renderPlayedMatch() {
         return (
             <React.Fragment>
-                <td>{this.props.match.homeTeam} <span>'\ue721'</span></td>
-                <td>{this.props.match.awayTeam}</td>
+                <TeamCell teamName={this.props.match.homeTeam} />
+                <TeamCell teamName={this.props.match.awayTeam} />
                 <td>{this.props.match.result.homeTeam} : {this.props.match.result.awayTeam}</td>
                 <td><a href={this.props.match.link}>Záznam</a></td>
             </React.Fragment>
@@ -31,9 +32,9 @@ export class MatchRow extends React.Component<MatchRowProps> {
     private renderNotPlayedMatch() {
         return (
             <React.Fragment>
-                <td>{this.props.match.homeTeam}</td>
-                <td>{this.props.match.awayTeam}</td>
-                <td>{this.props.match.startTime}</td>
+                <TeamCell teamName={this.props.match.homeTeam} />
+                <TeamCell teamName={this.props.match.awayTeam} />
+                <td>{new Date(this.props.match.startTime).toLocaleDateString('cs-CS')}</td>
                 <td><a href={this.props.match.link}>Záznam</a></td>
             </React.Fragment>
         );

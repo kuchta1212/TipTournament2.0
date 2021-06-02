@@ -4,6 +4,16 @@ import { MainData } from "../../typings/index"
 import { Matches } from "./Matches"
 import { UserBets } from "./UserBets"
 import { Ranking } from "./Ranking"
+import { css } from "@emotion/react";
+//import { PacmanLoader } from "react-spinners/PacmanLoader";
+import './../../custom.css'
+
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 interface MainPageState {
     data: MainData,
@@ -30,12 +40,11 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
 
     public render() {
         let contents = this.state.loading
-                ? <p><em>Loading...</em></p>
+                ? <p>Kurva</p>//<PacmanLoader css={override} size={150} color={"#123abc"} loading={this.state.loading} speedMultiplier={1.5} />
                 : this.renderDataTable(this.state.data);
 
         return (
             <div>
-                <h1 id="tabelLabel" >Hlavni cast</h1>
                 {contents}
             </div>
         );

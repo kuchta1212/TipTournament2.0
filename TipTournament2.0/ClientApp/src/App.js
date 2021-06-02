@@ -4,7 +4,7 @@ import { Layout } from './components/Layout';
 import { MainPage } from './components/MainPage/MainPage';
 import { Bets } from './components/Bets/Bets'
 import { AllBets } from './components/Bets/AllBets'
-import { UpdateChecker } from './components/Admin/AdminPage'
+import { AdminPage } from './components/Admin/AdminPage'
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import AdminAuthorizeRoute from './components/api-authorization/AdminAuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -21,7 +21,7 @@ export default class App extends Component {
         <AuthorizeRoute exact path='/' component={MainPage} />
         <AuthorizeRoute exact path="/tips" component={Bets} />
         <AuthorizeRoute exact path="/bets/all" component={AllBets} />
-        <AdminAuthorizeRoute exact path="/admin/update" component={UpdateChecker} allowed={['admin']}/>
+        <AuthorizeRoute exact path="/admin" component={AdminPage} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

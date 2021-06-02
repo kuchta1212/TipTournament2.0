@@ -36,7 +36,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
 
         return (
             <div>
-                <h1 id="tabelLabel" >Sazky</h1>
+                <h1 id="tabelLabel" >Sázky</h1>
                 {contents}
             </div>
         );
@@ -50,7 +50,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
 
     private renderBetsTable(matches: Match[], bets: Bet[]) {
         return (
-            <Table>
+            <Table className="table table-striped opacity-table">
                 <thead>
                 </thead>
                 <tbody>

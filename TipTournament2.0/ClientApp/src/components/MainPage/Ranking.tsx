@@ -17,7 +17,7 @@ export class Ranking extends React.Component<RankingProps> {
         let contents = this.renderRanking(this.props.ranking)
 
         return (
-            <div>
+            <div className="col-4">
                 <h1 id="tabelLabel" >Pořadí</h1>
                 {contents}
             </div>
@@ -26,17 +26,17 @@ export class Ranking extends React.Component<RankingProps> {
 
     private renderRanking(data: User[]) {
         return (
-            <Table>
+            <Table className="table table-striped opacity-table">
                 <thead>
                 </thead>
                 <tbody>
                     {data.map((user, index) => (
                         <tr key={user.userName}>
-                            <UserRow user={user} />
+                            <UserRow user={user} index={index} />
                         </tr>)
                     )}
                 </tbody>
-            </Table>
+                </Table>
         );
     }
 }

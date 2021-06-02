@@ -1,7 +1,8 @@
 ﻿import * as React from 'react';
 import { User } from "../../typings/index"
 import { Table } from 'reactstrap';
-import { getAdminApi, getApi } from '../api/ApiFactory';
+import { getApi } from '../api/ApiFactory';
+import { UserRow } from './UserRow'
 
 
 interface UserOverviewState {

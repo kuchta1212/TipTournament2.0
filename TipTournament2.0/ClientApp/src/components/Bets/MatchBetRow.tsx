@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
 import { Bet, Match, Result } from "../../typings/index"
+import { TeamCell } from './../TeamCell'
 
 interface MatchBetRowState {
     tip: Result,
@@ -33,24 +34,26 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
     private renderSettedBet() {
         return (
             <React.Fragment>
-                <td>{this.props.match.homeTeam} <span>\ue721</span></td>
-                <td>{this.props.match.awayTeam}</td>
+                <TeamCell teamName={this.props.match.homeTeam} />
+                <TeamCell teamName={this.props.match.awayTeam} />
                 <td>{this.state.tip.homeTeam} : {this.state.tip.awayTeam}</td>
-                {!this.props.isReadOnly ? <td><button onClick={() => this.modify()}>Upravit</button></td> : <td/>} 
+                {!this.props.isReadOnly ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : <td/>} 
             </React.Fragment>
         );
     }
 
     private renderNotSettedBet() {
-        return (
-            <React.Fragment>
-                <td>{this.props.match.homeTeam}</td>
-                <td>{this.props.match.awayTeam}</td>
-                <td><input type="number" min="0" max="99" value={!!this.state.tip.homeTeam ? this.state.tip.homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
-                <td><input type="number" min="0" max="99" value={!!this.state.tip.awayTeam ? this.state.tip.awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
-                {!this.props.isReadOnly ? <td><button onClick={() => this.uploadTip()}>Ulozit</button></td> : <td/>}
-            </React.Fragment>
-        );
+        return !this.props.isReadOnly ?
+            (
+                <React.Fragment>
+                    <TeamCell teamName={this.props.match.homeTeam} />
+                    <TeamCell teamName={this.props.match.awayTeam} />
+                    <td><input type="number" min="0" max="99" value={!!this.state.tip.homeTeam ? this.state.tip.homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
+                    <td><input type="number" min="0" max="99" value={!!this.state.tip.awayTeam ? this.state.tip.awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
+                    {<td><button className="btn btn-secondary" onClick={() => this.uploadTip()}>Uložit</button></td>}
+                </React.Fragment>
+            )
+            : null;
     }
 
     private setHomeTip(tip: string) {

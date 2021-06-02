@@ -19,24 +19,24 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
         if (!!this.props.bet.match.ended) {
             switch (this.props.bet.betResult) {
                 case BetResult.nothing:
-                    return this.renderPlayedMatchBet();
+                    return this.renderPlayedMatchBet("", "");
                 case BetResult.winner:
                     return this.renderPlayedMatchBet();
                 case BetResult.difference:
                     return this.renderPlayedMatchBet();
                 case BetResult.score:
-                    return this.renderPlayedMatchBet();
+                    return this.renderPlayedMatchBet("text-success", "bg-success");
             }
         } 
 
         return this.renderNotPlayedMatchBet();
     }
 
-    private renderPlayedMatchBet() {
+    private renderPlayedMatchBet(textClassName: string, backgroundClassName: string) {
         return (
             <React.Fragment>
-                <td>{this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}</td>
-                <td>{this.props.bet.betResult}</td>
+                <td className={textClassName}>{this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}</td>
+                <td className={backgroundClassName}>{this.props.bet.betResult}</td>
             </React.Fragment>
         );
     }

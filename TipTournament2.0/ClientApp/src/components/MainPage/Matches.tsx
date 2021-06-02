@@ -20,7 +20,7 @@ export class Matches extends React.Component<MatchesProps> {
         let contents = this.renderMatchTable(this.props.matches)
 
         return (
-            <div>
+            <div className="col">
                 <h1 id="tabelLabel" >Zápasy</h1>
                 {contents}
             </div>
@@ -29,7 +29,7 @@ export class Matches extends React.Component<MatchesProps> {
 
     private renderMatchTable(data: Match[]) {
         return (
-            <Table>
+                <Table className="table table-striped opacity-table">
                 <thead>
                 </thead>
                 <tbody>
@@ -39,7 +39,7 @@ export class Matches extends React.Component<MatchesProps> {
                         </tr>)
                     )}
                 </tbody>
-            </Table>
+                </Table>
         );
     }
 }

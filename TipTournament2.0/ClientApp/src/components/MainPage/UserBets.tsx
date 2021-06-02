@@ -17,7 +17,7 @@ export class UserBets extends React.Component<UserBetsProps> {
         let contents = this.renderBetsTable(this.props.bets)
 
         return (
-            <div>
+            <div className="col-2">
                 <h1 id="tabelLabel" >Sázky</h1>
                 {contents}
             </div>
@@ -26,7 +26,7 @@ export class UserBets extends React.Component<UserBetsProps> {
 
     private renderBetsTable(data: Bet[]) {
         return (
-            <Table>
+            <Table className="table table-striped opacity-table">
                 <thead>
                 </thead>
                 <tbody>
@@ -36,7 +36,7 @@ export class UserBets extends React.Component<UserBetsProps> {
                         </tr>)
                     )}
                 </tbody>
-            </Table>
+                </Table>
         );
     }
 }

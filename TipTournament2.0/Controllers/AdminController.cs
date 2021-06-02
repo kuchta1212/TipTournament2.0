@@ -12,7 +12,7 @@
     using TipTournament2._0.Models;
 
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [Route("api/admin")]
 
     public class AdminController : Controller

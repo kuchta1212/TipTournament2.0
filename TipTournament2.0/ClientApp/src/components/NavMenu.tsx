@@ -33,18 +33,21 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
   render () {
     return (
       <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
+            <Navbar className="navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3" light>
           <Container>
             <NavbarBrand tag={Link} to="/">Tipovačka EURO 2021</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/tips">Sázky</NavLink>
+                  <NavLink tag={Link} className="text-light" to="/tips">Sázky</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/bets/all">Všechny sázky</NavLink>
+                  <NavLink tag={Link} className="text-light" to="/bets/all">Všechny sázky</NavLink>
                 </NavItem>
+                {/*<NavItem>*/}
+                {/*    <NavLink tag={Link} className="text-dark" to="/admin">Admin</NavLink>*/}
+                {/*</NavItem>*/}
                 <LoginMenu>
                 </LoginMenu>
               </ul>

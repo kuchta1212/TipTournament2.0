@@ -12,3 +12,24 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+body {
+    padding-bottom: 20px;
+    background-image: url('images/background3.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.opacity-table {
+    background-color: rgba(245, 245, 245, 1);
+    opacity: .8;
+}
+
+.opacity-table:hover {
+    opacity: 1.0;
+}
+
+.opacity-cell {
+    opacity: 0
+}

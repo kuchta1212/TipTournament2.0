@@ -50,13 +50,19 @@
     <None Remove="ClientApp\src\components\Bets\MatchBetRow.tsx" />
     <None Remove="ClientApp\src\components\Bets\UserSelector.tsx" />
     <None Remove="ClientApp\src\components\Data.tsx" />
+    <None Remove="ClientApp\src\components\IconProvider.ts" />
     <None Remove="ClientApp\src\components\MainPage\Matches.tsx" />
     <None Remove="ClientApp\src\components\MainPage\MatchRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Ranking.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserBets.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserRow.tsx" />
+    <None Remove="ClientApp\src\components\TeamCell.tsx" />
     <None Remove="ClientApp\src\typings\index.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientApp\src\images\background.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -84,6 +90,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\Bets\Bets.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\UserSelector.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\MatchBetRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\IconProvider.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\Ranking.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBets.tsx">
@@ -97,6 +104,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\MainPage.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\TeamCell.tsx" />
     <TypeScriptCompile Include="ClientApp\src\typings\index.ts" />
   </ItemGroup>
 
@@ -155,6 +163,10 @@
     <None Update="ClientApp\src\components\api\Api - Copy.js.map">
       <DependentUpon>Api.js.map</DependentUpon>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

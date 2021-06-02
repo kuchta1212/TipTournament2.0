@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
-import { User } from "../../typings";
-import { getAdminApi } from "../api/ApiFactory"
+import { MatchLoader } from './MatchLoader';
+import { UpdateChecker } from './UpdateChecker';
+import { UserOverview } from './UserOverview';
 
 interface AdminPageState {
 

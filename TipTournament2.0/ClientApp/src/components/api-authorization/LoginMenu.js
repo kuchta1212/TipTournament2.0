@@ -53,13 +53,10 @@ export class LoginMenu extends Component {
         const didPayedClassName = didPayed ? "text-success" : "text-danger";
         return (<Fragment>
             <NavItem>
-                <NavLink className="text-dark" >Nazdar {userName}</NavLink>
-            </NavItem>
-            <NavItem>
                 <NavLink className={didPayedClassName}>{didPayedLabel}</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={logoutPath}>Odhlásit se</NavLink>
+                <NavLink tag={Link} className="text-light" to={logoutPath}>Odhlásit se</NavLink>
             </NavItem>
         </Fragment>);
 
@@ -68,10 +65,10 @@ export class LoginMenu extends Component {
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={registerPath}>Registrovat se</NavLink>
+                <NavLink tag={Link} className="text-light" to={registerPath}>Registrovat se</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-dark" to={loginPath}>Přihlásit se</NavLink>
+                <NavLink tag={Link} className="text-light" to={loginPath}>Přihlásit se</NavLink>
             </NavItem>
         </Fragment>);
     }

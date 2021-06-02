@@ -51,7 +51,7 @@ export class Login extends Component {
         } else {
             switch (action) {
                 case LoginActions.Login:
-                    return (<div>Processing login</div>);
+                    return this.processingLogin();
                 case LoginActions.LoginCallback:
                     return (<div>Processing login callback</div>);
                 case LoginActions.Profile:
@@ -61,6 +61,10 @@ export class Login extends Component {
                     throw new Error(`Invalid action '${action}'`);
             }
         }
+    }
+
+    processingLogin() {
+        return (<p class="display-4">Give us a second, we are signing you in!</p>)
     }
 
     async login(returnUrl) {
