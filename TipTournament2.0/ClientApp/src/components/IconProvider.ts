@@ -21,6 +21,10 @@ export function getIconName(teamName: string): string {
         case 'Dánsko': return 'icons/denmark.svg';
         case 'Finsko': return 'icons/finland.svg';
         case 'Anglie': return 'icons/england.svg';
+        case 'Chorvatsko': return 'icons/croatia.svg';
+        case 'Polsko': return 'icons/poland.svg';
+        case 'Skotsko': return 'icons/scotland.svg';
+        case 'Česko': return 'icons/czech-republic.svg';
         default: return '/germany.svg'
     }
 }

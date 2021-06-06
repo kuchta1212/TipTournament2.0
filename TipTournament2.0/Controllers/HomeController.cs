@@ -29,7 +29,7 @@
             var screen = new HomeScreenModel()
             {
                 Bets = this.context.GetBetsForUser(userId),
-                Matches = this.context.GetMatches(),
+                Matches = this.context.GetMatches().OrderBy(m => m.StartTime).ToList(),
                 Users = this.context.GetUsers()
             };
 
@@ -39,7 +39,7 @@
         [HttpGet("matches")]
         public IActionResult GetMatches() 
         {
-            return new OkObjectResult(this.context.GetMatches());
+            return new OkObjectResult(this.context.GetMatches().OrderBy(m => m.StartTime).ToList());
         }
 
         [HttpGet("bets")]

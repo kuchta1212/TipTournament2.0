@@ -4,8 +4,7 @@ import { MainData } from "../../typings/index"
 import { Matches } from "./Matches"
 import { UserBets } from "./UserBets"
 import { Ranking } from "./Ranking"
-import { css } from "@emotion/react";
-//import { PacmanLoader } from "react-spinners/PacmanLoader";
+import { Loader } from './../Loader'
 import './../../custom.css'
 
 
@@ -40,7 +39,7 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
 
     public render() {
         let contents = this.state.loading
-                ? <p>Kurva</p>//<PacmanLoader css={override} size={150} color={"#123abc"} loading={this.state.loading} speedMultiplier={1.5} />
+                ? <Loader />
                 : this.renderDataTable(this.state.data);
 
         return (

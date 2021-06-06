@@ -100,7 +100,7 @@
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Špatné heslo asi. Zkus znova.");
                     return Page();
                 }
             }

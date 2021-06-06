@@ -3,6 +3,7 @@ import { Component } from 'react';
 import authService from './AuthorizeService';
 import { AuthenticationResultStatus } from './AuthorizeService';
 import { QueryParameterNames, LogoutActions, ApplicationPaths } from './ApiAuthorizationConstants';
+import { Loader } from './../Loader'
 
 // The main responsibility of this component is to handle the user's logout process.
 // This is the starting point for the logout process, which is usually initiated when a
@@ -53,15 +54,23 @@ export class Logout extends Component {
             const action = this.props.action;
             switch (action) {
                 case LogoutActions.Logout:
-                    return (<div>Processing logout</div>);
+                    return this.processingLogout();
                 case LogoutActions.LogoutCallback:
-                    return (<div>Processing logout callback</div>);
+                    return this.processingLogout()
                 case LogoutActions.LoggedOut:
                     return (<div>{message}</div>);
                 default:
                     throw new Error(`Invalid action '${action}'`);
             }
         }
+    }
+
+    processingLogout() {
+        return (
+            <div className="justify-content-center">
+                <p className="display-4">Chvilku, odhlašuju!</p>
+                <Loader />
+            </div>)
     }
 
     async logout(returnUrl) {

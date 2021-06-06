@@ -6,7 +6,8 @@ interface UserSelectorState {
 
 interface UserSelectorProps {
     users: User[],
-    onUserSelect: (event: any) => void
+    onUserSelect: (event: any) => void,
+    disabled: boolean
 }
 
 export class UserSelector extends React.Component<UserSelectorProps, UserSelectorState> {
@@ -21,7 +22,7 @@ export class UserSelector extends React.Component<UserSelectorProps, UserSelecto
               <div className="input-group-prepend">
                     <label className="input-group-text" htmlFor="usersSelect">Vyber hráče:</label>
               </div>
-              <select className="custom-select" id="usersSelect" defaultValue={'default'} onChange={this.props.onUserSelect}>
+                <select className="custom-select" id="usersSelect" defaultValue={'default'} onChange={this.props.onUserSelect} disabled={this.props.disabled}>
                 <option key="defaultOption" value="default" disabled>---</option> 
                 {this.props.users.map((user, index) => {
                         return <option key={user.id} value={user.id}>{user.userName}</option>

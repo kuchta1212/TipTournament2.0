@@ -51,6 +51,7 @@
     <None Remove="ClientApp\src\components\Bets\UserSelector.tsx" />
     <None Remove="ClientApp\src\components\Data.tsx" />
     <None Remove="ClientApp\src\components\IconProvider.ts" />
+    <None Remove="ClientApp\src\components\Loader.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Matches.tsx" />
     <None Remove="ClientApp\src\components\MainPage\MatchRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Ranking.tsx" />
@@ -58,6 +59,7 @@
     <None Remove="ClientApp\src\components\MainPage\UserBets.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserRow.tsx" />
     <None Remove="ClientApp\src\components\TeamCell.tsx" />
+    <None Remove="ClientApp\src\components\WarningNotification.tsx" />
     <None Remove="ClientApp\src\typings\index.ts" />
   </ItemGroup>
 
@@ -104,7 +106,11 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\MainPage.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Loader.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\TeamCell.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\WarningNotification.tsx" />
     <TypeScriptCompile Include="ClientApp\src\typings\index.ts" />
   </ItemGroup>
 
@@ -163,9 +169,16 @@
     <None Update="ClientApp\src\components\api\Api - Copy.js.map">
       <DependentUpon>Api.js.map</DependentUpon>
     </None>
+    <None Update="ClientApp\src\components\TeamCell - Copy.js">
+      <DependentUpon>TeamCell.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\components\TeamCell - Copy.js.map">
+      <DependentUpon>TeamCell.js.map</DependentUpon>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\components\NewFolder\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

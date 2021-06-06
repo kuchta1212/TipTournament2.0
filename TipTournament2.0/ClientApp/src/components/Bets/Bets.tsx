@@ -3,11 +3,14 @@ import { getApi } from "../api/ApiFactory"
 import { Match, Bet, User } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
+import { Loader } from './../Loader'
+import { WarningNotification } from '../WarningNotification';
 
 interface BetsState {
     matches: Match[],
     bets: Bet[],
-    loading: boolean
+    loading: boolean,
+    afterLimit: boolean
 }
 
 interface BetsProps {
@@ -21,7 +24,8 @@ export class Bets extends React.Component<BetsProps, BetsState> {
         this.state = {
             matches: {} as Match[],
             bets: {} as Bet[],
-            loading: true
+            loading: true,
+            afterLimit: new Date() > new Date("2021-06-11 18:00")
         }
     }
 
@@ -31,12 +35,13 @@ export class Bets extends React.Component<BetsProps, BetsState> {
 
     public render() {
         let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
+            ? <Loader />
             : this.renderBetsTable(this.state.matches, this.state.bets);
 
         return (
             <div>
                 <h1 id="tabelLabel" >Sázky</h1>
+                {this.state.afterLimit ? <WarningNotification text="Prošvihl si to! Sázkám, už je konec." /> : <div/>}
                 {contents}
             </div>
         );
@@ -45,7 +50,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
     private async getData() {
         const matches = await getApi().getMatches();
         const bets = await getApi().getBets(this.props.user)
-        this.setState({ matches: matches, bets:bets, loading: false });
+        this.setState({ matches: matches, bets: bets, loading: false, afterLimit: this.state.afterLimit });
     }
 
     private renderBetsTable(matches: Match[], bets: Bet[]) {
@@ -56,7 +61,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                 <tbody>
                     {matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchBetRow match={match} bet={bets.find(b => !!b.match && b.match.id == match.id)} isReadOnly={!!this.props.user} />
+                            <MatchBetRow match={match} bet={bets.find(b => !!b.match && b.match.id == match.id)} isReadOnly={!!this.props.user || this.state.afterLimit} />
                         </tr>)
                     )}
                 </tbody>

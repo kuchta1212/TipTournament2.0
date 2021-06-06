@@ -1,8 +1,9 @@
-import React from 'react'
+﻿import React from 'react'
 import { Component } from 'react';
 import authService from './AuthorizeService';
 import { AuthenticationResultStatus } from './AuthorizeService';
 import { LoginActions, QueryParameterNames, ApplicationPaths } from './ApiAuthorizationConstants';
+import { Loader } from './../Loader'
 
 // The main responsibility of this component is to handle the user's login process.
 // This is the starting point for the login process. Any component that needs to authenticate
@@ -53,7 +54,7 @@ export class Login extends Component {
                 case LoginActions.Login:
                     return this.processingLogin();
                 case LoginActions.LoginCallback:
-                    return (<div>Processing login callback</div>);
+                    return this.processingLogin();
                 case LoginActions.Profile:
                 case LoginActions.Register:
                     return (<div></div>);
@@ -64,7 +65,11 @@ export class Login extends Component {
     }
 
     processingLogin() {
-        return (<p class="display-4">Give us a second, we are signing you in!</p>)
+        return (
+                <div className="justify-content-center">
+                <p className="display-4 text-light">Chvilku, přihlašuju!</p>
+                    <Loader />
+                </div>)
     }
 
     async login(returnUrl) {
