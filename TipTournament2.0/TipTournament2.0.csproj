@@ -178,7 +178,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\components\NewFolder\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

@@ -7,13 +7,6 @@ import { Ranking } from "./Ranking"
 import { Loader } from './../Loader'
 import './../../custom.css'
 
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
-
 interface MainPageState {
     data: MainData,
     loading: boolean
