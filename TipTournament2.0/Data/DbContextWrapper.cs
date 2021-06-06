@@ -62,6 +62,7 @@
             var user = this.GetUser(userId);
             user.Payed = payed;
             this.dbContext.Update(user);
+            this.dbContext.SaveChanges();
         }
 
         public void UploadTips(Dictionary<string, Result> tips, string userId)

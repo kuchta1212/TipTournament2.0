@@ -15,11 +15,13 @@
     public class MatchClient : IMatchClient
     {
         private const string Uri = "https://www.idnes.cz/fotbal/databanka/euro-2021-los.Umli48513";
-        private readonly Regex regex;
+        private readonly Regex dateTimeRegex;
+        private readonly Regex codingRegex;
 
         public MatchClient()
         {
-            this.regex = new Regex(@"(\d*):(\d*)");
+            this.dateTimeRegex = new Regex(@"(\d*):(\d*)");
+            this.codingRegex = new Regex("charset=(.*)");
         }
 
         public async Task<List<Models.Match>> CheckForUpdates(List<Models.Match> matches)
@@ -30,7 +32,7 @@
             {
                 var record = data.First(r => r.HomeTeam == match.HomeTeam && r.AwayTeam == match.AwayTeam);
 
-                var regexMatch = this.regex.Match(record.TimeOrResult);
+                var regexMatch = this.dateTimeRegex.Match(record.TimeOrResult);
                 if (!regexMatch.Success)
                 {
                     //some issue, should not happen hopefully :D 
@@ -103,9 +105,16 @@
             {
                 var contenttype = response.Content.Headers.First(h => h.Key.Equals("Content-Type"));
                 var rawencoding = contenttype.Value.First();
+                var codingRegexMatch = codingRegex.Match(rawencoding);
+                if(!codingRegexMatch.Success)
+                {
+                    //hopefully not :D 
+                    return new List<HtmlRecord>();
+                }
 
+                var codingName = codingRegexMatch.Groups[1].Value;
                 var bytes = await response.Content.ReadAsByteArrayAsync();
-                var html = Encoding.UTF8.GetString(bytes);
+                var html = Encoding.GetEncoding(codingName).GetString(bytes);
 
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(html);

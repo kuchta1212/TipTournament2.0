@@ -16,6 +16,6 @@ export class AdminApi implements IAdminApi {
     }
 
     payed(userId: string, payed: boolean): Promise<void> {
-        return convert<void>(get(`${API_URL}/${userId}/payed?payed=${payed}`));
+        return convert<void>(post(`${API_URL}/${userId}/payed?payed=${payed}`));
     }
 }
