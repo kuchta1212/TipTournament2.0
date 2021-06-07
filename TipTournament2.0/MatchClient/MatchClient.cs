@@ -111,7 +111,9 @@
 
                 var codingName = codingRegexMatch.Groups[1].Value;
                 var bytes = await response.Content.ReadAsByteArrayAsync();
-                var html = File.ReadAllText("C:\\Users\\jakuchar\\Desktop\\resultTest.html");//Encoding.GetEncoding(codingName).GetString(bytes);
+                //testing purposes
+                //var html = File.ReadAllText("C:\\Users\\jakuchar\\Desktop\\resultTest.html");//Encoding.GetEncoding(codingName).GetString(bytes);
+                var html = Encoding.GetEncoding(codingName).GetString(bytes);
 
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(html);
