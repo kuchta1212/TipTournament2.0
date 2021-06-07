@@ -4,7 +4,7 @@ import { Match, Bet, User } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from './../Loader'
-import { WarningNotification } from '../WarningNotification';
+import { WarningNotification, WarningTypes } from '../WarningNotification';
 
 interface BetsState {
     matches: Match[],
@@ -25,7 +25,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
             matches: {} as Match[],
             bets: {} as Bet[],
             loading: true,
-            afterLimit: new Date() > new Date("2021-06-11 18:00")
+            afterLimit: new Date() > new Date("2021-06-11 21:00")
         }
     }
 
@@ -41,7 +41,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
         return (
             <div>
                 <h1 id="tabelLabel" >Sázky</h1>
-                {this.state.afterLimit ? <WarningNotification text="Prošvihl si to! Sázkám, už je konec." /> : <div/>}
+                {this.state.afterLimit ? <WarningNotification text="Prošvihl si to! Sázkám, už je konec." type={WarningTypes.error} /> : <WarningNotification text="Sázky se uzavřou s prvním zápasem. Takže 11.6 v 21:00." type={WarningTypes.warning} />}
                 {contents}
             </div>
         );

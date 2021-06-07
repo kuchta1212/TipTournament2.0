@@ -26,14 +26,20 @@
 
         void SaveMatches(List<Match> matches);
 
-        void SaveResults(List<Match> matchesWithResults);
-
         List<Match> GetNotEndedMatches();
 
-        List<Bet> GetBetsForMatches(List<Match> matches);
+        List<Bet> GetBetsForMatch(Match match);
 
         void UpdateBets(List<Bet> bets);
 
         List<ApplicationUser> GetAllUsers();
+
+        Result SaveResult(Result result);
+
+        void UpdateMatch(Match match);
+
+        void UpdateResult(Result result);
+
+        void UpdateUsers(List<ApplicationUser> users);
     }
 }

@@ -52,6 +52,7 @@
     <None Remove="ClientApp\src\components\Data.tsx" />
     <None Remove="ClientApp\src\components\IconProvider.ts" />
     <None Remove="ClientApp\src\components\Loader.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\MainRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Matches.tsx" />
     <None Remove="ClientApp\src\components\MainPage\MatchRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Ranking.tsx" />
@@ -93,6 +94,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\Bets\UserSelector.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\MatchBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\IconProvider.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\MainRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\Ranking.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBets.tsx">

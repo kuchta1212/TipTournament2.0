@@ -8,9 +8,15 @@
 
     public class BetResultMaker : IBetResultMaker
     {
-        public List<Bet> UpdateBetResult(List<Bet> bets)
+        public List<Bet> UpdateBetResult(List<Bet> bets, Result result)
         {
-            throw new NotImplementedException();
+           foreach(var bet in bets)
+           {
+                var betResult = this.GetBetResult(result, bet);
+                bet.Result = betResult;
+           }
+
+            return bets;
         }
 
         private BetResult GetBetResult(Result result, Bet bet)

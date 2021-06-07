@@ -51,8 +51,7 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
         return (
             <div className="container body-content">
                 <div className="row">
-                    <Matches matches={ data.matches } />
-                    <UserBets bets={data.bets} />
+                    <Matches matches={data.matches} bets={data.bets} />
                     <Ranking ranking={data.users} />
                 </div>
             </div>

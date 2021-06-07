@@ -54,9 +54,9 @@
         }
 
         [HttpGet("matches/check")]
-        public IActionResult CheckForUpdates()
+        public async Task<IActionResult> CheckForUpdates()
         {
-            return new OkObjectResult(this.resultCoordinator.Coordinate());
+            return new OkObjectResult(await this.resultCoordinator.Coordinate());
         }
         
     }

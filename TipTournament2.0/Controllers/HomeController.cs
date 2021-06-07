@@ -30,7 +30,7 @@
             {
                 Bets = this.context.GetBetsForUser(userId),
                 Matches = this.context.GetMatches().OrderBy(m => m.StartTime).ToList(),
-                Users = this.context.GetUsers()
+                Users = this.context.GetUsers().OrderByDescending(u => u.Points).ToList()
             };
 
             return new OkObjectResult(screen);

@@ -4,7 +4,7 @@ import { Match, User } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { Bets } from './Bets';
 import { UserSelector } from './UserSelector';
-import { WarningNotification } from '../WarningNotification';
+import { WarningNotification, WarningTypes } from '../WarningNotification';
 
 interface AllBetsState {
     users: User[];
@@ -28,7 +28,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
             selectedUser: {} as User,
             loading: true,
             isUserSelected: false,
-            isAllowed: new Date() > new Date("2021-06-11 18:00")
+            isAllowed: new Date() > new Date("2021-06-11 21:00")
         }
     }
 
@@ -52,8 +52,8 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
     private renderUserSelector() {
         return this.state.isAllowed 
             ? (<UserSelector users={this.state.users} onUserSelect={this.userSelected.bind(this)} disabled={false} />)
-            : (<React.Fragment> 
-                    <WarningNotification text="Ještě ne! Až bude konec sázek." />
+            : (<React.Fragment>
+                <WarningNotification text="Sázky ostatních se otevřou s uzavřením sázek. Takže 11.6 v 21:00 " type={WarningTypes.error} />
                 <UserSelector users={this.state.users} onUserSelect={this.userSelected.bind(this)} disabled={true} />
                 </React.Fragment>)
     }
@@ -71,6 +71,5 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
         let user = this.state.users.find(u => u.id == event.target.value);
         this.setState({ users: this.state.users, selectedUser: user, loading: false, isUserSelected: true })
     }
-
 }
 

@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -11,6 +12,7 @@
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using TipTournament2._0.Models;
+    using Match = Models.Match;
 
     public class MatchClient : IMatchClient
     {
@@ -24,9 +26,9 @@
             this.codingRegex = new Regex("charset=(.*)");
         }
 
-        public async Task<List<Models.Match>> CheckForUpdates(List<Models.Match> matches)
+        public async Task<Dictionary<Match, Result>> CheckForUpdates(List<Match> matches)
         {
-            var updatedMatches = new List<Models.Match>();
+            var updatedMatches = new Dictionary<Match, Result>();
             var data = await this.LoadData();
             foreach(var match in matches)
             {
@@ -57,12 +59,7 @@
                 result.HomeTeam = home;
                 result.AwayTeam = away;
 
-                if(match.Result == null)
-                {
-                    match.Result = result;
-                }
-
-                updatedMatches.Add(match);
+                updatedMatches.Add(match, result);
             }
 
             return updatedMatches;
@@ -114,7 +111,7 @@
 
                 var codingName = codingRegexMatch.Groups[1].Value;
                 var bytes = await response.Content.ReadAsByteArrayAsync();
-                var html = Encoding.GetEncoding(codingName).GetString(bytes);
+                var html = File.ReadAllText("C:\\Users\\jakuchar\\Desktop\\resultTest.html");//Encoding.GetEncoding(codingName).GetString(bytes);
 
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(html);

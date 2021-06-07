@@ -23,7 +23,7 @@ export interface Bet {
     id: string;
     match: Match;
     tip: Result;
-    betResult: BetResult;
+    result: BetResult;
     user: User;
 }
 

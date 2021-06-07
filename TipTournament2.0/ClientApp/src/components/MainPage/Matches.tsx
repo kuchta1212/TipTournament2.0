@@ -1,10 +1,11 @@
 ﻿import * as React from 'react';
-import { Match } from "../../typings/index"
-import { MatchRow } from "./MatchRow"
+import { Match, Bet } from "../../typings/index"
 import { Table } from 'reactstrap';
+import { MainRow } from './MainRow';
 
 interface MatchesProps {
-    matches: Match[]
+    matches: Match[],
+    bets: Bet[]
 }
 
 export class Matches extends React.Component<MatchesProps> {
@@ -14,30 +15,34 @@ export class Matches extends React.Component<MatchesProps> {
     }
 
     public render() {
-        let contents = this.renderMatchTable(this.props.matches)
+        let contents = this.renderMatchTable()
 
         return (
             <div className="col">
-                <h1 id="tabelLabel" >Zápasy</h1>
+                <h1 id="tabelLabel" >Zápasy a sázky</h1>
                 {contents}
             </div>
         );
     }
 
-    private renderMatchTable(data: Match[]) {
+    private renderMatchTable() {
         return (
                 <Table className="table table-striped opacity-table">
                 <thead>
                 </thead>
                 <tbody>
-                    {data.map((match, index) => (
+                    {this.props.matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchRow match={match} />
+                            <MainRow match={match} bet={this.getBet(match)} />
                         </tr>)
                     )}
                 </tbody>
                 </Table>
         );
+    }
+
+    private getBet(match: Match): Bet {
+        return this.props.bets.find(b => b.match.id == match.id);
     }
 }
 

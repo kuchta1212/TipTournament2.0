@@ -34,15 +34,39 @@
         {
             var notEndedMatches = this.dbContextWrapper.GetNotEndedMatches();
             var matchesWithResult = await this.matchClient.CheckForUpdates(notEndedMatches);
-            this.dbContextWrapper.SaveResults(matchesWithResult);
-            return matchesWithResult.Where(m => m.Ended).ToList();
+
+            var updateMatches = this.UpsertResults(matchesWithResult);
+
+            return updateMatches.Where(m => m.Ended).ToList();
+        }
+
+        private List<Match> UpsertResults(Dictionary<Match, Result> matchesWithResult)
+        {
+            foreach(var matchWithResult in matchesWithResult)
+            {
+                if(matchWithResult.Key.Result == null)
+                {
+                    var result = this.dbContextWrapper.SaveResult(matchWithResult.Value);
+                    matchWithResult.Key.Result = result;
+                }
+                else
+                {
+                    this.dbContextWrapper.UpdateResult(matchWithResult.Value);
+                }
+                this.dbContextWrapper.UpdateMatch(matchWithResult.Key);
+            }
+
+            return matchesWithResult.Keys.ToList();
         }
 
         private void UpdateBetsResult(List<Match> matches)
         {
-            var bets = this.dbContextWrapper.GetBetsForMatches(matches);
-            var updateBets = this.betResultMaker.UpdateBetResult(bets);
-            this.dbContextWrapper.UpdateBets(updateBets);
+            foreach (var match in matches)
+            {
+                var bets = this.dbContextWrapper.GetBetsForMatch(match);
+                var updateBets = this.betResultMaker.UpdateBetResult(bets, match.Result);
+                this.dbContextWrapper.UpdateBets(updateBets);
+            }
         }
 
         private void RecalculatePoints()
@@ -52,8 +76,10 @@
             {
                 var betsForUser = this.dbContextWrapper.GetBetsForUser(user.Id);
                 var points = betsForUser.Sum(b => (int)b.Result);
-                user.Points = points;
+                user.Points = points;                
             }
+
+            this.dbContextWrapper.UpdateUsers(users);
         }
     }
 }

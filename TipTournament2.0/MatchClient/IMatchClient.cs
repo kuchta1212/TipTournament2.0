@@ -12,6 +12,6 @@
 
         Task<Result> GetResult(Match match);
 
-        Task<List<Match>> CheckForUpdates(List<Match> notEndedMatches);
+        Task<Dictionary<Match, Result>> CheckForUpdates(List<Match> notEndedMatches);
     }
 }

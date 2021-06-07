@@ -32,7 +32,9 @@
 
         public List<Match> GetMatches()
         {
-            var matches = dbContext.Matches.ToList();
+            var matches = dbContext.Matches
+                .Include(m => m.Result)
+                .ToList();
             return matches;
         }
 
@@ -52,9 +54,18 @@
             this.dbContext.SaveChanges();
         }
 
-        public void SaveResults(List<Match> matchesWithResults)
+        public Result SaveResult(Result result)
         {
-            this.dbContext.UpdateRange(matchesWithResults);
+            try
+            {
+                this.dbContext.Add(result);
+                this.dbContext.SaveChanges();
+                return result;
+            } catch(Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         public void SetUserPaymentInfo(string userId, bool payed)
@@ -107,18 +118,19 @@
             return this.dbContext.Matches.Where(m => !m.Ended).ToList();
         }
 
-        public List<Bet> GetBetsForMatches(List<Match> matches)
+        public List<Bet> GetBetsForMatch(Match match)
         {
             return this.dbContext.Bets
                 .Include(b => b.Match)
                 .Include(b => b.Tip)
-                .Where(b => matches.Contains(b.Match))
+                .Where(b => b.Match.Id == match.Id)
                 .ToList();
         }
 
         public void UpdateBets(List<Bet> bets)
         {
             this.dbContext.UpdateRange(bets);
+            this.dbContext.SaveChanges();
         }
 
         public List<ApplicationUser> GetAllUsers()
@@ -129,6 +141,24 @@
         private Match GetMatch(string matchId)
         {
             return this.dbContext.Matches.FirstOrDefault(x => x.Id == matchId);
+        }
+
+        public void UpdateMatch(Match match)
+        {
+            this.dbContext.Update(match);
+            this.dbContext.SaveChanges();
+        }
+
+        public void UpdateResult(Result result)
+        {
+            this.dbContext.Update(result);
+            this.dbContext.SaveChanges();
+        }
+
+        public void UpdateUsers(List<ApplicationUser> users)
+        {
+            this.dbContext.UpdateRange(users);
+            this.dbContext.SaveChanges();
         }
     }
 }
