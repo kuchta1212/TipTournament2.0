@@ -5,16 +5,13 @@ import { UserBetRow } from "./UserBetRow"
 
 interface MatchRowProps {
     match: Match,
-    bet: Bet
+    bet: Bet | undefined
 }
 
 export class MainRow extends React.Component<MatchRowProps> {
 
     constructor(props: MatchRowProps) {
         super(props);
-
-        console.log("Match:" + this.props.match);
-        console.log("Bet:" + this.props.bet);
     }
 
     public render() {

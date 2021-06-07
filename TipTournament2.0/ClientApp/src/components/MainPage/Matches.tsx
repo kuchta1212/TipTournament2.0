@@ -41,8 +41,8 @@ export class Matches extends React.Component<MatchesProps> {
         );
     }
 
-    private getBet(match: Match): Bet {
-        return this.props.bets.find(b => b.match.id == match.id);
+    private getBet(match: Match): Bet | undefined {
+       return this.props.bets.find(b => b.match.id == match.id);
     }
 }
 

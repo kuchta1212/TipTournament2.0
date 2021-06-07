@@ -1,14 +1,13 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, User } from "../../typings/index"
-import { Table } from 'reactstrap';
+import { User } from "../../typings/index"
 import { Bets } from './Bets';
 import { UserSelector } from './UserSelector';
 import { WarningNotification, WarningTypes } from '../WarningNotification';
 
 interface AllBetsState {
     users: User[];
-    selectedUser: User;
+    selectedUser: User | undefined;
     loading: boolean;
     isUserSelected: boolean,
     isAllowed: boolean
@@ -25,7 +24,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
 
         this.state = {
             users: {} as User[],
-            selectedUser: {} as User,
+            selectedUser: undefined,
             loading: true,
             isUserSelected: false,
             isAllowed: new Date() > new Date("2021-06-11 21:00")

@@ -21,11 +21,11 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
                 case BetResult.nothing:
                     return this.renderPlayedMatchBet("text-danger", "bg-danger");
                 case BetResult.winner:
-                    return this.renderPlayedMatchBet("text-success", "bg-success");
+                    return this.renderPlayedMatchBet("text-info", "bg-info");
                 case BetResult.difference:
                     return this.renderPlayedMatchBet("text-warning", "bg-warning");
                 case BetResult.score:
-                    return this.renderPlayedMatchBet("text-info", "bg-info");
+                    return this.renderPlayedMatchBet("text-success", "bg-success");
                 default:
                     return this.renderPlayedMatchBet("text-info", "bg-info");
             }
