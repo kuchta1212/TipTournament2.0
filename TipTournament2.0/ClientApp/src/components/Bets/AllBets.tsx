@@ -61,7 +61,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
         return (
             <React.Fragment>
                 <UserSelector users={this.state.users} onUserSelect={this.userSelected.bind(this)} disabled={false} />
-                <Bets user={this.state.selectedUser} />
+                <Bets key={this.state.selectedUser.id} user={this.state.selectedUser} />
             </React.Fragment>
             );
     }

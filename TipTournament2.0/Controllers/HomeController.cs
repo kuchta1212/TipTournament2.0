@@ -55,22 +55,6 @@
             return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
-        //[HttpGet("bets/all")]
-        //public IActionResult GetAllBets()
-        //{
-        //    var bets = this.context.GetAllBets();
-        //    var users = this.context.GetUsers();
-
-        //    return new OkObjectResult(users.Select(x => new { key = x, value = bets.Where(b => b.User == x) }).ToDictionary(e => e.key, e => e.value));
-        //}
-
-        //[HttpPost("tips")]
-        //public void UploadTips([FromBody]Dictionary<string, Result> tips)
-        //{
-        //    var userId = this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
-        //    this.context.UploadTips(tips, userId);
-        //}
-
         [HttpPost("tip")]
         public IActionResult UploadTip([FromBody] UploadTipRequest request)
         {

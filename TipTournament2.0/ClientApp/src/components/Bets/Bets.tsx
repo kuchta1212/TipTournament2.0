@@ -41,7 +41,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
         return (
             <div>
                 <h1 id="tabelLabel" >Sázky</h1>
-                {this.state.afterLimit ? <WarningNotification text="Prošvihl si to! Sázkám, už je konec." type={WarningTypes.error} /> : <WarningNotification text="Sázky se uzavřou s prvním zápasem. Takže 11.6 v 21:00." type={WarningTypes.warning} />}
+                {this.showWarningMessage()}
                 {contents}
             </div>
         );
@@ -67,6 +67,14 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                 </tbody>
             </Table>
          );
+    }
+
+    private showWarningMessage() {
+        return !!this.props.user
+            ? (<div />)
+            : this.state.afterLimit
+                ? <WarningNotification text="Prošvihl si to! Sázkám, už je konec." type={WarningTypes.error} />
+                : <WarningNotification text="Sázky se uzavřou s prvním zápasem. Takže 11.6 v 21:00." type={WarningTypes.warning} />
     }
 }
 

@@ -10,8 +10,6 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
 
     constructor(props: UserBetRowProps) {
         super(props);
-
-        console.log(props.bet);
     }
 
     public render() {
