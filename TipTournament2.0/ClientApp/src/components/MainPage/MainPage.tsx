@@ -6,10 +6,12 @@ import { UserBets } from "./UserBets"
 import { Ranking } from "./Ranking"
 import { Loader } from './../Loader'
 import './../../custom.css'
+import authService from './../api-authorization/AuthorizeService'
 
 interface MainPageState {
     data: MainData,
-    loading: boolean
+    loading: boolean,
+    currentUser: string
 }
 
 interface MainPageProps {
@@ -22,7 +24,8 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
         super(props);
         this.state = {
             data: {} as MainData,
-            loading: true
+            loading: true,
+            currentUser: ""
         }
     }
 
@@ -44,7 +47,8 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
 
     private async getData() {
         const data = await getApi().getData();
-        this.setState({ data: data, loading: false });
+        const currentUser = await authService.getUser();
+        this.setState({ data: data, loading: false, currentUser: currentUser["sub"] });
     }
 
     private renderDataTable(data: MainData) {
@@ -52,7 +56,7 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
             <div className="container body-content">
                 <div className="row">
                     <Matches matches={data.matches} bets={data.bets} />
-                    <Ranking ranking={data.users} />
+                    <Ranking ranking={data.users} currentUser={this.state.currentUser} />
                 </div>
             </div>
         );

@@ -6,6 +6,7 @@ import { MatchBetRow } from './MatchBetRow';
 import { Loader } from './../Loader'
 import { WarningNotification, WarningTypes } from '../WarningNotification';
 import { Dictionary, IDictionary } from "../../typings/Dictionary"
+import authService from './../api-authorization/AuthorizeService'
 
 interface BetsState {
     matches: Match[],
@@ -51,7 +52,9 @@ export class Bets extends React.Component<BetsProps, BetsState> {
     private async getData() {
         const matches = await getApi().getMatches();
         let userBets: IDictionary<Bet[]> = !!this.props.users ? await this.getBetsForMultipleUsers(this.props.users) : await this.getBetsForCurrentUser();
-        this.setState({ matches: matches, bets: userBets, loading: false});
+        const currentUser = await authService.getUser();
+        const isDad = currentUser["sub"] == "f99e0601-2b6e-449c-b640-16f15c28ae3b";
+        this.setState({ matches: matches, bets: userBets, loading: false, afterLimit: !isDad});
     }
 
     private async getBetsForCurrentUser(): Promise<IDictionary<Bet[]>> {

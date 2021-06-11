@@ -4,7 +4,8 @@ import { UserRow } from "./UserRow"
 import { Table } from 'reactstrap';
 
 interface RankingProps {
-    ranking: User[]
+    ranking: User[],
+    currentUser: string
 }
 
 export class Ranking extends React.Component<RankingProps> {
@@ -32,7 +33,7 @@ export class Ranking extends React.Component<RankingProps> {
                 <tbody>
                     {data.map((user, index) => (
                         <tr key={user.userName}>
-                            <UserRow user={user} index={index} />
+                            <UserRow user={user} index={index} currentUser={this.props.currentUser} />
                         </tr>)
                     )}
                 </tbody>

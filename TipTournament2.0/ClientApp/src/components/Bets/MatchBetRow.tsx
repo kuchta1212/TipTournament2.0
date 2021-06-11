@@ -18,7 +18,7 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
     constructor(props: MatchBetRowProps) {
         super(props);
 
-        if (!this.props.bets) {
+        if (!this.props.bets || this.props.bets.length == 0) {
             this.state = { tips: [{ homeTeam: 0, awayTeam: 0 }], setted: false }
         } else {
             this.state = { tips: this.props.bets.map((bet) => { return { homeTeam: bet.tip.homeTeam, awayTeam: bet.tip.awayTeam }}) , setted: true }
