@@ -31,7 +31,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
             selectorIds: ["0"],
             loading: true,
             isUserSelected: false,
-            isAllowed: new Date() > new Date("2021-06-07 21:00")
+            isAllowed: new Date() > new Date("2021-06-11 21:00")
         }
     }
 

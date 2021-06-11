@@ -37,7 +37,7 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
                 <TeamCell teamName={this.props.match.homeTeam} />
                 <TeamCell teamName={this.props.match.awayTeam} />
                 {this.state.tips.map((tip) => {
-                    return (<td key={this.props.match.id + this.props.bets[0]?.user.id}>{tip.homeTeam} : {tip.awayTeam}</td>)
+                    return (<td key={tip.id}>{tip.homeTeam} : {tip.awayTeam}</td>)
                 })}
                 {!this.props.isReadOnly ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : <td/>} 
             </React.Fragment>

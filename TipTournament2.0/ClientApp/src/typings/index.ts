@@ -15,6 +15,7 @@ export interface Match {
 }
 
 export interface Result {
+    id?: string;
     homeTeam: number;
     awayTeam: number;
 }
