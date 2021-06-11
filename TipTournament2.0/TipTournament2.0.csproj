@@ -61,6 +61,7 @@
     <None Remove="ClientApp\src\components\MainPage\UserRow.tsx" />
     <None Remove="ClientApp\src\components\TeamCell.tsx" />
     <None Remove="ClientApp\src\components\WarningNotification.tsx" />
+    <None Remove="ClientApp\src\typings\Dictionary.ts" />
     <None Remove="ClientApp\src\typings\index.ts" />
   </ItemGroup>
 
@@ -113,6 +114,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\TeamCell.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\WarningNotification.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\typings\Dictionary.ts" />
     <TypeScriptCompile Include="ClientApp\src\typings\index.ts" />
   </ItemGroup>
 

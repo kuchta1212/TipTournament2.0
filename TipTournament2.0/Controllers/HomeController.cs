@@ -55,6 +55,18 @@
             return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
+        [HttpPost("bets/users")]
+        public IActionResult GetBets([FromBody] string[] userIds)
+        {
+            var result = new Dictionary<string, Bet[]>();
+            foreach(var userId in userIds)
+            {
+                var bets = this.context.GetBetsForUser(userId);
+                result.Add(userId, bets.ToArray());
+            }
+            return new OkObjectResult(result);
+        }
+
         [HttpPost("tip")]
         public IActionResult UploadTip([FromBody] UploadTipRequest request)
         {

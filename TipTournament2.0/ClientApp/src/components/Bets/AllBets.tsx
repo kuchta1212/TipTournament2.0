@@ -5,16 +5,12 @@ import { Bets } from './Bets';
 import { Loader } from './../Loader'
 import { UserSelector } from './UserSelector';
 import { WarningNotification, WarningTypes } from '../WarningNotification';
-import { Button } from 'bootstrap';
-import { Identifier } from 'typescript';
-
-interface IDictionary {
-    [key: number]: User
-}
+import { Dictionary, IDictionary } from "../../typings/Dictionary";
 
 interface AllBetsState {
     users: User[];
-    selectedUsers: IDictionary | undefined;
+    selectedUsers: IDictionary<User>;
+    selectorIds: string[];
     loading: boolean;
     isUserSelected: boolean,
     isAllowed: boolean
@@ -31,7 +27,8 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
 
         this.state = {
             users: {} as User[],
-            selectedUsers: {0: {} as User },
+            selectedUsers: new Dictionary(),
+            selectorIds: ["0"],
             loading: true,
             isUserSelected: false,
             isAllowed: new Date() > new Date("2021-06-07 21:00")
@@ -65,7 +62,6 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
             : (<React.Fragment>
                     <WarningNotification text="Sázky ostatních se otevřou s uzavřením sázek. Takže 11.6 v 21:00 " type={WarningTypes.error} />
                     {this.renderUserSelectors()}
-                    {/*<UserSelector id={0} users={this.state.users} onUserSelect={this.userSelected.bind(this)} value={'default'} disabled={true} />*/}
                 </React.Fragment>)
     }
 
@@ -73,64 +69,66 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
         return (
             <React.Fragment>
                 {this.renderUserSelectors()}    
-                <button className="btn btn-link" onClick={() => this.addUserSelector()}><img src={process.env.PUBLIC_URL + 'icons/add.svg'} width="25" height="25" /></button> 
-                <Bets key={this.getCombineId()} user={this.state.selectedUsers[0]} />
+                <button className="btn btn-link" onClick={() => this.addUserSelector()}><img src={process.env.PUBLIC_URL + 'icons/add.svg'} width="25" height="25" /></button>
+                <Bets key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} />
             </React.Fragment>
             );
     }
 
-    private userSelected(event: any, id: number) {
+    private userSelected(event: any, id: string) {
         let user = this.state.users.find(u => u.id == event.target.value);
-        let selectedUsers = !!this.state.selectedUsers
-            ? this.state.selectedUsers
-            : {} as IDictionary;
-        selectedUsers[id] = user;
+        let selectedUsers = this.state.selectedUsers;
+        if (!!user) {
+            selectedUsers.put(id, user);
+        }
         this.setState({ selectedUsers: selectedUsers, loading: false, isUserSelected: true })
     }
 
     private renderUserSelectors() {
-        console.log(this.state.selectedUsers);
         return (<React.Fragment>
-            {Object.keys(this.state.selectedUsers).map((key, index) => {
-                return <UserSelector key={this.getKey(parseInt(key))} id={parseInt(key)} users={this.state.users} onUserSelect={this.userSelected.bind(this)} onSelectorRemove={this.removeUserSelector.bind(this)} value={!!this.state.selectedUsers[key].id ? this.state.selectedUsers[key].id : 'default'} disabled={false} />
+            {this.state.selectorIds.map((key) => {
+                return <UserSelector key={this.getKey(key)} id={key} users={this.state.users} onUserSelect={this.userSelected.bind(this)} onSelectorRemove={this.removeUserSelector.bind(this)} value={!!this.state.selectedUsers.get(key) ? this.state.selectedUsers.get(key).id : 'default'} disabled={!this.state.isAllowed} />
             })}
         </React.Fragment>
         )
     }
 
     private addUserSelector() {
-        let selectedUsers = this.state.selectedUsers;
-        const maxStr = Object.keys(selectedUsers).reduce((acc, cur) => {
+        let selectorIds = this.state.selectorIds;
+        const maxStr = selectorIds.reduce((acc, cur) => {
             let accInt = parseInt(acc);
             let curInt = parseInt(cur);
 
             return accInt > curInt
                 ? acc
                 : cur;
-        }, "-1")
+        }, "0")
 
         const newIndex = parseInt(maxStr) + 1;
-        selectedUsers[newIndex] = {} as User;
-        this.setState({ selectedUsers: selectedUsers })
+        selectorIds.push(newIndex.toString());
+        this.setState({ selectorIds: selectorIds })
     }
 
-    private removeUserSelector(event: any, id: number) {
-        console.log(id);
+    private removeUserSelector(event: any, id: string) {
         let selectedUsers = this.state.selectedUsers;
-        delete selectedUsers[id];
+        if (selectedUsers.contains(id)) {
+            selectedUsers.remove(id);
+        }
 
-        console.log(selectedUsers);
+        let selectorIds = this.state.selectorIds;
+        const index = selectorIds.indexOf(id);
+        selectorIds.splice(index, 1);
 
-        this.setState({ selectedUsers: selectedUsers });
+        this.setState({ selectedUsers: selectedUsers, selectorIds: selectorIds});
     }
 
     private getCombineId(): string {
-        return Object.keys(this.state.selectedUsers).reduce((acc, cur) => {
-            return acc += this.state.selectedUsers[parseInt(cur)].id;
+        return this.state.selectedUsers.getValues().reduce((acc, cur) => {
+            return acc += cur?.id;
         }, "CombineId-");
     }
 
-    private getKey(id: number): string {
+    private getKey(id: string): string {
         return "UserSelectorKey-" + id;
     }
 }

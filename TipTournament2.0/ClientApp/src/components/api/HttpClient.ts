@@ -12,7 +12,7 @@ async function getGetRequestInitRequired() {
 }
 
 async function getPostRequestInitRequired() {
-    var headers = await getHeaders();
+    let headers = await getHeaders();
     headers.delete('Content-Type');
     headers.append('Content-Type', 'application/json');
     return {

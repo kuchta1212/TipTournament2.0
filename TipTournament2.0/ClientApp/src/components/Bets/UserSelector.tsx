@@ -5,10 +5,10 @@ interface UserSelectorState {
 }
 
 interface UserSelectorProps {
-    id: number,
+    id: string,
     users: User[],
-    onUserSelect: (event: any, id: number) => void,
-    onSelectorRemove: (event: any, id: number) => void,
+    onUserSelect: (event: any, id: string) => void,
+    onSelectorRemove: (event: any, id: string) => void,
     disabled: boolean,
     value: string
 }
@@ -32,7 +32,7 @@ export class UserSelector extends React.Component<UserSelectorProps, UserSelecto
                     })}
                 </select>
                 {
-                    this.props.id != 0
+                    this.props.id != "0"
                         ? <div className="input-group-append"><button className="btn btn-link" type="button" onClick={(event) => this.props.onSelectorRemove(event, this.props.id)}><img src={process.env.PUBLIC_URL + 'icons/close.svg'} width="20" height="20" /></button></div>
                         : <div/>
                 }
