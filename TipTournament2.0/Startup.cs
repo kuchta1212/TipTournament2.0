@@ -72,7 +72,7 @@ namespace TipTournament2._0
                     .WithIdentity("Cron Trigger")
                     .ForJob(jobKey)
                     .StartNow()
-                    .WithCronSchedule("0 05 17,20,23 13-23 JUN ? 2021")
+                    .WithCronSchedule("0 05 15,18,21 13-23 JUN ? 2021")
                     .WithDescription("check-results-job-key")
                 );
             });
