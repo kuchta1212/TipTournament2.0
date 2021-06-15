@@ -160,5 +160,16 @@
             this.dbContext.UpdateRange(users);
             this.dbContext.SaveChanges();
         }
+
+        public void StoreUpdateStatus(UpdateStatus updateStatus)
+        {
+            this.dbContext.Add(updateStatus);
+            this.dbContext.SaveChanges();
+        }
+
+        public UpdateStatus GetLatestUpdateStatus()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

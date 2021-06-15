@@ -23,11 +23,15 @@ export class UserRow extends React.Component<UserRowProps> {
         className += this.props.currentUser == this.props.user.id ? " bg-secondary" : "";
         return (
             <React.Fragment>
-                <td className={className}>{this.props.index + 1}. {this.props.user.userName}</td>
+                <td className={className}>{this.props.index + 1}. {this.props.user.userName}  {this.didPay()}</td>
                 <td>{this.props.user.points}</td>
             </React.Fragment>
         );
 
+    }
+
+    private didPay() {
+        return !this.props.user.payed ? <p className="font-weight-light text-danger">NEZAPLACENO</p> : <p/>
     }
 }
 

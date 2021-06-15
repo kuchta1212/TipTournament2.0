@@ -20,6 +20,8 @@
 
         public DbSet<ApplicationUser> Players { get; set; }
 
+        public DbSet<UpdateStatus> UpdateStatuses { get; set; }
+
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)

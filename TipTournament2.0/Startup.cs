@@ -11,9 +11,12 @@ namespace TipTournament2._0
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Quartz;
+    using System;
     using TipTournament2._0.Calculator;
     using TipTournament2._0.Coordinator;
     using TipTournament2._0.Data;
+    using TipTournament2._0.Jobs;
     using TipTournament2._0.MatchClient;
     using TipTournament2._0.Models;
 
@@ -51,6 +54,33 @@ namespace TipTournament2._0
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
+            });
+
+            var jobKey = new JobKey("check-results-job-key");
+            services.AddTransient<CheckForResultsJob>();
+            services.AddQuartz(q =>
+            {
+                q.SchedulerId = "Scheduler-Core";
+                q.SchedulerName = "Scheduler-Core";
+                q.UseMicrosoftDependencyInjectionScopedJobFactory();
+
+                q.AddJob<CheckForResultsJob>(j => j
+                    .WithIdentity(jobKey)
+                );
+
+                q.AddTrigger(t => t
+                    .WithIdentity("Cron Trigger")
+                    .ForJob(jobKey)
+                    .StartNow()
+                    .WithCronSchedule("0 05 17,20,23 13-23 JUN ? 2021")
+                    .WithDescription("check-results-job-key")
+                );
+            });
+
+            services.AddQuartzServer(options =>
+            {
+                // when shutting down we want jobs to complete gracefully
+                options.WaitForJobsToComplete = true;
             });
 
             services.AddTransient<IDbContextWrapper, DbContextWrapper>();

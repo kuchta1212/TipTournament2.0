@@ -44,7 +44,7 @@
                 var home = int.Parse(regexMatch.Groups[1].Value);
                 var away = int.Parse(regexMatch.Groups[2].Value);
 
-                if ( match.Result == null && match.StartTime.Hour == home && match.StartTime.Minute == away)
+                if ( match.Result == null && ((match.StartTime.Hour == home && match.StartTime.Minute == away) || (home > 10 && away == 0)))
                 {
                     //match was still not played or even started
                     continue;

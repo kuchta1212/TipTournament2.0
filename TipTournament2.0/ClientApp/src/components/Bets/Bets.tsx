@@ -52,9 +52,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
     private async getData() {
         const matches = await getApi().getMatches();
         let userBets: IDictionary<Bet[]> = !!this.props.users ? await this.getBetsForMultipleUsers(this.props.users) : await this.getBetsForCurrentUser();
-        const currentUser = await authService.getUser();
-        const isDad = currentUser["sub"] == "f99e0601-2b6e-449c-b640-16f15c28ae3b";
-        this.setState({ matches: matches, bets: userBets, loading: false, afterLimit: !isDad});
+        this.setState({ matches: matches, bets: userBets, loading: false });
     }
 
     private async getBetsForCurrentUser(): Promise<IDictionary<Bet[]>> {

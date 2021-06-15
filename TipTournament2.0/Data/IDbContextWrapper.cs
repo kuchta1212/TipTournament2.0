@@ -41,5 +41,9 @@
         void UpdateResult(Result result);
 
         void UpdateUsers(List<ApplicationUser> users);
+
+        void StoreUpdateStatus(UpdateStatus updateStatus);
+
+        UpdateStatus GetLatestUpdateStatus();
     }
 }
