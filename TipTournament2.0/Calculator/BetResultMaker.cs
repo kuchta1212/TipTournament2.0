@@ -35,7 +35,7 @@
                 return BetResult.DIFFERENCE;
             }
 
-            if (resultDiff != 0)
+            if (resultDiff != 0 && betDiff != 0)
             {
                 if((result.IsHomeTeamWinner() && bet.Tip.IsHomeTeamWinner()) || (!result.IsHomeTeamWinner() && !bet.Tip.IsHomeTeamWinner()))
                 {
