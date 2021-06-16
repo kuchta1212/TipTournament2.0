@@ -30,7 +30,8 @@
             {
                 Bets = this.context.GetBetsForUser(userId),
                 Matches = this.context.GetMatches().OrderBy(m => m.StartTime).ToList(),
-                Users = this.context.GetUsers().OrderByDescending(u => u.Points).ToList()
+                Users = this.context.GetUsers().OrderByDescending(u => u.Points).ToList(),
+                Status = this.context.GetLatestUpdateStatus()
             };
 
             return new OkObjectResult(screen);
@@ -92,6 +93,12 @@
             }
 
             return new OkObjectResult(false);
+        }
+
+        [HttpGet("status")]
+        public IActionResult GetUpdateStatus()
+        {
+            return new OkObjectResult(this.context.GetLatestUpdateStatus());
         }
 
         private string GetUserId()

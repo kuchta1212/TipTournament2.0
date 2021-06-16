@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -36,5 +36,9 @@ export class Api implements IApi {
 
     getUsers(): Promise<User[]> {
         return convert<User[]>(get(`${API_URL}/users/`));
+    }
+
+    getUpdateStatus(): Promise<UpdateStatus> {
+        return convert<UpdateStatus>(get(`${API_URL}/status/`))
     }
 }

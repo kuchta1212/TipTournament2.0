@@ -1,11 +1,12 @@
 ﻿import * as React from 'react';
-import { Match, Bet } from "../../typings/index"
+import { Match, Bet, UpdateStatus } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MainRow } from './MainRow';
 
 interface MatchesProps {
     matches: Match[],
-    bets: Bet[]
+    bets: Bet[];
+    status: UpdateStatus
 }
 
 export class Matches extends React.Component<MatchesProps> {
@@ -21,6 +22,7 @@ export class Matches extends React.Component<MatchesProps> {
             <div className="col">
                 <h1 id="tabelLabel" >Zápasy a sázky</h1>
                 {contents}
+                <p className="text-light font-weight-light">Naposledy updatováno:{new Date(this.props.status.date).toLocaleString('cs-CS')}</p>
             </div>
         );
     }

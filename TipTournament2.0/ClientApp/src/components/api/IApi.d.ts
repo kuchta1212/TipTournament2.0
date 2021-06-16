@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Bet, Result, User } from "../../typings";
+﻿import { MainData, Match, Bet, Result, User, UpdateStatus } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
@@ -9,4 +9,5 @@ export interface IApi {
     uploadTip(bet: Result, matchId: string): Promise<void>;
     getDidPayed(): Promise<boolean>;
     getUsers(): Promise<User[]>;
+    getUpdateStatus(): Promise<UpdateStatus>;
 }

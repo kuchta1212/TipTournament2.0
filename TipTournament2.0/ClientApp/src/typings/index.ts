@@ -1,7 +1,8 @@
 ﻿export interface MainData {
     matches: Match[];
     users: User[];
-    bets: Bet[]
+    bets: Bet[];
+    status: UpdateStatus;
 }
 
 export interface Match {
@@ -52,4 +53,9 @@ export enum HttpStatusCode {
     Unauthorized = 401,
     NotFound = 404,
     PreconditionFailed = 412
+}
+
+export interface UpdateStatus {
+    date: Date;
+    errorMessage: string;
 }

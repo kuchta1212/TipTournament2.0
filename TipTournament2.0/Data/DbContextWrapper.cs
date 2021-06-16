@@ -169,7 +169,7 @@
 
         public UpdateStatus GetLatestUpdateStatus()
         {
-            throw new NotImplementedException();
+            return this.dbContext.UpdateStatuses.OrderByDescending(u => u.Date).First();
         }
     }
 }
