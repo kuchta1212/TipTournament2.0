@@ -307,7 +307,161 @@ namespace TipTournament2._0.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("TipTournament2._0.Models.Bet", b =>
+            modelBuilder.Entity("TipTournament2._0.Models.Comment", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.Group", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResultId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.GroupBet", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FirstId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FourthId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SecondId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ThirdId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FirstId");
+
+                    b.HasIndex("FourthId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("SecondId");
+
+                    b.HasIndex("ThirdId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GroupBets");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.GroupResult", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FirstId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FourthId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SecondId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ThirdId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FirstId");
+
+                    b.HasIndex("FourthId");
+
+                    b.HasIndex("SecondId");
+
+                    b.HasIndex("ThirdId");
+
+                    b.ToTable("GroupResults");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.Match", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AwayId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Ended")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("HomeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResultId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Stage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AwayId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("HomeId");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("Matches");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.MatchBet", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -336,37 +490,6 @@ namespace TipTournament2._0.Data.Migrations
                     b.ToTable("Bets");
                 });
 
-            modelBuilder.Entity("TipTournament2._0.Models.Match", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AwayTeam")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Ended")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("HomeTeam")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Link")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Results")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Results");
-
-                    b.ToTable("Matches");
-                });
-
             modelBuilder.Entity("TipTournament2._0.Models.Result", b =>
                 {
                     b.Property<string>("Id")
@@ -382,6 +505,71 @@ namespace TipTournament2._0.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Results");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.SpecificTeamPlaceBet", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("StageBet")
+                        .HasColumnType("int");
+
+                    b.Property<string>("teamId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("teamId");
+
+                    b.ToTable("TeamPlaceBets");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.Team", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("FinishedAt")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IconPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.TopShooterBet", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShoterNameOne")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShoterNameThree")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShoterNameTwo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TopShooterBets");
                 });
 
             modelBuilder.Entity("TipTournament2._0.Models.UpdateStatus", b =>
@@ -455,7 +643,79 @@ namespace TipTournament2._0.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TipTournament2._0.Models.Bet", b =>
+            modelBuilder.Entity("TipTournament2._0.Models.Group", b =>
+                {
+                    b.HasOne("TipTournament2._0.Models.GroupResult", "Result")
+                        .WithMany()
+                        .HasForeignKey("ResultId");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.GroupBet", b =>
+                {
+                    b.HasOne("TipTournament2._0.Models.Team", "First")
+                        .WithMany()
+                        .HasForeignKey("FirstId");
+
+                    b.HasOne("TipTournament2._0.Models.Team", "Fourth")
+                        .WithMany()
+                        .HasForeignKey("FourthId");
+
+                    b.HasOne("TipTournament2._0.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("TipTournament2._0.Models.Team", "Second")
+                        .WithMany()
+                        .HasForeignKey("SecondId");
+
+                    b.HasOne("TipTournament2._0.Models.Team", "Third")
+                        .WithMany()
+                        .HasForeignKey("ThirdId");
+
+                    b.HasOne("TipTournament2._0.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.GroupResult", b =>
+                {
+                    b.HasOne("TipTournament2._0.Models.Team", "First")
+                        .WithMany()
+                        .HasForeignKey("FirstId");
+
+                    b.HasOne("TipTournament2._0.Models.Team", "Fourth")
+                        .WithMany()
+                        .HasForeignKey("FourthId");
+
+                    b.HasOne("TipTournament2._0.Models.Team", "Second")
+                        .WithMany()
+                        .HasForeignKey("SecondId");
+
+                    b.HasOne("TipTournament2._0.Models.Team", "Third")
+                        .WithMany()
+                        .HasForeignKey("ThirdId");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.Match", b =>
+                {
+                    b.HasOne("TipTournament2._0.Models.Team", "Away")
+                        .WithMany()
+                        .HasForeignKey("AwayId");
+
+                    b.HasOne("TipTournament2._0.Models.Group", null)
+                        .WithMany("Matches")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("TipTournament2._0.Models.Team", "Home")
+                        .WithMany()
+                        .HasForeignKey("HomeId");
+
+                    b.HasOne("TipTournament2._0.Models.Result", "Result")
+                        .WithMany()
+                        .HasForeignKey("ResultId");
+                });
+
+            modelBuilder.Entity("TipTournament2._0.Models.MatchBet", b =>
                 {
                     b.HasOne("TipTournament2._0.Models.ApplicationUser", "User")
                         .WithMany()
@@ -470,11 +730,11 @@ namespace TipTournament2._0.Data.Migrations
                         .HasForeignKey("Results");
                 });
 
-            modelBuilder.Entity("TipTournament2._0.Models.Match", b =>
+            modelBuilder.Entity("TipTournament2._0.Models.SpecificTeamPlaceBet", b =>
                 {
-                    b.HasOne("TipTournament2._0.Models.Result", "Result")
+                    b.HasOne("TipTournament2._0.Models.Team", "team")
                         .WithMany()
-                        .HasForeignKey("Results");
+                        .HasForeignKey("teamId");
                 });
 #pragma warning restore 612, 618
         }

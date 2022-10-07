@@ -8,6 +8,6 @@
 
     public interface IBetResultMaker
     {
-        List<Bet> UpdateBetResult(List<Bet> bets, Result result);
+        List<MatchBet> UpdateBetResult(List<MatchBet> bets, Result result);
     }
 }

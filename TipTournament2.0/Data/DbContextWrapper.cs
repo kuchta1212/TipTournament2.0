@@ -16,12 +16,12 @@
             this.dbContext = dbContext;
         }
 
-        public List<Bet> GetAllBets()
+        public List<MatchBet> GetAllBets()
         {
             return dbContext.Bets.ToList();
         }
 
-        public List<Bet> GetBetsForUser(string userId)
+        public List<MatchBet> GetBetsForUser(string userId)
         {
             return dbContext.Bets
                 .Include(b => b.User)
@@ -34,6 +34,17 @@
         {
             var matches = dbContext.Matches
                 .Include(m => m.Result)
+                .ToList();
+            return matches;
+        }
+
+        public List<Match> GetMatches(TournamentStage stage)
+        {
+            var matches = dbContext.Matches
+                .Where(m => m.Stage == stage)
+                .Include(m => m.Result)
+                .Include(m => m.Home)
+                .Include(m => m.Away)
                 .ToList();
             return matches;
         }
@@ -99,7 +110,7 @@
             }
             else
             {
-                var bet = new Bet()
+                var bet = new MatchBet()
                 {
                     Match = match,
                     Result = BetResult.NOTHING,
@@ -118,7 +129,7 @@
             return this.dbContext.Matches.Where(m => !m.Ended).ToList();
         }
 
-        public List<Bet> GetBetsForMatch(Match match)
+        public List<MatchBet> GetBetsForMatch(Match match)
         {
             return this.dbContext.Bets
                 .Include(b => b.Match)
@@ -127,7 +138,7 @@
                 .ToList();
         }
 
-        public void UpdateBets(List<Bet> bets)
+        public void UpdateBets(List<MatchBet> bets)
         {
             this.dbContext.UpdateRange(bets);
             this.dbContext.SaveChanges();
@@ -169,7 +180,75 @@
 
         public UpdateStatus GetLatestUpdateStatus()
         {
-            return this.dbContext.UpdateStatuses.OrderByDescending(u => u.Date).First();
+            return this.dbContext.UpdateStatuses.OrderByDescending(u => u.Date).FirstOrDefault();
+        }
+
+        public GroupBet GetGroupBetByGroupId(string userId, string groupId)
+        {
+            return this.dbContext.GroupBets
+                .Where(gb => gb.Group.Id == groupId)
+                .Where(gb => gb.User.Id == userId)
+                .Include(gb => gb.First)
+                .Include(gb => gb.Second)
+                .Include(gb => gb.Third)
+                .Include(gb => gb.Fourth)
+                .FirstOrDefault();
+        }
+
+        public Team[] GetGroupTeams(string groupId)
+        {
+            var group = this.dbContext.Groups
+                .Where(g => g.Id == groupId)
+                .Include(g => g.Matches)
+                    .ThenInclude(m => m.Home)
+                .Include(g => g.Matches)
+                    .ThenInclude(m => m.Away)
+                .FirstOrDefault();
+
+            var teams = new List<Team>();
+
+            if (group != null)
+            {
+                foreach (var match in group.Matches)
+                {
+                    if (!teams.Contains(match.Home))
+                    {
+                        teams.Add(match.Home);
+                    }
+
+                    if (!teams.Contains(match.Away))
+                    {
+                        teams.Add(match.Away);
+                    }
+
+                    if (teams.Count == 4)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return teams.ToArray();
+        }
+
+        public Group[] GetGroups()
+        {
+            return this.dbContext.Groups.ToArray();
+        }
+
+        public void UploadGroupBet(GroupBet groupBet, string groupId, string userId)
+        {
+            groupBet.Group = this.GetGroup(groupId);
+            groupBet.User = this.GetUser(userId);
+
+            this.dbContext.Add(groupBet);
+
+            this.dbContext.SaveChanges();
+        }
+
+        public Group GetGroup(string groupId)
+        {
+           return this.dbContext.Groups.Where(g => g.Id == groupId).FirstOrDefault();
         }
     }
 }

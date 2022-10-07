@@ -13,17 +13,18 @@
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
-        public string HomeTeam { get; set; }
+        public Team Home { get; set; }
 
-        public string AwayTeam { get; set; }
+        public Team Away { get; set; }
 
         public DateTime StartTime { get; set; }
-        
-        [ForeignKey("Results")]
+
         public Result Result { get; set; }
 
         public bool Ended { get; set; }
 
         public string Link { get; set; }
+
+        public TournamentStage Stage { get; set; }
     }
 }

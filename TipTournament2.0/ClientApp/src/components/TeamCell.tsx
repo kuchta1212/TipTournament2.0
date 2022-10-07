@@ -1,8 +1,8 @@
 ﻿import * as React from 'react';
-import { getIconName } from "./IconProvider"
+import { Team } from '../typings';
 
 interface MatchRowProps {
-    teamName: string
+    team: Team
 }
 
 export class TeamCell extends React.Component<MatchRowProps> {
@@ -12,7 +12,7 @@ export class TeamCell extends React.Component<MatchRowProps> {
     }
 
     public render() {
-        return <td>{this.props.teamName} <img src={process.env.PUBLIC_URL + getIconName(this.props.teamName)} width="25" height="25" /></td>
+        return <td>{this.props.team.name} <img src={process.env.PUBLIC_URL + this.props.team.iconPath} width="25" height="25" /></td>
     }
 }
 

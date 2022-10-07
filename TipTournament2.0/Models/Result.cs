@@ -22,6 +22,11 @@
             return HomeTeam > AwayTeam;
         }
 
+        public bool IsTie()
+        {
+            return HomeTeam == AwayTeam;
+        }
+
         public override string ToString()
         {
             return $"{this.HomeTeam}:{this.AwayTeam}";

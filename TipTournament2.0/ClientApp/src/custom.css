@@ -15,7 +15,7 @@ code {
 
 body {
     padding-bottom: 20px;
-    background-image: url('images/background3.jpg');
+    background-image: url('images/background1.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -55,5 +55,46 @@ body {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+.groupList {
+    column-count: 3;
+    column-gap: 0;
+}
+
+.groupItem {
+    break-inside: avoid;
+    flex-direction: column;
+    padding: 0px 16px 0px 16px;
+    margin: 0px 16px 16px 0px;
+    background: #FFFFFF;
+    border: 1px solid #EDEBE9;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+@media (min-width: 0px) {
+    .groupList {
+        column-count: 1;
+    }
+}
+
+@media (min-width: 768px) {
+    .groupList {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1200px) {
+    .groupList {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 2400px) {
+    .groupList {
+        column-count: 4;
     }
 }

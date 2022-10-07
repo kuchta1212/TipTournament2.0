@@ -16,11 +16,25 @@
 
         public DbSet<Result> Results { get; set; }
 
-        public DbSet<Bet> Bets { get; set; }
+        public DbSet<MatchBet> Bets { get; set; }
 
         public DbSet<ApplicationUser> Players { get; set; }
 
         public DbSet<UpdateStatus> UpdateStatuses { get; set; }
+
+        public DbSet<Team> Teams { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<GroupBet> GroupBets { get; set; }
+
+        public DbSet<SpecificTeamPlaceBet> TeamPlaceBets { get; set; }
+
+        public DbSet<TopShooterBet> TopShooterBets { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<GroupResult> GroupResults { get; set; }
 
         public ApplicationDbContext(
             DbContextOptions options,

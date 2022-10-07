@@ -12,10 +12,11 @@ export async function convert<T>(responsePromise: Promise<Response>): Promise<T>
         throw e;
     }
 
-    if (!response.ok) {
-        console.log("Http call failed")
-        console.log(response);
-    }
+    //if (!response.ok) {
+    //    console.log("Http call failed")
+    //    console.log(response);
+    //    return {} as T;
+    //}
 
     if (response.status === HttpStatusCode.NoContent) { return {} as T; }
 

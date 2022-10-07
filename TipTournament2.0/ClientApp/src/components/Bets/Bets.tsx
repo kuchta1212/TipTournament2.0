@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, Bet, User } from "../../typings/index"
+import { Match, Bet, User, TournamentStage } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from './../Loader'
@@ -12,7 +12,6 @@ interface BetsState {
     matches: Match[],
     bets: IDictionary<Bet[]>,
     loading: boolean,
-    afterLimit: boolean
 }
 
 interface BetsProps {
@@ -27,7 +26,6 @@ export class Bets extends React.Component<BetsProps, BetsState> {
             matches: {} as Match[],
             bets: new Dictionary(),
             loading: true,
-            afterLimit: new Date() > new Date("2021-06-11 21:00")
         }
     }
 
@@ -42,15 +40,13 @@ export class Bets extends React.Component<BetsProps, BetsState> {
 
         return (
             <div>
-                <h1 id="tabelLabel" >Sázky</h1>
-                {this.showWarningMessage()}
                 {contents}
             </div>
         );
     }
 
     private async getData() {
-        const matches = await getApi().getMatches();
+        const matches = await getApi().getMatches(TournamentStage.Group);
         let userBets: IDictionary<Bet[]> = !!this.props.users ? await this.getBetsForMultipleUsers(this.props.users) : await this.getBetsForCurrentUser();
         this.setState({ matches: matches, bets: userBets, loading: false });
     }
@@ -89,7 +85,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                 <tbody>
                     {matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={!!this.props.users || this.state.afterLimit} />
+                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={!!this.props.users} />
                         </tr>)
                     )}
                 </tbody>
@@ -118,20 +114,12 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                 <tbody>
                     {matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={!!this.props.users || this.state.afterLimit} />
+                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={!!this.props.users} />
                         </tr>)
                     )}
                 </tbody>
             </Table>
         );
-    }
-
-    private showWarningMessage() {
-        return !!this.props.users
-            ? (<div />)
-            : this.state.afterLimit
-                ? <WarningNotification text="Prošvihl si to! Sázkám, už je konec." type={WarningTypes.error} />
-                : <WarningNotification text="Sázky se uzavřou s prvním zápasem. Takže 11.6 v 21:00." type={WarningTypes.warning} />
     }
 }
 

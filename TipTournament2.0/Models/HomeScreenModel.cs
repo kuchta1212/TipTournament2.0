@@ -11,7 +11,7 @@
 
         public List<ApplicationUser> Users { get; set; }
 
-        public List<Bet> Bets { get; set; }
+        public List<MatchBet> Bets { get; set; }
 
         public UpdateStatus Status {get; set; }
     }

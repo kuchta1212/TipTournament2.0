@@ -51,6 +51,11 @@
             public string UserName { get; set; }
 
             [Required]
+            [Display(Name = "Email")]
+            [DataType(DataType.EmailAddress)]
+            public string Email { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "{0} musí mít alespoň {2} znaků.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Heslo")]
@@ -74,7 +79,7 @@
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.UserName, Email = Input.UserName, EmailConfirmed = true, Payed = false, Points = 0 };
+                var user = new ApplicationUser { UserName = Input.UserName, Email = Input.Email, EmailConfirmed = true, Payed = false, Points = 0 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

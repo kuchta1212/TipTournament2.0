@@ -7,12 +7,24 @@
 
 export interface Match {
     id: string;
-    homeTeam: string;
-    awayTeam: string;
+    home: Team;
+    away: Team;
     startTime: Date;
     result: Result;
     ended: boolean;
     link: string;
+}
+
+export interface Team {
+    id: string;
+    name: string;
+    iconPath: string
+}
+
+export interface Group {
+    id: string;
+    groupName: string;
+    matches: Match[];
 }
 
 export interface Result {
@@ -26,6 +38,23 @@ export interface Bet {
     match: Match;
     tip: Result;
     result: BetResult;
+    user: User;
+}
+
+export interface GroupBet {
+    id: string;
+    first: Team;
+    second: Team;
+    third: Team;
+    fourth: Team;
+    points: number;
+}
+
+export interface DeltaBet {
+    id: string;
+    match: Match;
+    betWinner: Team;
+    resultWinner: Team;
     user: User;
 }
 
@@ -58,4 +87,12 @@ export enum HttpStatusCode {
 export interface UpdateStatus {
     date: Date;
     errorMessage: string;
+}
+
+export enum TournamentStage {
+    Group = 0,
+    FirstRound = 1,
+    Quarterfinal = 2,
+    Semifinal = 3,
+    Final = 4
 }

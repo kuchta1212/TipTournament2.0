@@ -2,20 +2,38 @@
 import { User } from "../../typings/index"
 import { UserRow } from "./UserRow"
 import { Table } from 'reactstrap';
+import { getApi } from "../api/ApiFactory"
+import { Loader } from './../Loader'
 
 interface RankingProps {
-    ranking: User[],
     currentUser: string
 }
 
-export class Ranking extends React.Component<RankingProps> {
+interface RankingState {
+    ranking: User[],
+    loading: boolean
+
+}
+
+export class Ranking extends React.Component<RankingProps, RankingState> {
 
     constructor(props: RankingProps) {
         super(props);
+        this.state = {
+            ranking: {} as User[],
+            loading: true
+        };
+    }
+
+
+    public componentDidMount() {
+        this.getData();
     }
 
     public render() {
-        let contents = this.renderRanking(this.props.ranking)
+        let contents = this.state.loading
+            ? <Loader />
+            : this.renderRanking(this.state.ranking);
 
         return (
             <div className="col-4">
@@ -23,6 +41,11 @@ export class Ranking extends React.Component<RankingProps> {
                 {contents}
             </div>
         );
+    }
+
+    private async getData() {
+        const users = await getApi().getUsers(true);
+        this.setState({ ranking: users, loading: false });
     }
 
     private renderRanking(data: User[]) {

@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -7,13 +7,29 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api';
 
 export class Api implements IApi {
+    async uploadGroupBet(bet: GroupBet, groupId: string): Promise<void> {
+        await post(`${API_URL}/bets/group?groupId=${groupId}`, bet);
+    }
+    getGroups(): Promise<Group[]> {
+        return convert<Group[]>(get(`${API_URL}/bets/groups`));
+    }
+    getGroupBet(groupId: string): Promise<GroupBet> {
+        return convert<GroupBet>(get(`${API_URL}/bets/group?groupId=${groupId}`));
+    }
+    getGroupTeams(groupId: string): Promise<Team[]> {
+        return convert<Team[]>(get(`${API_URL}/bets/group/teams?groupId=${groupId}`));
+    }
 
     getData(): Promise<MainData> {
         return convert<MainData>(get(`${API_URL}/data/`));
     }
 
-    getMatches(): Promise<Match[]> {
-        return convert<Match[]>(get(`${API_URL}/matches/`));
+    getAllMatches(): Promise<Match[]> {
+        return convert<Match[]>(get(`${API_URL}/match/all`));
+    }
+
+    getMatches(stage: TournamentStage): Promise<Match[]> {
+        return convert<Match[]>(get(`${API_URL}/match?stage=${stage}`));
     }
 
     getBets(user: User | undefined): Promise<Bet[]> {
@@ -26,16 +42,16 @@ export class Api implements IApi {
         return convert<any>(post(`${API_URL}/bets/users?userIds`, users.map((user) => { if (!!user) { return user.id } })))
     }
 
-    uploadTip(tip: Result, matchId: string): Promise<void> {
-        return convert<void>(post(`${API_URL}/tip/`, { tip: tip, matchId: matchId }));
+    async uploadTip(tip: Result, matchId: string): Promise<void> {
+        await post(`${API_URL}/bets/tip/`, { tip: tip, matchId: matchId });
     }
 
     getDidPayed(): Promise<boolean> {
         return convert<boolean>(get(`${API_URL}/user/payed/`));
     }
 
-    getUsers(): Promise<User[]> {
-        return convert<User[]>(get(`${API_URL}/users/`));
+    getUsers(sorted: boolean): Promise<User[]> {
+        return convert<User[]>(get(`${API_URL}/users?orderByPoints=${sorted}`));
     }
 
     getUpdateStatus(): Promise<UpdateStatus> {

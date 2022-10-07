@@ -50,6 +50,10 @@
     <None Remove="ClientApp\src\components\api\ResponseConvertor.ts" />
     <None Remove="ClientApp\src\components\Bets\AllBets.tsx" />
     <None Remove="ClientApp\src\components\Bets\Bets.tsx" />
+    <None Remove="ClientApp\src\components\Bets\BetsMainPage.tsx" />
+    <None Remove="ClientApp\src\components\Bets\DeltaBets.tsx" />
+    <None Remove="ClientApp\src\components\Bets\GamaBets.tsx" />
+    <None Remove="ClientApp\src\components\Bets\GroupTable.tsx" />
     <None Remove="ClientApp\src\components\Bets\MatchBetRow.tsx" />
     <None Remove="ClientApp\src\components\Bets\UserSelector.tsx" />
     <None Remove="ClientApp\src\components\Data.tsx" />
@@ -58,6 +62,7 @@
     <None Remove="ClientApp\src\components\MainPage\MainRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Matches.tsx" />
     <None Remove="ClientApp\src\components\MainPage\MatchRow.tsx" />
+    <None Remove="ClientApp\src\components\MainPage\MatchStages.tsx" />
     <None Remove="ClientApp\src\components\MainPage\Ranking.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserBets.tsx" />
@@ -94,11 +99,17 @@
     <TypeScriptCompile Include="ClientApp\src\components\api\Api.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\api\ResponseConvertor.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\AllBets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\DeltaBets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\GroupTable.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\GamaBets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\BetsMainPage.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\Bets.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\UserSelector.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\MatchBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\IconProvider.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\MainRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\MainPage\MatchStages.tsx">
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\Ranking.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\MainPage\UserBets.tsx">

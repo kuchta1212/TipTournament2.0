@@ -8,7 +8,7 @@
 
     public class BetResultMaker : IBetResultMaker
     {
-        public List<Bet> UpdateBetResult(List<Bet> bets, Result result)
+        public List<MatchBet> UpdateBetResult(List<MatchBet> bets, Result result)
         {
            foreach(var bet in bets)
            {
@@ -19,7 +19,7 @@
             return bets;
         }
 
-        private BetResult GetBetResult(Result result, Bet bet)
+        private BetResult GetBetResult(Result result, MatchBet bet)
         {
             if ((result.HomeTeam == bet.Tip.HomeTeam) && (result.AwayTeam == bet.Tip.AwayTeam))
             {

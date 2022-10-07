@@ -44,14 +44,14 @@
             return new OkResult();
         }
 
-        [HttpGet("matches/load")]
-        public async Task<IActionResult> ImportMatches()
-        {
-            var matches = await this.matchClient.LoadMatches();
-            this.context.SaveMatches(matches);
+        //[HttpGet("matches/load")]
+        //public async Task<IActionResult> ImportMatches()
+        //{
+        //    var matches = await this.matchClient.LoadMatches();
+        //    this.context.SaveMatches(matches);
 
-            return new OkObjectResult(matches.Count);
-        }
+        //    return new OkObjectResult(matches.Count);
+        //}
 
         [HttpGet("matches/check")]
         public async Task<IActionResult> CheckForUpdates()

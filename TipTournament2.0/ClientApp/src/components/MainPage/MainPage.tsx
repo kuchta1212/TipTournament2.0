@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { MainData } from "../../typings/index"
+import { MainData, TournamentStage } from "../../typings/index"
 import { Matches } from "./Matches"
 import { UserBets } from "./UserBets"
 import { Ranking } from "./Ranking"
@@ -9,9 +9,8 @@ import './../../custom.css'
 import authService from './../api-authorization/AuthorizeService'
 
 interface MainPageState {
-    data: MainData,
-    loading: boolean,
-    currentUser: string
+    currentUser: string;
+    activeStage: TournamentStage
 }
 
 interface MainPageProps {
@@ -23,9 +22,8 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
     constructor(props: MainPageProps) {
         super(props);
         this.state = {
-            data: {} as MainData,
-            loading: true,
-            currentUser: ""
+            currentUser: "",
+            activeStage: this.getActiveStage()
         }
     }
 
@@ -34,9 +32,7 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
     }
 
     public render() {
-        let contents = this.state.loading
-                ? <Loader />
-                : this.renderDataTable(this.state.data);
+        let contents = this.renderDataTable();
 
         return (
             <div>
@@ -46,20 +42,40 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
     }
 
     private async getData() {
-        const data = await getApi().getData();
         const currentUser = await authService.getUser();
-        this.setState({ data: data, loading: false, currentUser: currentUser["sub"] });
+        this.setState({ currentUser: currentUser["sub"] });
     }
 
-    private renderDataTable(data: MainData) {
+    private renderDataTable() {
         return (
             <div className="container body-content">
                 <div className="row">
-                    <Matches matches={data.matches} bets={data.bets} status={data.status} />
-                    <Ranking ranking={data.users} currentUser={this.state.currentUser} />
+                    <Matches activeStage={this.state.activeStage} />
+                    <Ranking currentUser={this.state.currentUser} />
                 </div>
             </div>
         );
+    }
+
+    private getActiveStage(): TournamentStage {
+        const today = new Date();
+        if (today < new Date(2022, 12, 3)) {
+            return TournamentStage.Group;
+        }
+
+        if (today < new Date(2022, 12, 9)) {
+            return TournamentStage.FirstRound;
+        }
+
+        if (today < new Date(2022, 12, 13)) {
+            return TournamentStage.Quarterfinal;
+        }
+
+        if (today < new Date(2022, 12, 18)) {
+            return TournamentStage.Semifinal;
+        }
+
+        return TournamentStage.Final;
     }
 }
 

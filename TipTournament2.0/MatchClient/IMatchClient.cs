@@ -8,10 +8,10 @@
 
     public interface IMatchClient
     {
-        Task<List<Match>> LoadMatches();
+        //Task<List<Match>> LoadMatches();
 
-        Task<Result> GetResult(Match match);
+        //Task<Result> GetResult(Match match);
 
-        Task<Dictionary<Match, Result>> CheckForUpdates(List<Match> notEndedMatches);
+        //Task<Dictionary<Match, Result>> CheckForUpdates(List<Match> notEndedMatches);
     }
 }

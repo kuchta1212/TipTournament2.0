@@ -10,11 +10,13 @@
     {
         List<Match> GetMatches();
 
-        List<Bet> GetBetsForUser(string userId);
+        List<Match> GetMatches(TournamentStage stage);
+
+        List<MatchBet> GetBetsForUser(string userId);
 
         List<ApplicationUser> GetUsers();
 
-        List<Bet> GetAllBets();
+        List<MatchBet> GetAllBets();
 
         void UploadTips(Dictionary<string, Result> tips, string userId);
 
@@ -28,9 +30,9 @@
 
         List<Match> GetNotEndedMatches();
 
-        List<Bet> GetBetsForMatch(Match match);
+        List<MatchBet> GetBetsForMatch(Match match);
 
-        void UpdateBets(List<Bet> bets);
+        void UpdateBets(List<MatchBet> bets);
 
         List<ApplicationUser> GetAllUsers();
 
@@ -45,5 +47,13 @@
         void StoreUpdateStatus(UpdateStatus updateStatus);
 
         UpdateStatus GetLatestUpdateStatus();
+
+        GroupBet GetGroupBetByGroupId(string userId, string groupId);
+
+        Team[] GetGroupTeams(string groupId);
+
+        Group[] GetGroups();
+
+        void UploadGroupBet(GroupBet groupBet, string groupId, string userId);
     }
 }

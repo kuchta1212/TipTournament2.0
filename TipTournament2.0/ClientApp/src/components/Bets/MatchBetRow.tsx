@@ -34,8 +34,8 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
     private renderSettedBet() {
         return (
             <React.Fragment>
-                <TeamCell teamName={this.props.match.homeTeam} />
-                <TeamCell teamName={this.props.match.awayTeam} />
+                <TeamCell team={this.props.match.home} />
+                <TeamCell team={this.props.match.away} />
                 {this.state.tips.map((tip) => {
                     return (<td key={tip.id}>{tip.homeTeam} : {tip.awayTeam}</td>)
                 })}
@@ -48,8 +48,8 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
         return !this.props.isReadOnly ?
             (
                 <React.Fragment>
-                    <TeamCell teamName={this.props.match.homeTeam} />
-                    <TeamCell teamName={this.props.match.awayTeam} />
+                    <TeamCell team={this.props.match.home} />
+                    <TeamCell team={this.props.match.away} />
                     <td><input type="number" min="0" max="99" value={!!this.state.tips[0].homeTeam ? this.state.tips[0].homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
                     <td><input type="number" min="0" max="99" value={!!this.state.tips[0].awayTeam ? this.state.tips[0].awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
                     {<td><button className="btn btn-secondary" onClick={() => this.uploadTip()}>Uložit</button></td>}

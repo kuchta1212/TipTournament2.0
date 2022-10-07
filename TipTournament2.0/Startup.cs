@@ -56,32 +56,32 @@ namespace TipTournament2._0
                 configuration.RootPath = "ClientApp/build";
             });
 
-            var jobKey = new JobKey("check-results-job-key");
-            services.AddTransient<CheckForResultsJob>();
-            services.AddQuartz(q =>
-            {
-                q.SchedulerId = "Scheduler-Core";
-                q.SchedulerName = "Scheduler-Core";
-                q.UseMicrosoftDependencyInjectionScopedJobFactory();
+            //var jobKey = new JobKey("check-results-job-key");
+            //services.AddTransient<CheckForResultsJob>();
+            //services.AddQuartz(q =>
+            //{
+            //    q.SchedulerId = "Scheduler-Core";
+            //    q.SchedulerName = "Scheduler-Core";
+            //    q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
-                q.AddJob<CheckForResultsJob>(j => j
-                    .WithIdentity(jobKey)
-                );
+            //    q.AddJob<CheckForResultsJob>(j => j
+            //        .WithIdentity(jobKey)
+            //    );
 
-                q.AddTrigger(t => t
-                    .WithIdentity("Cron Trigger")
-                    .ForJob(jobKey)
-                    .StartNow()
-                    .WithCronSchedule("0 05 15,18,21 13-23 JUN ? 2021")
-                    .WithDescription("check-results-job-key")
-                );
-            });
+            //    q.AddTrigger(t => t
+            //        .WithIdentity("Cron Trigger")
+            //        .ForJob(jobKey)
+            //        .StartNow()
+            //        .WithCronSchedule("0 05 15,18,21 13-23 JUN ? 2021")
+            //        .WithDescription("check-results-job-key")
+            //    );
+            //});
 
-            services.AddQuartzServer(options =>
-            {
-                // when shutting down we want jobs to complete gracefully
-                options.WaitForJobsToComplete = true;
-            });
+            //services.AddQuartzServer(options =>
+            //{
+            //    // when shutting down we want jobs to complete gracefully
+            //    options.WaitForJobsToComplete = true;
+            //});
 
             services.AddTransient<IDbContextWrapper, DbContextWrapper>();
             services.AddTransient<IMatchClient, MatchClient.MatchClient>();

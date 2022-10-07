@@ -22,23 +22,24 @@
             this.betResultMaker = betResultMaker;
         }
 
-        public async Task<int> Coordinate()
+        public Task<int> Coordinate()
         {
-            var matches = await this.LoadNewResults();
-            this.UpdateBetsResult(matches);
-            this.RecalculatePoints();
-            return matches.Count();
+            throw new NotImplementedException();
+            //var matches = await this.LoadNewResults();
+            //this.UpdateBetsResult(matches);
+            //this.RecalculatePoints();
+            //return matches.Count();
         }
 
-        private async Task<List<Match>> LoadNewResults()
-        {
-            var notEndedMatches = this.dbContextWrapper.GetNotEndedMatches();
-            var matchesWithResult = await this.matchClient.CheckForUpdates(notEndedMatches);
+        //private async Task<List<Match>> LoadNewResults()
+        //{
+        //    var notEndedMatches = this.dbContextWrapper.GetNotEndedMatches();
+        //    var matchesWithResult = await this.matchClient.CheckForUpdates(notEndedMatches);
 
-            var updateMatches = this.UpsertResults(matchesWithResult);
+        //    var updateMatches = this.UpsertResults(matchesWithResult);
 
-            return updateMatches.Where(m => m.Ended).ToList();
-        }
+        //    return updateMatches.Where(m => m.Ended).ToList();
+        //}
 
         private List<Match> UpsertResults(Dictionary<Match, Result> matchesWithResult)
         {
