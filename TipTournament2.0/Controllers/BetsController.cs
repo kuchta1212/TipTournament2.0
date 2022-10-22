@@ -10,6 +10,7 @@ namespace TipTournament2._0.Controllers
     using System.Threading.Tasks;
     using TipTournament2._0.Data;
     using TipTournament2._0.Models;
+    using TipTournament2._0.Utils;
 
     [ApiController]
     [Authorize]
@@ -18,10 +19,14 @@ namespace TipTournament2._0.Controllers
     public class BetsController : Controller
     {
         private readonly IDbContextWrapper context;
+        private readonly ITeamGenerator teamGenerator;
+        private readonly IBetGenerator betGenerator;
 
-        public BetsController(IDbContextWrapper context)
+        public BetsController(IDbContextWrapper context, ITeamGenerator teamGenerator, IBetGenerator betGenerator)
         {
             this.context = context;
+            this.teamGenerator = teamGenerator;
+            this.betGenerator = betGenerator;
         }
         [HttpGet("")]
         public IActionResult GetBets()
@@ -36,6 +41,13 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
+        [HttpGet("ready/{stage}")]
+        public IActionResult IsReady([FromRoute] TournamentStage stage)
+        {
+            var userId = this.GetUserId();
+            return new OkObjectResult(this.betGenerator.ReadyForStage(stage, userId));
+        }
+
         [HttpGet("groups")]
         public IActionResult GetGroups()
         {
@@ -48,10 +60,23 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.context.GetGroupBetByGroupId(this.GetUserId(), groupId));
         }
 
+        [HttpGet("delta")]
+        public IActionResult GetDelaBet([FromQuery] string matchId)
+        {
+            return new OkObjectResult(this.context.GetDeltaBetByMatchId(this.GetUserId(), matchId));
+        }
+
         [HttpGet("group/teams")]
         public IActionResult GetGroupTeams([FromQuery] string groupId)
         {
             return new OkObjectResult(this.context.GetGroupTeams(groupId));
+        }
+
+        [HttpGet("delta/teams")]
+        public IActionResult GetDeltaTeams([FromQuery] string matchId, [FromQuery] TournamentStage stage)
+        {
+            var userId = this.GetUserId();
+            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.FirstRound, userId));
         }
 
         [HttpPost("tip")]
@@ -67,6 +92,14 @@ namespace TipTournament2._0.Controllers
         {
             var userId = this.GetUserId();
             this.context.UploadGroupBet(groupBet, groupId, userId);
+            return new OkResult();
+        }
+
+        [HttpPost("delta")]
+        public IActionResult UploadDeltaBet([FromBody] DeltaBet deltaBet, [FromQuery] string matchId)
+        {
+            var userId = this.GetUserId();
+            this.context.UploadDeltaBet(deltaBet, matchId, userId);
             return new OkResult();
         }
 

@@ -11,14 +11,17 @@ namespace TipTournament2._0
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Newtonsoft.Json;
     using Quartz;
     using System;
+    using System.Collections.Generic;
     using TipTournament2._0.Calculator;
     using TipTournament2._0.Coordinator;
     using TipTournament2._0.Data;
     using TipTournament2._0.Jobs;
     using TipTournament2._0.MatchClient;
     using TipTournament2._0.Models;
+    using TipTournament2._0.Utils;
 
     public class Startup
     {
@@ -46,6 +49,12 @@ namespace TipTournament2._0
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.Configure<DeltaStageOptions>(opt =>
+            {
+                opt.FirstRound = Configuration.GetSection("DeltaStage:FirstRound").Get<FirstRoundOptions[]>();
+                opt.NextRounds = Configuration.GetSection("DeltaStage:Next").Get<NextRoundOptions[]>();
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -87,6 +96,8 @@ namespace TipTournament2._0
             services.AddTransient<IMatchClient, MatchClient.MatchClient>();
             services.AddTransient<IBetResultMaker, BetResultMaker>();
             services.AddTransient<IResultCoordinator, ResultCoordinator>();
+            services.AddTransient<ITeamGenerator, TeamGenerator>();
+            services.AddTransient<IBetGenerator, BetGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

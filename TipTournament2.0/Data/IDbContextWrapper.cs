@@ -55,5 +55,13 @@
         Group[] GetGroups();
 
         void UploadGroupBet(GroupBet groupBet, string groupId, string userId);
+
+        DeltaBet GetDeltaBetByMatchId(string userId, string matchId);
+
+        Team[] GetDeltaTeams(string matchId);
+
+        void UploadDeltaBet(DeltaBet deltaBet, string matchId, string userId);
+
+        List<DeltaBet> GetDeltaBetsForUserAndStage(TournamentStage stage, string userId);
     }
 }

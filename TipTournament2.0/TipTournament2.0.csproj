@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.12" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Quartz" Version="3.3.2" />
     <PackageReference Include="Quartz.AspNetCore" Version="3.3.2" />
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.3.2" />
@@ -33,6 +34,11 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20221012190911_test-foreignkey-add-column-groupbet.cs" />
+    <Compile Remove="Data\Migrations\20221012190911_test-foreignkey-add-column-groupbet.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,11 +57,13 @@
     <None Remove="ClientApp\src\components\Bets\AllBets.tsx" />
     <None Remove="ClientApp\src\components\Bets\Bets.tsx" />
     <None Remove="ClientApp\src\components\Bets\BetsMainPage.tsx" />
+    <None Remove="ClientApp\src\components\Bets\DeltaBetRow.tsx" />
     <None Remove="ClientApp\src\components\Bets\DeltaBets.tsx" />
     <None Remove="ClientApp\src\components\Bets\GamaBets.tsx" />
     <None Remove="ClientApp\src\components\Bets\GroupTable.tsx" />
     <None Remove="ClientApp\src\components\Bets\MatchBetRow.tsx" />
     <None Remove="ClientApp\src\components\Bets\UserSelector.tsx" />
+    <None Remove="ClientApp\src\components\Bets\WinnerBet.tsx" />
     <None Remove="ClientApp\src\components\Data.tsx" />
     <None Remove="ClientApp\src\components\IconProvider.ts" />
     <None Remove="ClientApp\src\components\Loader.tsx" />
@@ -99,7 +107,9 @@
     <TypeScriptCompile Include="ClientApp\src\components\api\Api.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\api\ResponseConvertor.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\AllBets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\WinnerBet.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\DeltaBets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\DeltaBetRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\GroupTable.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\GamaBets.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\BetsMainPage.tsx" />

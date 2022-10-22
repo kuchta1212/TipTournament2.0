@@ -13,6 +13,7 @@ export interface Match {
     result: Result;
     ended: boolean;
     link: string;
+    stage: TournamentStage;
 }
 
 export interface Team {
@@ -53,8 +54,9 @@ export interface GroupBet {
 export interface DeltaBet {
     id: string;
     match: Match;
-    betWinner: Team;
-    resultWinner: Team;
+    homeTeamBet: Team;
+    awayTeamBet: Team;
+    points: number;
     user: User;
 }
 
@@ -95,4 +97,9 @@ export enum TournamentStage {
     Quarterfinal = 2,
     Semifinal = 3,
     Final = 4
+}
+
+export interface DeltaBetTeams {
+    possibleHomeTeams: Team[];
+    possibleAwayTeams: Team[];
 }

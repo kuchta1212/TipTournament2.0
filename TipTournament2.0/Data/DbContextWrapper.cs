@@ -238,10 +238,17 @@
 
         public void UploadGroupBet(GroupBet groupBet, string groupId, string userId)
         {
-            groupBet.Group = this.GetGroup(groupId);
-            groupBet.User = this.GetUser(userId);
+            var gb = new GroupBet()
+            {
+                GroupId = groupId,
+                UserId = userId,
+                FirstId = groupBet.First.Id,
+                SecondId = groupBet.Second.Id,
+                ThirdId = groupBet.Third.Id,
+                FourthId = groupBet.Fourth.Id
+            };
 
-            this.dbContext.Add(groupBet);
+            this.dbContext.GroupBets.Add(gb);
 
             this.dbContext.SaveChanges();
         }
@@ -249,6 +256,52 @@
         public Group GetGroup(string groupId)
         {
            return this.dbContext.Groups.Where(g => g.Id == groupId).FirstOrDefault();
+        }
+
+        public DeltaBet GetDeltaBetByMatchId(string userId, string matchId)
+        {
+            return this.dbContext.DeltaBets
+                .Where(db => db.User.Id == userId)
+                .Where(db => db.Match.Id == matchId)
+                .Include(db => db.HomeTeamBet)
+                .Include(db => db.AwayTeamBet)
+                .FirstOrDefault();
+        }
+
+        public Team[] GetDeltaTeams(string matchId)
+        {
+            var match = this.dbContext.Matches.Where(m => m.Id == matchId)
+                .Include(m => m.Home)
+                .Include(m => m.Away)
+                .FirstOrDefault();
+
+            var list = new List<Team>() { match.Home, match.Away };
+            return list.ToArray();
+        }
+
+        public void UploadDeltaBet(DeltaBet deltaBet, string matchId, string userId)
+        {
+            var db = new DeltaBet()
+            {
+                MatchId = matchId,
+                UserId = userId,
+                HomeTeamBetId = deltaBet.HomeTeamBet.Id,
+                AwayTeamBetId = deltaBet.AwayTeamBet.Id
+            };
+
+            this.dbContext.DeltaBets.Add(db);
+
+            this.dbContext.SaveChanges();
+        }
+
+        public List<DeltaBet> GetDeltaBetsForUserAndStage(TournamentStage stage, string userId)
+        {
+            var query = from db in this.dbContext.DeltaBets.Where(db => db.UserId == userId)
+                        join match in this.dbContext.Matches.Where(m => m.Stage == stage)
+                        on db.MatchId equals match.Id
+                        select db;
+
+            return query.ToList();
         }
     }
 }

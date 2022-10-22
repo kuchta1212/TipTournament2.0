@@ -71,7 +71,7 @@ export class MatchStages extends React.Component<MatchStagesProps, MatchStagesSt
     private renderMesage() {
         return (
             <div>
-                Zatím nic
+                Zatím zde nejsou žádné zápasy. 
             </div>
         );
     }

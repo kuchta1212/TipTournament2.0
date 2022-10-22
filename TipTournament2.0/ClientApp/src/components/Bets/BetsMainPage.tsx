@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 import { Bets } from './Bets';
 import { GamaBets } from './GamaBets'
+import { DeltaBets } from './DeltaBets' 
 import { WarningNotification, WarningTypes } from '../WarningNotification';
 import { TournamentStage } from '../../typings';
 
@@ -70,13 +71,13 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
                 <div className="card">
                     <div className="card-header" id="headingTwo">
                         <h5 className="mb-0">
-                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                 Osmifinále
                             </button>
                         </h5>
                     </div>
 
-                    <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div id="collapseThree" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                         <div className="card-body">
                             <DeltaBets stage={TournamentStage.FirstRound} />
                         </div>
@@ -86,13 +87,13 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
                 <div className="card">
                     <div className="card-header" id="headingTwo">
                         <h5 className="mb-0">
-                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                 Čtvrtfinále
                             </button>
                         </h5>
                     </div>
 
-                    <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div id="collapseFour" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                         <div className="card-body">
                             <DeltaBets stage={TournamentStage.Quarterfinal} />
                         </div>
@@ -102,13 +103,13 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
                 <div className="card">
                     <div className="card-header" id="headingTwo">
                         <h5 className="mb-0">
-                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                 Semifinále
                             </button>
                         </h5>
                     </div>
 
-                    <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div id="collapseFive" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                         <div className="card-body">
                             <DeltaBets stage={TournamentStage.Semifinal} />
                         </div>
@@ -118,15 +119,31 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
                 <div className="card">
                     <div className="card-header" id="headingTwo">
                         <h5 className="mb-0">
-                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                                 Finále
                             </button>
                         </h5>
                     </div>
 
-                    <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div id="collapseSix" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                         <div className="card-body">
                             <DeltaBets stage={TournamentStage.Final} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="card">
+                    <div className="card-header" id="headingTwo">
+                        <h5 className="mb-0">
+                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                Finále
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="collapseSix" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                        <div className="card-body">
+                            <WinnerBet />
                         </div>
                     </div>
                 </div>
