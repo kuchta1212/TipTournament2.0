@@ -5,18 +5,10 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public enum TournamentStage
+    public enum BetsStageStatus
     {
-        Group,
-
-        FirstRound,
-
-        Quarterfinal,
-
-        Semifinal,
-
-        Final,
-
-        Winner
+        NotReady,
+        Ready,
+        Done
     }
 }

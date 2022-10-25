@@ -21,6 +21,10 @@ body {
     background-size: cover;
 }
 
+body.waiting * {
+    cursor: progress;
+}
+
 .opacity-table {
     background-color: rgba(245, 245, 245, 1);
     opacity: .8;

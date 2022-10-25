@@ -22,18 +22,18 @@
         public DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId)
         {
             return isFirstRound
-                ? this.GenerateTeamsForFirstRound(matchId)
+                ? this.GenerateTeamsFirstRound(matchId, userId)
                 : this.GenerateTeams(matchId, userId);
         }
 
-        private DeltaBetTeams GenerateTeamsForFirstRound(string matchId)
+        private DeltaBetTeams GenerateTeamsFirstRound(string matchId, string userId)
         {
             var matchOption = this.deltaStageOptions.Value.FirstRound.Where(f => f.MatchId == matchId).First();
 
             var result = new DeltaBetTeams
             {
-                PossibleHomeTeams = new List<Team>(this.dbContextWrapper.GetGroupTeams(matchOption.Groups.Winner)),
-                PossibleAwayTeams = new List<Team>(this.dbContextWrapper.GetGroupTeams(matchOption.Groups.Runner))
+                PossibleHomeTeams = new List<Team>() { this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Winner, userId)?.First },
+                PossibleAwayTeams = new List<Team>() { this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Runner, userId)?.Second }
             };
 
             return result;
@@ -47,8 +47,8 @@
             var awayTeamBetOptions = this.dbContextWrapper.GetDeltaBetByMatchId(userId, matchOption.Matches[1]);
             var result = new DeltaBetTeams()
             {
-                PossibleHomeTeams = new List<Team>(new[] { homeTeamBetOptions.HomeTeamBet, homeTeamBetOptions.AwayTeamBet }),
-                PossibleAwayTeams = new List<Team>(new[] { awayTeamBetOptions.HomeTeamBet, awayTeamBetOptions.AwayTeamBet })
+                PossibleHomeTeams = new List<Team>(new[] { homeTeamBetOptions?.HomeTeamBet, homeTeamBetOptions?.AwayTeamBet }),
+                PossibleAwayTeams = new List<Team>(new[] { awayTeamBetOptions?.HomeTeamBet, awayTeamBetOptions?.AwayTeamBet })
             };
 
             return result;

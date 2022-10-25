@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using TipTournament2._0.Models;
+    using TipTournament2._0.Utils;
 
     public class DbContextWrapper : IDbContextWrapper
     {
@@ -138,6 +139,17 @@
                 .ToList();
         }
 
+        public MatchBet GetBetForMatchAndUser(Match match, string userId)
+        {
+            return this.dbContext.Bets
+                .Include(b => b.Match)
+                .Include(b => b.Tip)
+                .Include(b => b.User)
+                .Where(b => b.Match.Id == match.Id)
+                .Where(b => b.User.Id == userId)
+                .FirstOrDefault();
+        }
+
         public void UpdateBets(List<MatchBet> bets)
         {
             this.dbContext.UpdateRange(bets);
@@ -183,11 +195,11 @@
             return this.dbContext.UpdateStatuses.OrderByDescending(u => u.Date).FirstOrDefault();
         }
 
-        public GroupBet GetGroupBetByGroupId(string userId, string groupId)
+        public GroupBet GetGroupBetByGroupId(string groupId, string userId)
         {
             return this.dbContext.GroupBets
-                .Where(gb => gb.Group.Id == groupId)
-                .Where(gb => gb.User.Id == userId)
+                .Where(gb => gb.GroupId == groupId)
+                .Where(gb => gb.UserId == userId)
                 .Include(gb => gb.First)
                 .Include(gb => gb.Second)
                 .Include(gb => gb.Third)
@@ -231,24 +243,65 @@
             return teams.ToArray();
         }
 
-        public Group[] GetGroups()
+        public Group[] GetGroups(bool includeMatches = false)
         {
-            return this.dbContext.Groups.ToArray();
+            return includeMatches
+                ? this.dbContext.Groups.Include(g => g.Matches).ToArray()
+                : this.dbContext.Groups.ToArray();
         }
 
         public void UploadGroupBet(GroupBet groupBet, string groupId, string userId)
         {
-            var gb = new GroupBet()
-            {
-                GroupId = groupId,
-                UserId = userId,
-                FirstId = groupBet.First.Id,
-                SecondId = groupBet.Second.Id,
-                ThirdId = groupBet.Third.Id,
-                FourthId = groupBet.Fourth.Id
-            };
+            var existing = this.dbContext.GroupBets
+                .Where(gb => gb.GroupId == groupBet.GroupId && gb.UserId == groupBet.UserId)
+                .FirstOrDefault();
 
-            this.dbContext.GroupBets.Add(gb);
+            if(existing == null)
+            {
+                var gb = new GroupBet()
+                {
+                    GroupId = groupId,
+                    UserId = userId,
+                    FirstId = groupBet.First.Id,
+                    SecondId = groupBet.Second.Id,
+                    ThirdId = groupBet.Third.Id,
+                    FourthId = groupBet.Fourth.Id
+                };
+
+                this.dbContext.GroupBets.Add(gb);
+            }
+            else
+            {
+                existing.FirstId = groupBet.First.Id;
+                existing.SecondId = groupBet.Second.Id;
+                existing.ThirdId = groupBet.Third.Id;
+                existing.FourthId = groupBet.Fourth.Id;
+
+                this.dbContext.Update(existing);
+            }
+
+            this.dbContext.SaveChanges();
+        }
+
+        public void UpsertGroupBet(GroupBet groupBet)
+        {
+            var existing = this.dbContext.GroupBets
+                .Where(gb => gb.GroupId == groupBet.GroupId && gb.UserId == groupBet.UserId)
+                .FirstOrDefault();
+
+            if(existing == null)
+            {
+                this.dbContext.GroupBets.Add(groupBet);
+            } 
+            else
+            {
+                existing.FirstId = groupBet.FirstId;
+                existing.SecondId = groupBet.SecondId;
+                existing.ThirdId = groupBet.ThirdId;
+                existing.FourthId = groupBet.FourthId;
+
+                this.dbContext.Update(existing);
+            }
 
             this.dbContext.SaveChanges();
         }
@@ -279,17 +332,30 @@
             return list.ToArray();
         }
 
-        public void UploadDeltaBet(DeltaBet deltaBet, string matchId, string userId)
+        public void UpsertDeltaBet(DeltaBet deltaBet, string matchId, string userId)
         {
-            var db = new DeltaBet()
-            {
-                MatchId = matchId,
-                UserId = userId,
-                HomeTeamBetId = deltaBet.HomeTeamBet.Id,
-                AwayTeamBetId = deltaBet.AwayTeamBet.Id
-            };
+            var current = this.GetDeltaBetByMatchId(userId, matchId);
 
-            this.dbContext.DeltaBets.Add(db);
+            if(current == null)
+            {
+                var db = new DeltaBet()
+                {
+                    MatchId = matchId,
+                    UserId = userId,
+                    HomeTeamBetId = deltaBet.HomeTeamBet.Id,
+                    AwayTeamBetId = deltaBet.AwayTeamBet.Id
+                };
+
+                this.dbContext.DeltaBets.Add(db);
+            }
+            else
+            {
+                current.HomeTeamBetId = deltaBet.HomeTeamBet.Id;
+                current.AwayTeamBetId = deltaBet.AwayTeamBet.Id;
+
+                this.dbContext.Update(current);
+            }
+
 
             this.dbContext.SaveChanges();
         }
@@ -302,6 +368,37 @@
                         select db;
 
             return query.ToList();
+        }
+
+        public BetsStatus GetBetsStatus(string userId)
+        {
+            return this.dbContext.BetsStatuses.Where(bs => bs.UserId == userId).FirstOrDefault();
+        }
+
+        public void ConfirmBetsStatus(TournamentStage stage, string userId)
+        {
+            var betsStatus = this.GetBetsStatus(userId);
+            if(betsStatus == null)
+            {
+                betsStatus = new BetsStatus()
+                {
+                    UserId = userId,
+                };
+                betsStatus.ConfirmStage(stage);
+
+                this.dbContext.Add(betsStatus);
+            } 
+            else
+            {
+                betsStatus.ConfirmStage(stage);
+            }
+
+            this.dbContext.SaveChanges();
+        }
+
+        public List<GroupBet> GetGroupBetsForUser(string userId)
+        {
+            return this.dbContext.GroupBets.Where(gb => gb.UserId == userId).ToList();
         }
     }
 }

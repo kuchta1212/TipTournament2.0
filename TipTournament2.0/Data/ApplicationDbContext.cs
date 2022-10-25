@@ -38,6 +38,8 @@
 
         public DbSet<DeltaBet> DeltaBets { get; set; }
 
+        public DbSet<BetsStatus> BetsStatuses { get; set; }
+
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)

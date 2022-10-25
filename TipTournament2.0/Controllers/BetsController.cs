@@ -41,11 +41,25 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
-        [HttpGet("ready/{stage}")]
-        public IActionResult IsReady([FromRoute] TournamentStage stage)
+        [HttpGet("status")]
+        public IActionResult GetStatus()
         {
             var userId = this.GetUserId();
-            return new OkObjectResult(this.betGenerator.ReadyForStage(stage, userId));
+            return new OkObjectResult(this.context.GetBetsStatus(userId));
+        }
+
+        [HttpGet("status/{stage}")]
+        public IActionResult GetStageStatus([FromRoute] TournamentStage stage)
+        {
+            var userId = this.GetUserId();
+            return new OkObjectResult(this.betGenerator.GetBetsStatus(stage, userId));
+        }
+
+        [HttpPost("status/{stage}/confirm")]
+        public IActionResult ConfirmBetsStatus([FromRoute] TournamentStage stage)
+        {
+            var userId = this.GetUserId();
+            return new OkObjectResult(this.betGenerator.ConfirmBetsStatus(stage, userId));
         }
 
         [HttpGet("groups")]
@@ -57,7 +71,7 @@ namespace TipTournament2._0.Controllers
         [HttpGet("group")]
         public IActionResult GetGroupBet([FromQuery] string groupId)
         {
-            return new OkObjectResult(this.context.GetGroupBetByGroupId(this.GetUserId(), groupId));
+            return new OkObjectResult(this.context.GetGroupBetByGroupId(groupId, this.GetUserId()));
         }
 
         [HttpGet("delta")]
@@ -77,6 +91,13 @@ namespace TipTournament2._0.Controllers
         {
             var userId = this.GetUserId();
             return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.FirstRound, userId));
+        }
+
+        [HttpPost("generate/groupbet")]
+        public IActionResult GenerateGroupBets()
+        {
+            var userId = this.GetUserId();
+            return new OkObjectResult(this.betGenerator.CheckGroupMatchesAndGenerateTableResults(userId));
         }
 
         [HttpPost("tip")]
@@ -99,7 +120,7 @@ namespace TipTournament2._0.Controllers
         public IActionResult UploadDeltaBet([FromBody] DeltaBet deltaBet, [FromQuery] string matchId)
         {
             var userId = this.GetUserId();
-            this.context.UploadDeltaBet(deltaBet, matchId, userId);
+            this.context.UpsertDeltaBet(deltaBet, matchId, userId);
             return new OkResult();
         }
 

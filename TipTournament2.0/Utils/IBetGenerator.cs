@@ -8,6 +8,10 @@
 
     public interface IBetGenerator
     {
-        public bool ReadyForStage(TournamentStage stage, string userId);
+        BetsStageStatus GetBetsStatus(TournamentStage stage, string userId);
+
+        BetsStatus ConfirmBetsStatus(TournamentStage stage, string userId);
+
+        bool CheckGroupMatchesAndGenerateTableResults(string userId);
     }
 }

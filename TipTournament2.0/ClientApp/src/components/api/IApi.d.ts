@@ -1,8 +1,11 @@
-﻿import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet } from "../../typings";
+﻿import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, BetsStageStatus, BetsStatus } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
-    isReady(stage: TournamentStage): Promise<boolean>;
+    generateGroupBets(): Promise<boolean>;
+    getBetsStatus(): Promise<BetsStatus>;
+    confirmStageBets(stage: TournamentStage): Promise<BetsStatus>;
+    getBetsStageStatus(stage: TournamentStage): Promise<BetsStageStatus>;
     uploadDeltaBet(bet: DeltaBet, id: string);
     getTeamsForDeltaBet(id: string, stage: TournamentStage);
     getDeltaBet(matchId: string);

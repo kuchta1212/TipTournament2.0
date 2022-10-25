@@ -39,6 +39,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20221012190911_test-foreignkey-add-column-groupbet.cs" />
     <Compile Remove="Data\Migrations\20221012190911_test-foreignkey-add-column-groupbet.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221022144405_add-bet-status-table.cs" />
+    <Compile Remove="Data\Migrations\20221022144405_add-bet-status-table.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +59,7 @@
     <None Remove="ClientApp\src\components\Bets\AllBets.tsx" />
     <None Remove="ClientApp\src\components\Bets\Bets.tsx" />
     <None Remove="ClientApp\src\components\Bets\BetsMainPage.tsx" />
+    <None Remove="ClientApp\src\components\Bets\CardBet.tsx" />
     <None Remove="ClientApp\src\components\Bets\DeltaBetRow.tsx" />
     <None Remove="ClientApp\src\components\Bets\DeltaBets.tsx" />
     <None Remove="ClientApp\src\components\Bets\GamaBets.tsx" />
@@ -107,6 +110,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\api\Api.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\api\ResponseConvertor.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\AllBets.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Bets\CardBet.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\WinnerBet.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\DeltaBets.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Bets\DeltaBetRow.tsx" />

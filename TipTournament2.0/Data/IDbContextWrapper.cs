@@ -32,10 +32,12 @@
 
         List<MatchBet> GetBetsForMatch(Match match);
 
+        MatchBet GetBetForMatchAndUser(Match match, string userId);
+
         void UpdateBets(List<MatchBet> bets);
 
         List<ApplicationUser> GetAllUsers();
-
+        BetsStatus GetBetsStatus(string userId);
         Result SaveResult(Result result);
 
         void UpdateMatch(Match match);
@@ -48,20 +50,26 @@
 
         UpdateStatus GetLatestUpdateStatus();
 
-        GroupBet GetGroupBetByGroupId(string userId, string groupId);
+        GroupBet GetGroupBetByGroupId(string groupId, string userId);
+
+        List<GroupBet> GetGroupBetsForUser(string userId);
 
         Team[] GetGroupTeams(string groupId);
 
-        Group[] GetGroups();
+        Group[] GetGroups(bool includeMatches = false);
 
         void UploadGroupBet(GroupBet groupBet, string groupId, string userId);
+
+        void UpsertGroupBet(GroupBet groupBet);
 
         DeltaBet GetDeltaBetByMatchId(string userId, string matchId);
 
         Team[] GetDeltaTeams(string matchId);
 
-        void UploadDeltaBet(DeltaBet deltaBet, string matchId, string userId);
+        void UpsertDeltaBet(DeltaBet deltaBet, string matchId, string userId);
 
         List<DeltaBet> GetDeltaBetsForUserAndStage(TournamentStage stage, string userId);
+
+        void ConfirmBetsStatus(TournamentStage stage, string userId);
     }
 }

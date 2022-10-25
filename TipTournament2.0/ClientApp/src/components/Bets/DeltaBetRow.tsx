@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, Team, DeltaBet, DeltaBetTeams } from "../../typings/index"
+import { Match, BetsStageStatus, DeltaBet, DeltaBetTeams } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from '../Loader'
@@ -24,6 +24,7 @@ interface DeltaBetState {
 
 interface DeltaBetProps {
     match: Match;
+    isReadOnly: boolean;
 }
 
 export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
@@ -33,7 +34,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         this.state = {
             bet: {} as DeltaBet,
             loading: true,
-            isEditable: false,
+            isEditable: !this.props.isReadOnly,
             teams: {} as DeltaBetTeams,
             selection: {} as BetSelection
         }
@@ -57,11 +58,11 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
     private async getData() {
         const bet = await getApi().getDeltaBet(this.props.match.id);
-        const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage)
         if (!bet.id) {
-            this.setState({ isEditable: true, loading: false, teams: teams });
+            const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage)
+            this.setState({ loading: false, teams: teams });
         } else {
-            this.setState({ bet: bet, loading: false, isEditable: false, teams: teams });
+            this.setState({ bet: bet, loading: false, isEditable: false });
 
         }
     }
@@ -105,7 +106,11 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         </tr>
                         <tr>
                             <td />
-                            {this.state.isEditable ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button> : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
+                            {this.props.isReadOnly
+                                ? <div />
+                                : this.state.isEditable
+                                    ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
+                                    : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
                         </tr>
                     </tbody>
                 </Table>

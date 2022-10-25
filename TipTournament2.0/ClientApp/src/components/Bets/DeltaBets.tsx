@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, Bet, User, TournamentStage } from "../../typings/index"
+import { Match, BetsStageStatus, TournamentStage } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { DeltaBetRow } from './DeltaBetRow';
 import { Loader } from '../Loader'
@@ -8,12 +8,12 @@ import { Dictionary, IDictionary } from "../../typings/Dictionary"
 
 interface DeltaBetsState {
     matches: Match[],
-    isReady: boolean,
     loading: boolean,
 }
 
 interface DeltaBetsProps {
-   stage: TournamentStage
+    stage: TournamentStage,
+    status: BetsStageStatus
 }
 
 export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
@@ -22,8 +22,7 @@ export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
         super(props);
         this.state = {
             matches: {} as Match[],
-            isReady: false,
-            loading: true,
+            loading: true
         }
     }
 
@@ -34,9 +33,7 @@ export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.state.isReady
-                ? this.renderBetsTable()
-                : this.renderMessage();
+            : this.props.status != BetsStageStatus.NotReady ? this.renderBetsTable() : <div />;
 
         return (
             <div>
@@ -46,28 +43,22 @@ export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
     }
 
     private async getData() {
-        const isReady = await getApi().isReady(this.props.stage);
         const matches = await getApi().getMatches(this.props.stage);
-        this.setState({ matches: matches, loading: false, isReady: isReady });
+        this.setState({ matches: matches, loading: false });
     }
 
     private renderBetsTable() {
         return (
-            <div className="groupList">
-                {this.state.matches.map((match, index) => {
-                    return <DeltaBetRow key={match.id} match={match} />
-                })}
+            <div>
+                <div className="groupList">
+                    {this.state.matches.map((match, index) => {
+                        return <DeltaBetRow key={match.id} match={match} isReadOnly={this.props.status == BetsStageStatus.Done} />
+                    })}
+                </div>
             </div>
         );
     }
 
-    private renderMessage() {
-        return (
-            <div>
-                Prosím nejdříve vyplň sázky z dřívějšího kola.
-                V případě, že jsou všechny vyplněny, zkus obnovit stránku.
-            </div>
-            )
-    }
+
 }
 

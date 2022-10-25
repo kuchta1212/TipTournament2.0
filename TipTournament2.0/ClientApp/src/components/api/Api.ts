@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -7,8 +7,17 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api';
 
 export class Api implements IApi {
-    isReady(stage: TournamentStage): Promise<boolean> {
-        return convert<boolean>(get(`${API_URL}/bets/ready/${stage}`));
+    generateGroupBets(): Promise<boolean> {
+        return convert<boolean>(post(`${API_URL}/bets/generate/groupbet`));
+    }
+    getBetsStatus(): Promise<BetsStatus> {
+        return convert<BetsStatus>(get(`${API_URL}/bets/status`));
+    }
+    confirmStageBets(stage: TournamentStage): Promise<BetsStatus> {
+        return convert<BetsStatus>(post(`${API_URL}/bets/status/${stage}/confirm`));
+    }
+    getBetsStageStatus(stage: TournamentStage): Promise<BetsStageStatus> {
+        return convert<BetsStageStatus>(get(`${API_URL}/bets/status/${stage}`));
     }
     async uploadDeltaBet(bet: DeltaBet, matchId: string): Promise<void> {
         await post(`${API_URL}/bets/delta?matchId=${matchId}`, bet);

@@ -91,15 +91,31 @@ export interface UpdateStatus {
     errorMessage: string;
 }
 
+export interface BetsStatus {
+    id: string,
+    matchesInGroupsDone: boolean,
+    groupStagesDone: boolean,
+    querterfinalStageDone: boolean,
+    semifinalStageDone: boolean,
+    finalStageDone: boolean,
+}
+
 export enum TournamentStage {
     Group = 0,
     FirstRound = 1,
     Quarterfinal = 2,
     Semifinal = 3,
-    Final = 4
+    Final = 4,
+    Winner = 5
 }
 
 export interface DeltaBetTeams {
     possibleHomeTeams: Team[];
     possibleAwayTeams: Team[];
+}
+
+export enum BetsStageStatus {
+    NotReady = 0,
+    Ready = 1,
+    Done = 2
 }
