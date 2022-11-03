@@ -11,7 +11,17 @@
 
         public string UserName { get; set; }
 
-        public int Points { get; set; }
+        public int TotalPoints { get; set; }
+
+        public int AlfaPoints { get; set; }
+
+        public int GamaPoints { get; set; }
+
+        public int DeltaPoints { get; set; }
+
+        public int LambdaPoints { get; set; }
+
+        public int OmikronPoints { get; set; }
 
         public bool Payed { get; set; }
 
@@ -21,7 +31,12 @@
             {
                 Id = appUser.Id,
                 UserName = appUser.UserName,
-                Points = appUser.Points,
+                TotalPoints = appUser.TotalPoints,
+                AlfaPoints = appUser.AlfaPoints,
+                GamaPoints = appUser.GamaPoints,
+                DeltaPoints = appUser.DeltaPoints,
+                LambdaPoints = appUser.LambdaPoints,
+                OmikronPoints = appUser.OmikronPoints,
                 Payed = appUser.Payed
             };
         }

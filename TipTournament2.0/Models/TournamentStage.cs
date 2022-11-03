@@ -17,6 +17,10 @@
 
         Final,
 
-        Winner
+        Winner,
+
+        Lambda,
+
+        Omikron
     }
 }

@@ -33,7 +33,10 @@
         [ForeignKey("FourthId")]
         public Team Fourth { get; set; }
 
-        public int Points { get; set; }
+        public string  ResultId { get; set; }
+
+        [ForeignKey("ResultId")]
+        public GroupBetResult Result { get; set; }
 
         public string UserId { get; set; }
 

@@ -71,5 +71,17 @@
         List<DeltaBet> GetDeltaBetsForUserAndStage(TournamentStage stage, string userId);
 
         void ConfirmBetsStatus(TournamentStage stage, string userId);
+
+        void ModifyBetsStatus(TournamentStage stage, string userId);
+
+        SpecificTeamPlaceBet GetTeamPlaceBet(string userId, bool isWinnerBet);
+
+        void UpsertTeamPlaceBet(string teamId, string userId, bool isWinnerBet, TournamentStage stage);
+
+        Team GetTeam(string teamId);
+
+        void UpsertShooterBet(string name, string userId);
+
+        TopShooterBet GetShooterBet(string userId);
     }
 }

@@ -77,7 +77,7 @@
             {
                 var betsForUser = this.dbContextWrapper.GetBetsForUser(user.Id);
                 var points = betsForUser.Sum(b => (int)b.Result);
-                user.Points = points;                
+                user.TotalPoints = points;                
             }
 
             this.dbContextWrapper.UpdateUsers(users);

@@ -24,7 +24,12 @@ export class UserRow extends React.Component<UserRowProps> {
         return (
             <React.Fragment>
                 <td className={className}>{this.props.index + 1}. {this.props.user.userName}  {this.didPay()}</td>
-                <td>{this.props.user.points}</td>
+                <td>{this.props.user.alfaPoints}</td>
+                <td>{this.props.user.gamaPoints}</td>
+                <td>{this.props.user.deltaPoints}</td>
+                <td>{this.props.user.lambdaPoints}</td>
+                <td>{this.props.user.omikronPoints}</td>
+                <td className="font-weight-bold">{this.props.user.totalPoints}</td>
             </React.Fragment>
         );
 

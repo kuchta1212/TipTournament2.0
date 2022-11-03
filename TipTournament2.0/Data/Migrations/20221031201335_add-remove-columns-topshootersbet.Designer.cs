@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TipTournament2._0.Data;
 
 namespace TipTournament2._0.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221031201335_add-remove-columns-topshootersbet")]
+    partial class addremovecolumnstopshootersbet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,15 +246,9 @@ namespace TipTournament2._0.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("AlfaPoints")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DeltaPoints")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
@@ -260,12 +256,6 @@ namespace TipTournament2._0.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<int>("GamaPoints")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LambdaPoints")
-                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -281,9 +271,6 @@ namespace TipTournament2._0.Data.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<int>("OmikronPoints")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -296,11 +283,11 @@ namespace TipTournament2._0.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalPoints")
-                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -394,8 +381,8 @@ namespace TipTournament2._0.Data.Migrations
                     b.Property<string>("MatchId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ResultId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -408,31 +395,9 @@ namespace TipTournament2._0.Data.Migrations
 
                     b.HasIndex("MatchId");
 
-                    b.HasIndex("ResultId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("DeltaBets");
-                });
-
-            modelBuilder.Entity("TipTournament2._0.Models.DeltaBetResult", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsAwayTeamCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsHomeTeamCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeltaBetResults");
                 });
 
             modelBuilder.Entity("TipTournament2._0.Models.Group", b =>
@@ -469,8 +434,8 @@ namespace TipTournament2._0.Data.Migrations
                     b.Property<string>("GroupId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ResultId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
 
                     b.Property<string>("SecondId")
                         .HasColumnType("nvarchar(450)");
@@ -489,8 +454,6 @@ namespace TipTournament2._0.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("ResultId");
-
                     b.HasIndex("SecondId");
 
                     b.HasIndex("ThirdId");
@@ -498,32 +461,6 @@ namespace TipTournament2._0.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("GroupBets");
-                });
-
-            modelBuilder.Entity("TipTournament2._0.Models.GroupBetResult", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsFirstCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFourthCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSecondCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsThirdCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GroupBetResults");
                 });
 
             modelBuilder.Entity("TipTournament2._0.Models.GroupResult", b =>
@@ -702,9 +639,6 @@ namespace TipTournament2._0.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
@@ -813,10 +747,6 @@ namespace TipTournament2._0.Data.Migrations
                         .WithMany()
                         .HasForeignKey("MatchId");
 
-                    b.HasOne("TipTournament2._0.Models.DeltaBetResult", "Result")
-                        .WithMany()
-                        .HasForeignKey("ResultId");
-
                     b.HasOne("TipTournament2._0.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -842,10 +772,6 @@ namespace TipTournament2._0.Data.Migrations
                     b.HasOne("TipTournament2._0.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
-
-                    b.HasOne("TipTournament2._0.Models.GroupBetResult", "Result")
-                        .WithMany()
-                        .HasForeignKey("ResultId");
 
                     b.HasOne("TipTournament2._0.Models.Team", "Second")
                         .WithMany()

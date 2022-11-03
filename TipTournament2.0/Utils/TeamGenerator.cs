@@ -11,12 +11,14 @@
     public class TeamGenerator : ITeamGenerator
     {
         private readonly IOptions<DeltaStageOptions> deltaStageOptions;
+        private readonly IOptions<OmikronStageOptions> omikronStageOptions;
         private readonly IDbContextWrapper dbContextWrapper;
 
-        public TeamGenerator(IOptions<DeltaStageOptions> deltaStageOptions, IDbContextWrapper dbContextWrapper)
+        public TeamGenerator(IOptions<DeltaStageOptions> deltaStageOptions, IOptions<OmikronStageOptions> omikronStageOptions, IDbContextWrapper dbContextWrapper)
         {
             this.deltaStageOptions = deltaStageOptions;
             this.dbContextWrapper = dbContextWrapper;
+            this.omikronStageOptions = omikronStageOptions;
         }
 
         public DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId)
@@ -52,6 +54,26 @@
             };
 
             return result;
+        }
+
+        public Team[] GenerateSpecificBetTeams()
+        {
+            var result = new List<Team>();
+
+            var teamIds = this.omikronStageOptions.Value.TeamIds;
+            foreach(var teamId in teamIds)
+            {
+                var team = this.dbContextWrapper.GetTeam(teamId);
+                result.Add(team);
+            }
+
+            return result.ToArray();
+        }
+
+        public Team[] GetFinalists(string userId)
+        {
+            var deltaBet = this.dbContextWrapper.GetDeltaBetByMatchId(userId, "match_64");
+            return new List<Team>() { deltaBet.HomeTeamBet, deltaBet.AwayTeamBet }.ToArray();
         }
     }
 }

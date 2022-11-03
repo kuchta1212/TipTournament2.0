@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, Bet, User, TournamentStage } from "../../typings/index"
+import { Match, Bet, User, TournamentStage, BetsStageStatus } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from './../Loader'
@@ -16,6 +16,7 @@ interface BetsState {
 
 interface BetsProps {
     users: User[] | undefined,
+    status: BetsStageStatus
 }
 
 export class Bets extends React.Component<BetsProps, BetsState> {
@@ -114,7 +115,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                 <tbody>
                     {matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={!!this.props.users} />
+                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={this.props.status == BetsStageStatus.Done} />
                         </tr>)
                     )}
                 </tbody>

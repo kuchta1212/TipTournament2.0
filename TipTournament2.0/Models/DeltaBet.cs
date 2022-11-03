@@ -28,7 +28,10 @@
         [ForeignKey("AwayTeamBetId")]
         public Team AwayTeamBet { get; set; }
 
-        public int Points { get; set; }
+        public string ResultId { get; set; }
+
+        [ForeignKey("ResultId")]
+        public DeltaBetResult Result { get; set; }
 
         public string UserId { get; set; }
 

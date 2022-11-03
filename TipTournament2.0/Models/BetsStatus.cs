@@ -27,5 +27,11 @@
         public bool SemifinalStageDone { get; set; }
 
         public bool FinalStageDone { get; set; }
+
+        public bool WinnerStageDone { get; set; }
+
+        public bool LambdaStageDone { get; set; }
+
+        public bool OmikronStageDone { get; set; }
     }
 }

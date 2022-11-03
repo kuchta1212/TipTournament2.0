@@ -9,5 +9,9 @@
     public interface ITeamGenerator
     {
         DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId);
+
+        Team[] GenerateSpecificBetTeams();
+
+        Team[] GetFinalists(string userId);
     }
 }

@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -7,6 +7,25 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api';
 
 export class Api implements IApi {
+
+    uploadShooterBet(bet: string): Promise<TopShooterBet> {
+        return convert<TopShooterBet>(post(`${API_URL}/bets/shooter?name=${bet}`));
+    }
+    getShooterBet(): Promise<TopShooterBet> {
+        return convert<TopShooterBet>(get(`${API_URL}/bets/shooter`));
+    }
+    getTeamsForTeamPlaceBet(isWinnerBet: boolean): Promise<Team[]> {
+        return convert<Team[]>(get(`${API_URL}/bets/teamplace/teams?isWinnerBet=${isWinnerBet}`));
+    }
+    uploadTeamPlaceBet(stage: TournamentStage, teamId: string, isWinnerBet: boolean): Promise<PlaceTeamBet> {
+        return convert<PlaceTeamBet>(post(`${API_URL}/bets/teamplace?teamId=${teamId}&isWinnerBet=${isWinnerBet}&stage=${stage}`));
+    }
+    getTeamPlaceBet(): Promise<PlaceTeamBet> {
+        return convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=false`));
+    }
+    getWinnerBet(): Promise<PlaceTeamBet> {
+        return convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=true`));
+    }
     generateGroupBets(): Promise<boolean> {
         return convert<boolean>(post(`${API_URL}/bets/generate/groupbet`));
     }
@@ -15,6 +34,9 @@ export class Api implements IApi {
     }
     confirmStageBets(stage: TournamentStage): Promise<BetsStatus> {
         return convert<BetsStatus>(post(`${API_URL}/bets/status/${stage}/confirm`));
+    }
+    modifyStageBet(stage: TournamentStage): Promise<BetsStatus> {
+        return convert<BetsStatus>(post(`${API_URL}/bets/status/${stage}/modify`));
     }
     getBetsStageStatus(stage: TournamentStage): Promise<BetsStageStatus> {
         return convert<BetsStageStatus>(get(`${API_URL}/bets/status/${stage}`));

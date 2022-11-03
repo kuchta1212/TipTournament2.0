@@ -56,6 +56,11 @@ namespace TipTournament2._0
                 opt.NextRounds = Configuration.GetSection("DeltaStage:Next").Get<NextRoundOptions[]>();
             });
 
+            services.Configure<OmikronStageOptions>(opt =>
+            {
+                opt.TeamIds = Configuration.GetSection("OmikronStage:TeamIds").Get<string[]>();
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 

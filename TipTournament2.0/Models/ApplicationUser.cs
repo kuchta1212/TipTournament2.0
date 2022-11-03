@@ -8,7 +8,17 @@
 
     public class ApplicationUser : IdentityUser
     {
-        public int Points { get; set; }
+        public int TotalPoints { get; set; }
+
+        public int AlfaPoints { get; set; }
+
+        public int GamaPoints { get; set; }
+
+        public int DeltaPoints { get; set; }
+
+        public int LambdaPoints { get; set; }
+
+        public int OmikronPoints { get; set; }
 
         public bool Payed { get; set; }
     }

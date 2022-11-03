@@ -32,7 +32,7 @@
         public IActionResult GetUsers([FromQuery] bool orderByPoints)
         {
             return orderByPoints
-                ? new OkObjectResult(this.context.GetAllUsers().Select(u => UiUser.FromApplicationUser(u)).OrderByDescending(u => u.Points).ToList())
+                ? new OkObjectResult(this.context.GetAllUsers().Select(u => UiUser.FromApplicationUser(u)).OrderByDescending(u => u.TotalPoints).ToList())
                 : new OkObjectResult(this.context.GetAllUsers().Select(u => UiUser.FromApplicationUser(u)).ToList());
         }
 

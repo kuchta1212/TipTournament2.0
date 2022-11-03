@@ -25,6 +25,7 @@ interface DeltaBetState {
 interface DeltaBetProps {
     match: Match;
     isReadOnly: boolean;
+    showResult: boolean;
 }
 
 export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
@@ -73,11 +74,11 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                 <Table className="table table-striped opacity-table">
                     <tbody>
                         <tr>
-                            <td>
+                            <td className={this.getClass(1)}>
                                 {this.state.isEditable
                                     ? <div className="input-group mb-3">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text" htmlFor="inputGroupSelect01">Týmy</label>
+                                            <label className="input-group-text" htmlFor="inputGroupSelect01">Tým</label>
                                         </div>
                                         <select className="custom-select" id="inputFirstTeamSelect" defaultValue={this.state.selection.homeId ?? "default"} onChange={(event) => this.onSelect(event.target)}>
                                             <option key="default-id" value="default" >Vyber tým</option>
@@ -88,11 +89,11 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                                     </div>
                                     : <TeamCell team={this.state.bet.homeTeamBet} />}
                             </td>
-                            <td>
+                            <td className={this.getClass(1)}>
                                 {this.state.isEditable
                                 ?   <div className="input-group mb-3">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text" htmlFor="inputSecondTeamSelect">Týmy</label>
+                                            <label className="input-group-text" htmlFor="inputSecondTeamSelect">Tým</label>
                                         </div>
                                         <select className="custom-select" id="inputSecondTeamSelect" defaultValue={this.state.selection.awayId ?? "default"} onChange={(event) => this.onSelect(event.target)}>
                                             <option key="default-id" value="default" >Vyber tým</option>
@@ -106,16 +107,31 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         </tr>
                         <tr>
                             <td />
-                            {this.props.isReadOnly
-                                ? <div />
-                                : this.state.isEditable
-                                    ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
-                                    : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
+                            {this.props.showResult
+                                ? <tr><td>Body:</td><td>{this.state.bet.result?.points ?? 0}</td></tr>
+                                : this.props.isReadOnly
+                                    ? <div />
+                                    : this.state.isEditable
+                                        ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
+                                        : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
                         </tr>
                     </tbody>
                 </Table>
             </div>
         );
+    }
+
+    private getClass(order: number): string {
+        if (!this.props.showResult || !this.state.bet.result) {
+            return "";
+        }
+
+        switch (order) {
+            case 1:
+                return this.state.bet.result.isHomeTeamCorrect ? "border border-success" : "border border-danger";
+            case 2:
+                return this.state.bet.result.isAwayTeamCorrect ? "border border-success" : "border border-danger";
+        }
     }
 
     private onSelect(event: any) {

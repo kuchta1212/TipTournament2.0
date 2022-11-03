@@ -1,26 +1,23 @@
 ﻿import * as React from 'react';
-import { getApi } from "../api/ApiFactory"
-import { Match, Bet, User, Group, GroupBet } from "../../typings/index"
+import { Match, Bet, Group, TournamentStage } from "../../typings/index"
 import { Table } from 'reactstrap';
-import { MatchBetRow } from './MatchBetRow';
-import { Loader } from '../Loader'
-import { WarningNotification, WarningTypes } from '../WarningNotification';
-import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import authService from '../api-authorization/AuthorizeService'
-import { GroupTable } from './GroupTable';
+import { MainRow } from './MainRow';
+import { Loader } from '../Loader';
+import { getApi } from '../api/ApiFactory';
+import { GroupTable } from '../Bets/GroupTable';
 
-interface GamaBetsState {
+interface GammaViewState {
     groups: Group[]
     loading: boolean,
 }
 
-interface GamaBetsProps {
-    isReadOnly: boolean
+interface GammaViewProps {
+
 }
 
-export class GamaBets extends React.Component<GamaBetsProps, GamaBetsState> {
+export class GammaView extends React.Component<GammaViewProps, GammaViewState> {
 
-    constructor(props: GamaBetsProps) {
+    constructor(props: GammaViewProps) {
         super(props);
         this.state = {
             groups: {} as Group[],
@@ -53,10 +50,9 @@ export class GamaBets extends React.Component<GamaBetsProps, GamaBetsState> {
         return (
             <div className="groupList">
                 {this.state.groups.map((group, index) => {
-                    return <GroupTable key={group.id} group={group} isReadOnly={this.props.isReadOnly} showResult={false} />
+                    return <GroupTable key={group.id} group={group} isReadOnly={true} showResult={true} />
                 })}
             </div>
         );
     }
 }
-

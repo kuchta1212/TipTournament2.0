@@ -62,6 +62,13 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.betGenerator.ConfirmBetsStatus(stage, userId));
         }
 
+        [HttpPost("status/{stage}/modify")]
+        public IActionResult ModifyBetsStatus([FromRoute] TournamentStage stage)
+        {
+            var userId = this.GetUserId();
+            return new OkObjectResult(this.betGenerator.ModifyBetsStatus(stage, userId));
+        }
+
         [HttpGet("groups")]
         public IActionResult GetGroups()
         {
@@ -72,6 +79,28 @@ namespace TipTournament2._0.Controllers
         public IActionResult GetGroupBet([FromQuery] string groupId)
         {
             return new OkObjectResult(this.context.GetGroupBetByGroupId(groupId, this.GetUserId()));
+        }
+
+        [HttpGet("teamplace")]
+        public IActionResult GetTeamPlaceBet([FromQuery] bool isWinnerBet)
+        {
+            return new OkObjectResult(this.context.GetTeamPlaceBet(this.GetUserId(), isWinnerBet));
+        }
+
+        [HttpGet("teamplace/teams")]
+        public IActionResult GetTeamPlaceBetTeams([FromQuery] bool isWinnerBet)
+        {
+            var teams = isWinnerBet
+                ? this.teamGenerator.GetFinalists(this.GetUserId())
+                : this.teamGenerator.GenerateSpecificBetTeams();
+
+            return new OkObjectResult(teams);
+        }
+
+        [HttpGet("shooter")]
+        public IActionResult GetShooterBet()
+        {
+            return new OkObjectResult(this.context.GetShooterBet(this.GetUserId()));
         }
 
         [HttpGet("delta")]
@@ -122,6 +151,24 @@ namespace TipTournament2._0.Controllers
             var userId = this.GetUserId();
             this.context.UpsertDeltaBet(deltaBet, matchId, userId);
             return new OkResult();
+        }
+
+
+        [HttpPost("teamplace")]
+        public IActionResult UploadTeamPlaceBet([FromQuery] string teamId, [FromQuery] bool isWinnerBet, [FromQuery] TournamentStage stage)
+        {
+            var userId = this.GetUserId();
+            this.context.UpsertTeamPlaceBet(teamId, userId, isWinnerBet, stage);
+            return new OkObjectResult(this.context.GetTeamPlaceBet(userId, isWinnerBet));
+        }
+
+
+        [HttpPost("shooter")]
+        public IActionResult UploadShooterBet([FromQuery] string name)
+        {
+            var userId = this.GetUserId();
+            this.context.UpsertShooterBet(name, userId);
+            return new OkObjectResult(this.context.GetShooterBet(userId));
         }
 
         [HttpPost("users")]

@@ -13,10 +13,20 @@
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
-        public Team team { get; set; }
+        public string teamId { get; set; }
+
+        [ForeignKey("teamId")]
+        public Team Team { get; set; }
 
         public TournamentStage StageBet { get; set; }
 
+        public bool IsWinnerBet { get; set; }
+
         public bool IsCorrect { get; set; }
+
+        public string UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
     }
 }

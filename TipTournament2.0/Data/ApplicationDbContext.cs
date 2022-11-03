@@ -40,6 +40,10 @@
 
         public DbSet<BetsStatus> BetsStatuses { get; set; }
 
+        public DbSet<GroupBetResult> GroupBetResults { get; set; }
+
+        public DbSet<DeltaBetResult> DeltaBetResults { get; set; }
+
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)

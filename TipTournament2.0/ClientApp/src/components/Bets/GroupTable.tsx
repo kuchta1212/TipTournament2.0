@@ -26,6 +26,8 @@ interface GroupTableState {
 
 interface GroupTableProps {
     group: Group;
+    isReadOnly: boolean;
+    showResult: boolean;
 }
 
 export class GroupTable extends React.Component<GroupTableProps, GroupTableState> {
@@ -87,7 +89,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                         <th>{this.props.group.groupName}</th>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr className={this.getClass(1)}>
                             <td>1.</td>
                             {this.state.isEditable
                                 ? <td>
@@ -105,7 +107,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                                 </td>
                                 : <TeamCell team={this.state.bet.first} />}
                         </tr>
-                        <tr>
+                        <tr className={this.getClass(2)}>
                             <td>2.</td>
                             {this.state.isEditable
                                 ? <td>
@@ -123,7 +125,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                                 </td>
                                 : <TeamCell team={this.state.bet.second} />}
                         </tr>
-                        <tr>
+                        <tr className={this.getClass(3)}>
                             <td>3.</td>
                             {this.state.isEditable
                                 ? <td>
@@ -141,7 +143,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                                 </td>
                                 : <TeamCell team={this.state.bet.third} />}
                         </tr>
-                        <tr>
+                        <tr className={this.getClass(4)}>
                             <td>4.</td>
                             {this.state.isEditable
                                 ? <td>
@@ -159,14 +161,36 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                                 </td>
                                 : <TeamCell team={this.state.bet.fourth} />}
                         </tr>
-                        <tr>
-                            <td />
-                            {this.state.isEditable ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button> : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
-                        </tr>
+                        {
+                            this.props.showResult 
+                                ? <tr><td>Body:</td><td>{this.state.bet.result?.points ?? 0}</td></tr>
+                                : this.props.isReadOnly
+                                    ? <div />
+                                    : this.state.isEditable
+                                        ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
+                                        : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>
+                        }
                     </tbody>
                 </Table>
             </div>
         );
+    }
+
+    private getClass(order: number): string {
+        if (!this.props.showResult || !this.state.bet.result) {
+            return "";
+        }
+
+        switch (order) {
+            case 1:
+                return this.state.bet.result.isFirstCorrect ? "border border-success" : "border border-danger";
+            case 2:
+                return this.state.bet.result.isSecondCorrect ? "border border-success" : "border border-danger";
+            case 3:
+                return this.state.bet.result.isThirdCorrect ? "border border-success" : "border border-danger";
+            case 4:
+                return this.state.bet.result.isThirdCorrect ? "border border-success" : "border border-danger";
+        }
     }
 
     private onSelect(event: any) {

@@ -7,6 +7,7 @@ import { Ranking } from "./Ranking"
 import { Loader } from './../Loader'
 import './../../custom.css'
 import authService from './../api-authorization/AuthorizeService'
+import { MainInnerPage } from './MainPageInner';
 
 interface MainPageState {
     currentUser: string;
@@ -50,8 +51,12 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
         return (
             <div className="container body-content">
                 <div className="row">
-                    <Matches activeStage={this.state.activeStage} />
-                    <Ranking currentUser={this.state.currentUser} />
+                    <div className="col">
+                        <MainInnerPage activeStage={this.state.activeStage} />
+                    </div>
+                    <div className="col col-lg-2">
+                        <Ranking currentUser={this.state.currentUser} />
+                    </div>
                 </div>
             </div>
         );

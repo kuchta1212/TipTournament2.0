@@ -57,6 +57,13 @@
             return null;
         }
 
+        public BetsStatus ModifyBetsStatus(TournamentStage stage, string userId)
+        {
+            this.contextWrapper.ModifyBetsStatus(stage, userId);
+
+            return this.contextWrapper.GetBetsStatus(userId);
+        }
+
         public bool CheckGroupMatchesAndGenerateTableResults(string userId)
         {
             if(!this.CanConfirmGroupMatches(userId))
@@ -94,12 +101,24 @@
 
         private bool CanConfirm(TournamentStage stage, string userId)
         {
-            if (stage == TournamentStage.Group)
+            switch (stage)
             {
-                return this.CanConfirmGroupStage(userId);
+                case TournamentStage.Group:
+                    return this.CanConfirmGroupStage(userId);
+                case TournamentStage.Winner:
+                    return this.CanConfirmWinner(userId);
+                case TournamentStage.Lambda:
+                case TournamentStage.Omikron:
+                    return true;
+                default:
+                    return this.CanConfirmDelta(stage, userId);
             }
+        }
 
-            return this.CanConfirmDelta(stage, userId);
+        private bool CanConfirmWinner(string userId)
+        {
+            var bet = this.contextWrapper.GetTeamPlaceBet(userId, true);
+            return bet != null;
         }
 
         private bool CanConfirmGroupMatches(string userId)

@@ -12,6 +12,8 @@
 
         BetsStatus ConfirmBetsStatus(TournamentStage stage, string userId);
 
+        BetsStatus ModifyBetsStatus(TournamentStage stage, string userId);
+
         bool CheckGroupMatchesAndGenerateTableResults(string userId);
     }
 }

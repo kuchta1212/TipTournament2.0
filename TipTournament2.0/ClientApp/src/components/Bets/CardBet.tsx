@@ -20,6 +20,7 @@ interface CardBetProps {
     text: string,
     stage: TournamentStage,
     confirm: (stage: TournamentStage) => Promise<void>,
+    modify: (stage: TournamentStage) => Promise<void>,
     hideConfirmButton?: boolean,
     showGenerateButton?: boolean,
 }
@@ -90,7 +91,7 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
 
 
     private modify() {
-        this.setState({ status: BetsStageStatus.Ready })
+        this.props.modify(this.props.stage);
     }
 
     private async confirm(): Promise<void> {

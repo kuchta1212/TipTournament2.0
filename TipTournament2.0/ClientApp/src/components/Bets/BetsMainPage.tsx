@@ -7,6 +7,8 @@ import { BetsStageStatus, BetsStatus, TournamentStage } from '../../typings';
 import { CardBet } from './CardBet';
 import { Loader } from '../Loader'
 import { getApi } from "../api/ApiFactory"
+import { TeamPlaceBet } from './TeamPlaceBet';
+import { BestShooterBet } from './BestShooterBet';
 
 interface BetsMainPageState {
     afterLimit: boolean,
@@ -55,33 +57,45 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
         return (
             <div className="accordion" id="accordionExample">
                 <div className="card">
-                    <CardBet component={<Bets users={undefined} />} confirm={this.confirm.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Skupinová fáze" hideConfirmButton={true} />
+                    <CardBet component={<Bets users={undefined} status={this.getStageStatus(TournamentStage.Group)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Alfa + Beta - Skupinová fáze" hideConfirmButton={true} />
                 </div>
 
                 <div className="card">
-                    <CardBet component={<GamaBets />} confirm={this.confirm.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Skupiny" showGenerateButton={true} />
+                    <CardBet component={<GamaBets isReadOnly={this.getStageStatus(TournamentStage.Group) == BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Gama - Skupiny" showGenerateButton={true} hideConfirmButton={this.state.afterLimit} />
                 </div>
 
                 <div className="card">
-                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Osmifinále" hideConfirmButton={true} />
+                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={true} />
                 </div>
 
                 <div className="card">
-                    <CardBet component={<DeltaBets stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} />} confirm={this.confirm.bind(this)} stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} text="Čtvrtfinále" />
+                    <CardBet component={<DeltaBets stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} text="Delta - Čtvrtfinále" hideConfirmButton={this.state.afterLimit} />
                 </div>
 
                 <div className="card">
-                    <CardBet component={<DeltaBets stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} />} confirm={this.confirm.bind(this)} stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} text="Semifinále" />
+                    <CardBet component={<DeltaBets stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} text="Delta - Semifinále" hideConfirmButton={this.state.afterLimit} />
                 </div>
 
                 <div className="card">
-                    <CardBet component={<DeltaBets stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} />} confirm={this.confirm.bind(this)} stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} text="Finále" />
+                    <CardBet component={<DeltaBets stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} text="Delta - Finále" hideConfirmButton={this.state.afterLimit} />
+                </div>
+                <div className="card">
+                    <CardBet component={<TeamPlaceBet isWinnerBet={true} status={this.getStageStatus(TournamentStage.Winner)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Winner} status={this.getStageStatus(TournamentStage.Winner)} text="Delta - Vítěz" hideConfirmButton={this.state.afterLimit} />
+                </div>
+                <div className="card">
+                    <CardBet component={<BestShooterBet isReadOnly={this.getStageStatus(TournamentStage.Lambda) == BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Lambda} status={this.getStageStatus(TournamentStage.Lambda)} text="Lambda - Nejlepší střelec" hideConfirmButton={this.state.afterLimit} />
+                </div>
+                <div className="card">
+                    <CardBet component={<TeamPlaceBet isWinnerBet={false} status={this.getStageStatus(TournamentStage.Omikron)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Omikron} status={this.getStageStatus(TournamentStage.Omikron)} text="Omikron - Sázka na tým" hideConfirmButton={this.state.afterLimit} />
                 </div>
             </div>
         );
     }
 
     private getStageStatus(stage: TournamentStage): BetsStageStatus {
+        if (this.state.afterLimit) {
+            return BetsStageStatus.Done;
+        }
         switch (stage) {
             case TournamentStage.Group:
                 return this.state.status.matchesInGroupsDone ? BetsStageStatus.Done : BetsStageStatus.Ready;
@@ -94,7 +108,11 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
             case TournamentStage.Final:
                 return this.state.status.semifinalStageDone ? this.state.status.finalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
             case TournamentStage.Winner:
-                return this.state.status.finalStageDone ? BetsStageStatus.Ready : BetsStageStatus.NotReady;
+                return this.state.status.finalStageDone ? this.state.status.winnerStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
+            case TournamentStage.Lambda:
+                return this.state.status.lambdaStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready;
+            case TournamentStage.Omikron:
+                return this.state.status.omikronStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready;
             default:
                 return BetsStageStatus.NotReady;
 
@@ -109,6 +127,17 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
             this.setState({ status: betsStatus });
         } else {
             alert("Nejsou vyplněny všechny výsledky");
+        }
+    }
+
+    private async modify(stage: TournamentStage): Promise<void> {
+        document.body.style.cursor = "wait";
+        const betsStatus = await getApi().modifyStageBet(stage);
+        document.body.style.cursor = "pointer";
+        if (!!betsStatus.id) {
+            this.setState({ status: betsStatus });
+        } else {
+            alert("To si udělal něco divného ne?");
         }
     }
 

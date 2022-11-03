@@ -204,6 +204,7 @@
                 .Include(gb => gb.Second)
                 .Include(gb => gb.Third)
                 .Include(gb => gb.Fourth)
+                .Include(gb => gb.Result)
                 .FirstOrDefault();
         }
 
@@ -318,6 +319,7 @@
                 .Where(db => db.Match.Id == matchId)
                 .Include(db => db.HomeTeamBet)
                 .Include(db => db.AwayTeamBet)
+                .Include(db => db.Result)
                 .FirstOrDefault();
         }
 
@@ -399,6 +401,85 @@
         public List<GroupBet> GetGroupBetsForUser(string userId)
         {
             return this.dbContext.GroupBets.Where(gb => gb.UserId == userId).ToList();
+        }
+
+        public SpecificTeamPlaceBet GetTeamPlaceBet(string userId, bool isWinnerBet)
+        {
+            return this.dbContext.TeamPlaceBets
+                .Where(t => t.UserId == userId && t.IsWinnerBet == isWinnerBet)
+                .Include(t => t.Team)
+                .FirstOrDefault();
+        }
+
+        public void UpsertTeamPlaceBet(string teamId, string userId, bool isWinnerBet, TournamentStage stage)
+        {
+            var current = this.GetTeamPlaceBet(userId, isWinnerBet);
+
+            if (current == null)
+            {
+                var teamPlaceBet = new SpecificTeamPlaceBet()
+                {
+                    UserId = userId,
+                    teamId = teamId,
+                    StageBet = stage,
+                    IsWinnerBet = isWinnerBet
+                };
+
+                this.dbContext.Add(teamPlaceBet);
+            }
+            else
+            {
+                current.teamId = teamId;
+                current.StageBet = stage;
+
+                this.dbContext.Update(current);
+            }
+
+            this.dbContext.SaveChanges();
+        }
+
+        public Team GetTeam(string teamId)
+        {
+            return this.dbContext.Teams.Where(t => t.Id == teamId).FirstOrDefault();
+        }
+
+        public void UpsertShooterBet(string name, string userId)
+        {
+            var bet = this.GetShooterBet(userId);
+            if(bet != null)
+            {
+                bet.ShoterName = name;
+                this.dbContext.Update(bet);
+            } 
+            else
+            {
+                var shooterBet = new TopShooterBet()
+                {
+                    ShoterName = name,
+                    UserId = userId
+                };
+
+                this.dbContext.Add(shooterBet);
+            }
+
+            this.dbContext.SaveChanges();
+        }
+
+        public TopShooterBet GetShooterBet(string userId)
+        {
+            return this.dbContext.TopShooterBets.Where(b => b.UserId == userId).FirstOrDefault();
+        }
+
+        public void ModifyBetsStatus(TournamentStage stage, string userId)
+        {
+            var betsStatus = this.GetBetsStatus(userId);
+            if(betsStatus == null)
+            {
+                return;
+            }
+
+            betsStatus.ModifyStage(stage);
+            this.dbContext.SaveChanges();
         }
     }
 }

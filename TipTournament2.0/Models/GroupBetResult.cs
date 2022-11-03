@@ -7,20 +7,19 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class TopShooterBet
+    public class GroupBetResult
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
-        public string ShoterName { get; set; }
+        public bool IsFirstCorrect { get; set; }
 
-        public string UserId { get; set; }
+        public bool IsSecondCorrect { get; set; }
 
-        [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
+        public bool IsThirdCorrect { get; set; }
 
-        public bool IsCorrect { get; set; }
+        public bool IsFourthCorrect { get; set; }
 
         public int Points { get; set; }
     }

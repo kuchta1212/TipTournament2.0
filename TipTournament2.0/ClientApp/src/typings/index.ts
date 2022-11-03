@@ -48,7 +48,7 @@ export interface GroupBet {
     second: Team;
     third: Team;
     fourth: Team;
-    points: number;
+    result: GroupBetResult;
 }
 
 export interface DeltaBet {
@@ -56,7 +56,7 @@ export interface DeltaBet {
     match: Match;
     homeTeamBet: Team;
     awayTeamBet: Team;
-    points: number;
+    result: DeltaBetResult;
     user: User;
 }
 
@@ -70,7 +70,12 @@ export enum BetResult {
 export interface User {
     id: string;
     userName: string;
-    points: number;
+    totalPoints: number;
+    alfaPoints: number;
+    gamaPoints: number;
+    deltaPoints: number;
+    lambdaPoints: number;
+    omikronPoints: number;
     payed: boolean;
 }
 
@@ -98,6 +103,9 @@ export interface BetsStatus {
     querterfinalStageDone: boolean,
     semifinalStageDone: boolean,
     finalStageDone: boolean,
+    winnerStageDone: boolean,
+    lambdaStageDone: boolean,
+    omikronStageDone: boolean
 }
 
 export enum TournamentStage {
@@ -106,7 +114,10 @@ export enum TournamentStage {
     Quarterfinal = 2,
     Semifinal = 3,
     Final = 4,
-    Winner = 5
+    Winner = 5,
+    Lambda = 6,
+    Omikron = 7,
+
 }
 
 export interface DeltaBetTeams {
@@ -118,4 +129,38 @@ export enum BetsStageStatus {
     NotReady = 0,
     Ready = 1,
     Done = 2
+}
+
+export interface PlaceTeamBet {
+    id: string;
+    team: Team;
+    stageBet: TournamentStage;
+    isWinnerBet: boolean;
+    isCorrect: boolean;
+    userId: string;
+}
+
+export interface TopShooterBet {
+    id: string;
+    shoterName: string;
+    userId: string;
+    points: number;
+    isCorrect: boolean;
+}
+
+export interface GroupBetResult {
+    id: string;
+    isFirstCorrect: boolean;
+    isSecondCorrect: boolean;
+    isThirdCorrect: boolean;
+    isFourthCorrect: boolean;
+    points: number;
+
+}
+
+export interface DeltaBetResult {
+    id: string;
+    isHomeTeamCorrect: boolean;
+    isAwayTeamCorrect: boolean;
+    points: boolean
 }

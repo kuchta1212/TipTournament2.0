@@ -52,6 +52,13 @@ export class Ranking extends React.Component<RankingProps, RankingState> {
         return (
             <Table className="table table-striped opacity-table">
                 <thead>
+                    <td>Jméno</td>
+                    <td>α+β</td>
+                    <td>γ</td>
+                    <td>δ</td>
+                    <td>λ</td>
+                    <td>ο</td>
+                    <td className="font-weight-bold">Σ</td>
                 </thead>
                 <tbody>
                     {data.map((user, index) => (
