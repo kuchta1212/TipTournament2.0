@@ -59,5 +59,12 @@
             return new OkObjectResult(await this.resultCoordinator.Coordinate());
         }
         
+        [HttpPost("result")]
+        public async Task<IActionResult> UploadResult([FromQuery] string matchId, [FromBody] Result result)
+        {
+            this.resultCoordinator.UploadNewResult(matchId, result);
+            return new OkResult();
+        }
+
     }
 }

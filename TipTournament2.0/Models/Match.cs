@@ -13,7 +13,13 @@
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
+        public string HomeId { get; set; }
+
+        [ForeignKey("HomeId")]
         public Team Home { get; set; }
+
+        [ForeignKey("AwayId")]
+        public string AwayId { get; set; }
 
         public Team Away { get; set; }
 

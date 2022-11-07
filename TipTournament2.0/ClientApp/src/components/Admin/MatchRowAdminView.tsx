@@ -30,11 +30,11 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
 
     private renderMatchWithResult() {
         return (
-            <div>
+            <tr>
                 <TeamCell team={this.props.match.home} />
                 <TeamCell team={this.props.match.away} />
                 <td key={this.props.match.result.id}>{this.props.match.result.homeTeam} : {this.props.match.result.awayTeam}</td>
-            </div>
+            </tr>
         );
     }
 
@@ -58,22 +58,28 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
 
     private setHomeResult(tip: string) {
         let newMatch = this.state.match;
+        if (!newMatch.result) {
+            newMatch.result = {} as Result
+        }
         newMatch.result.homeTeam = Number(tip);
-        
+
         this.setState({ match: newMatch });
     }
 
     private setAwayResult(tip: string) {
         let newMatch = this.state.match;
+        if (!newMatch.result) {
+            newMatch.result = {} as Result;
+        }
         newMatch.result.awayTeam = Number(tip);
         this.setState({ match: newMatch });
     }
 
-    private uploadResult() {
+    private async uploadResult(): Promise<void> {
         document.body.style.cursor = "wait";
-        this.setState({ withResult: true })
-        getApi().uploadMatchResult(this.state.match.result, this.props.match.id);
+        await getApi().uploadMatchResult(this.state.match.result, this.props.match.id);
         document.body.style.cursor = "normal";
+        this.setState({ withResult: true })
     }
 }
 

@@ -41,6 +41,15 @@
         //    return updateMatches.Where(m => m.Ended).ToList();
         //}
 
+        public void UploadNewResult(string matchId, Result result)
+        {
+            var match = this.dbContextWrapper.GetMatchById(matchId);
+            var dict = new Dictionary<Match, Result>();
+            dict.Add(match, result);
+            this.UpsertResults(dict);
+            //this.RecalculatePoints();
+        }
+
         private List<Match> UpsertResults(Dictionary<Match, Result> matchesWithResult)
         {
             foreach(var matchWithResult in matchesWithResult)

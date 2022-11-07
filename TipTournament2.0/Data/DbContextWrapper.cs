@@ -34,6 +34,8 @@
         public List<Match> GetMatches()
         {
             var matches = dbContext.Matches
+                .Include(m => m.Home)
+                .Include(m => m.Away)
                 .Include(m => m.Result)
                 .ToList();
             return matches;
@@ -249,6 +251,14 @@
             return includeMatches
                 ? this.dbContext.Groups.Include(g => g.Matches).ToArray()
                 : this.dbContext.Groups.ToArray();
+        }
+
+        public Match GetMatchById(string matchId)
+        {
+            return this.dbContext.Matches
+                .Where(m => m.Id == matchId)
+                .Include(m => m.Result)
+                .FirstOrDefault();
         }
 
         public void UploadGroupBet(GroupBet groupBet, string groupId, string userId)

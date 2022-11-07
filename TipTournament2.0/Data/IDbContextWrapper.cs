@@ -59,6 +59,8 @@
         Group[] GetGroups(bool includeMatches = false);
 
         void UploadGroupBet(GroupBet groupBet, string groupId, string userId);
+        
+        Match GetMatchById(string matchId);
 
         void UpsertGroupBet(GroupBet groupBet);
 
