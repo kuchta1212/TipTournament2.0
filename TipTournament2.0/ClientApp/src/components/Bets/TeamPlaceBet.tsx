@@ -22,7 +22,8 @@ interface TeamPlaceBetState {
 
 interface TeamPlaceBetProps {
     isWinnerBet: boolean,
-    status: BetsStageStatus
+    status: BetsStageStatus,
+    showResult: boolean
 }
 
 export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBetState> {
@@ -80,7 +81,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
                 <Table className="table table-striped opacity-table">
                     <tbody>
                         <tr>
-                            <td>
+                            <td className={this.getClass()}>
                             {this.state.isEditable
                                     ? <div className="input-group mb-3">
                                         <div className="input-group-prepend">
@@ -96,7 +97,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
                                     : <TeamCell team={this.state.bet.team} />
                                 }
                             </td>
-                            <td>
+                            <td className={this.getClass()}>
                                 {this.state.isEditable && !this.props.isWinnerBet
                                     ?   <div className="input-group mb-3">
                                             <div className="input-group-prepend">
@@ -120,17 +121,27 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
                         </tr>
                         <tr>
                             <td>
-                                {this.props.status == BetsStageStatus.Done
-                                    ? <div />
-                                    : this.state.isEditable
-                                        ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
-                                        : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
+                                {this.props.showResult
+                                    ? <tr><td>Body:</td><td>{this.state.bet.isCorrect ? 3 : 0}</td></tr>
+                                    : this.props.status == BetsStageStatus.Done
+                                        ? <div />
+                                        : this.state.isEditable
+                                            ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
+                                            : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
                                 </td>
                         </tr>
                     </tbody>
                 </Table>
             </div>
         );
+    }
+
+    private getClass(): string {
+        if (!this.props.showResult) {
+            return "";
+        }
+
+        return this.state.bet.isCorrect ? "border border-success" : "border border-danger";
     }
 
     private stageToString(stage: TournamentStage) {

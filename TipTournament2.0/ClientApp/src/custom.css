@@ -15,9 +15,9 @@ code {
 
 body {
     padding-bottom: 20px;
-    background-image: url('images/background1.png');
+    background-image: url('images/background2.jpg');
     background-position: center;
-    background-repeat: no-repeat;
+    /*background-repeat: no-repeat;*/
     background-size: cover;
 }
 
@@ -33,6 +33,16 @@ body.waiting * {
 .opacity-table:hover {
     opacity: 1.0;
 }
+
+.opacity-card {
+    opacity: .8;
+}
+
+
+.opacity-card:hover {
+    opacity: 1.0
+}
+
 
 .opacity-cell {
     opacity: 0

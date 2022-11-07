@@ -22,6 +22,7 @@ interface BestShooterBetState {
 
 interface BestShooterBetProps {
     isReadOnly: boolean;
+    showResult: boolean;
 }
 
 export class BestShooterBet extends React.Component<BestShooterBetProps, BestShooterBetState> {
@@ -76,22 +77,33 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
                                         </div>
                                         <input type="text" className="form-control" id="shootername" aria-describedby="basic-addon3" placeholder="Lewandowski/Mbappe/Messi...." onChange={(event) => this.onChange(event.target)}/>
                                     </div>
-                                    : <td>{this.state.bet.shoterName}</td>}
+                                    : <td className={this.getClass()}>{this.state.bet.shoterName}</td>}
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                {this.props.isReadOnly
-                                    ? <div />
-                                    : this.state.isEditable
-                                        ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
-                                            : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
+                                {
+                                    this.props.showResult
+                                        ? <tr><td>Body:</td><td>{this.state.bet.isCorrect ? this.state.bet.points : 0}</td></tr>
+                                        : this.props.isReadOnly
+                                            ? <div />
+                                            : this.state.isEditable
+                                                ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
+                                                    : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
                             </td>
                         </tr>
                     </tbody>
                 </Table>
             </div>
         );
+    }
+
+    private getClass(): string {
+        if (!this.props.showResult) {
+            return "";
+        }
+
+        return this.state.bet.isCorrect ? "border border-success" : "border border-danger";
     }
 
     private onChange(event: any) {

@@ -41,7 +41,7 @@ export class UserOverview extends React.Component<UserOverviewProps, UserOvervie
     }
 
     private async getData() {
-        const users = await getApi().getUsers();
+        const users = await getApi().getUsers(false);
         this.setState({ users: users, loading: false });
     }
 

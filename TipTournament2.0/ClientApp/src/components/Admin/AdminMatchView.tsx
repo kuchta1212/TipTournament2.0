@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { BetsStageStatus, MainData, TournamentStage, UpdateStatus } from "../../typings/index"
+import { BetsStageStatus, Match, TournamentStage, UpdateStatus } from "../../typings/index"
 import { MatchCard } from "./MatchCard"
 import { AlfaMatches } from "./AlfaMatches"
 import { Ranking } from "./Ranking"
@@ -11,17 +11,18 @@ import { GammaView } from './GammaView';
 import { DeltaView } from './DeltaView';
 import { TeamPlaceBet } from '../Bets/TeamPlaceBet';
 import { BestShooterBet } from '../Bets/BestShooterBet';
+import { MatchBetRow } from '../Bets/MatchBetRow';
 
-interface MainPageInnerState {
-    currentUser: string;
-    status: UpdateStatus
+interface AdminMatchViewState {
+    matches: Match[],
+    loading: boolean
 }
 
-interface MainPageInnerProps {
-    activeStage: TournamentStage
+interface AdminMatchViewProps {
+
 }
 
-export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageInnerState> {
+export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMatchViewState> {
 
     private data = [
         { text: "Alfa + Beta - Skupinová fáze", component: <AlfaMatches />, stage: TournamentStage.Group },
@@ -35,11 +36,11 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
         { text: "Omikron - Sázka na tým", component: <TeamPlaceBet isWinnerBet={false} status={BetsStageStatus.Done} showResult={true} />, stage: TournamentStage.Omikron },
     ]
 
-    constructor(props: MainPageInnerProps) {
+    constructor(props: AdminMatchViewProps) {
         super(props);
         this.state = {
-            currentUser: "",
-            status: {} as UpdateStatus
+            loading: true,
+            matches: {} as Match[]
         }
     }
 
@@ -48,29 +49,47 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
     }
 
     public render() {
-        let contents = this.renderDataTable();
+        let contents = this.state.loading
+            ? <Loader />
+            : this.renderData();
 
         return (
             <div>
-                <h1 id="tabelLabel" >Zápasy, sázky, výsledky</h1>
+                <h1 id="tabelLabel">Výsledky</h1>
                 {contents}
             </div>
         );
     }
 
     private async getData() {
-        const currentUser = await authService.getUser();
-        this.setState({ currentUser: currentUser["sub"] });
+        const matches = await getApi().getAllMatches();
+        this.setState({ matches: matches, loading: false });
     }
 
-    private renderDataTable() {
+
+    private renderData() {
         return (
             <div className="accordion" id="accordionExample">
-                {
-                    this.data.map(d => {
-                         return <MatchCard component={d.component} stage={d.stage} text={d.text} />
-                    })
-                }
+                <div className="card opacity-card">
+                    <div className="card-header" id="matches-card">
+                        <div className="row" style={{ justifyContent: 'space-between' }}>
+                            <h5 className="mb-0">
+                                <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#matches-card" aria-expanded="false" aria-controls="matches-card">
+                                    "Zápasy"
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                    <div id="matches-card" className="collapse" aria-labelledby="matches-card" data-parent="#accordionExample">
+                        <div className="card-body">
+                            {
+                                this.state.matches.map(m => {
+                                    <MatchBetRow />
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
 
             </div>
         );

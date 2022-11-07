@@ -2,7 +2,7 @@
 import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
-
+    uploadMatchResult(result: Result, id: string): Promise<void>;
     uploadShooterBet(bet: string): Promise<TopShooterBet>;
     getShooterBet(): Promise<TopShooterBet>;
     getTeamsForTeamPlaceBet(isWinnerBet: boolean): Promise<Team[]>

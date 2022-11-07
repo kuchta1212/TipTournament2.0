@@ -56,37 +56,37 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
     private renderBets() {
         return (
             <div className="accordion" id="accordionExample">
-                <div className="card">
+                <div className="card opacity-card" >
                     <CardBet component={<Bets users={undefined} status={this.getStageStatus(TournamentStage.Group)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Alfa + Beta - Skupinová fáze" hideConfirmButton={true} />
                 </div>
 
-                <div className="card">
+                <div className="card opacity-card">
                     <CardBet component={<GamaBets isReadOnly={this.getStageStatus(TournamentStage.Group) == BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Gama - Skupiny" showGenerateButton={true} hideConfirmButton={this.state.afterLimit} />
                 </div>
 
-                <div className="card">
+                <div className="card opacity-card">
                     <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={true} />
                 </div>
 
-                <div className="card">
+                <div className="card opacity-card">
                     <CardBet component={<DeltaBets stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} text="Delta - Čtvrtfinále" hideConfirmButton={this.state.afterLimit} />
                 </div>
 
-                <div className="card">
+                <div className="card opacity-card">
                     <CardBet component={<DeltaBets stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} text="Delta - Semifinále" hideConfirmButton={this.state.afterLimit} />
                 </div>
 
-                <div className="card">
+                <div className="card opacity-card">
                     <CardBet component={<DeltaBets stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} text="Delta - Finále" hideConfirmButton={this.state.afterLimit} />
                 </div>
-                <div className="card">
-                    <CardBet component={<TeamPlaceBet isWinnerBet={true} status={this.getStageStatus(TournamentStage.Winner)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Winner} status={this.getStageStatus(TournamentStage.Winner)} text="Delta - Vítěz" hideConfirmButton={this.state.afterLimit} />
+                <div className="card opacity-card">
+                    <CardBet component={<TeamPlaceBet isWinnerBet={true} status={this.getStageStatus(TournamentStage.Winner)} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Winner} status={this.getStageStatus(TournamentStage.Winner)} text="Delta - Vítěz" hideConfirmButton={this.state.afterLimit} />
                 </div>
-                <div className="card">
-                    <CardBet component={<BestShooterBet isReadOnly={this.getStageStatus(TournamentStage.Lambda) == BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Lambda} status={this.getStageStatus(TournamentStage.Lambda)} text="Lambda - Nejlepší střelec" hideConfirmButton={this.state.afterLimit} />
+                <div className="card opacity-card">
+                    <CardBet component={<BestShooterBet isReadOnly={this.getStageStatus(TournamentStage.Lambda) == BetsStageStatus.Done} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Lambda} status={this.getStageStatus(TournamentStage.Lambda)} text="Lambda - Nejlepší střelec" hideConfirmButton={this.state.afterLimit} />
                 </div>
-                <div className="card">
-                    <CardBet component={<TeamPlaceBet isWinnerBet={false} status={this.getStageStatus(TournamentStage.Omikron)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Omikron} status={this.getStageStatus(TournamentStage.Omikron)} text="Omikron - Sázka na tým" hideConfirmButton={this.state.afterLimit} />
+                <div className="card opacity-card">
+                    <CardBet component={<TeamPlaceBet isWinnerBet={false} status={this.getStageStatus(TournamentStage.Omikron)} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Omikron} status={this.getStageStatus(TournamentStage.Omikron)} text="Omikron - Sázka na tým" hideConfirmButton={this.state.afterLimit} />
                 </div>
             </div>
         );

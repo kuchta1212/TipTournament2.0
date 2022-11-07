@@ -36,7 +36,7 @@ export class MatchCard extends React.Component<MatchCardProps, MatchCardState> {
 
     private renderData() {
         return (
-            <div className="card">
+            <div className="card opacity-card">
                 <div className="card-header" id={this.getId()}>
                     <div className="row" style={{ justifyContent: 'space-between' }}>
                         <h5 className="mb-0">

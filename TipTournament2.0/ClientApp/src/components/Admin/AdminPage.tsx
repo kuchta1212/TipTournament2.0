@@ -1,4 +1,6 @@
 ﻿import * as React from 'react';
+import { TournamentStage } from '../../typings';
+import { MainInnerPage } from '../MainPage/MainPageInner';
 import { MatchLoader } from './MatchLoader';
 import { UpdateChecker } from './UpdateChecker';
 import { UserOverview } from './UserOverview';
@@ -23,6 +25,7 @@ export class AdminPage extends React.Component<AdminPageProps, AdminPageState> {
                 <MatchLoader />
                 <UpdateChecker />
                 <UserOverview />
+                <MainInnerPage activeStage={TournamentStage.Group} />
             </React.Fragment>
         );
     }
