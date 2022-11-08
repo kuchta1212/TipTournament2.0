@@ -5,6 +5,7 @@ import { Loader } from './../Loader'
 import './../../custom.css'
 import { MatchRowAdminView } from './MatchRowAdminView';
 import { Table } from 'reactstrap';
+import { GroupTableAdmin } from './GroupTableAdmin';
 
 interface AdminMatchViewState {
     matches: Match[],
