@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { User } from "../../typings/index"
+import { BetsStageStatus, User } from "../../typings/index"
 import { Bets } from './Bets';
 import { Loader } from './../Loader'
 import { UserSelector } from './UserSelector';
@@ -48,7 +48,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
     }
 
     private async loadData() {
-        const users = await getApi().getUsers();
+        const users = await getApi().getUsers(true);
         this.setState({ users: users, loading: false });
     }
 
@@ -70,7 +70,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
             <React.Fragment>
                 {this.renderUserSelectors()}    
                 <button className="btn btn-link" onClick={() => this.addUserSelector()}><img src={process.env.PUBLIC_URL + 'icons/add.svg'} width="25" height="25" /></button>
-                <Bets key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} />
+                <Bets key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} status={BetsStageStatus.Done} />
             </React.Fragment>
             );
     }

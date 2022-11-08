@@ -2,7 +2,6 @@
 import { getApi } from "../api/ApiFactory"
 import { Match, Bet, Team, Group, GroupBet, GroupBetResult, GroupResult, BetResult } from "../../typings/index"
 import { Table } from 'reactstrap';
-import { MatchBetRow } from './MatchBetRow';
 import { Loader } from '../Loader'
 import { WarningNotification, WarningTypes } from '../WarningNotification';
 import { Dictionary, IDictionary } from "../../typings/Dictionary"

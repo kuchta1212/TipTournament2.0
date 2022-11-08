@@ -52,7 +52,7 @@ export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
             <div>
                 <div className="groupList">
                     {this.state.matches.map((match, index) => {
-                        return <DeltaBetRow key={match.id} match={match} isReadOnly={this.props.status == BetsStageStatus.Done} />
+                        return <DeltaBetRow key={match.id} match={match} isReadOnly={this.props.status == BetsStageStatus.Done} showResult={false} />
                     })}
                 </div>
             </div>

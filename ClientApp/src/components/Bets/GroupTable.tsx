@@ -191,6 +191,8 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
             case 4:
                 return this.state.bet.result.isThirdCorrect ? "border border-success" : "border border-danger";
         }
+
+        return "";
     }
 
     private onSelect(event: any) {

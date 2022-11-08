@@ -132,6 +132,8 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
             case 2:
                 return this.state.bet.result.isAwayTeamCorrect ? "border border-success" : "border border-danger";
         }
+
+        return "";
     }
 
     private onSelect(event: any) {
