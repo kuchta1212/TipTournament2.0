@@ -110,7 +110,9 @@
         public Team[] GetFinalists(string userId)
         {
             var deltaBet = this.dbContextWrapper.GetDeltaBetByMatchId(userId, "match_64");
-            return new List<Team>() { deltaBet.HomeTeamBet, deltaBet.AwayTeamBet }.ToArray();
+            return deltaBet == null
+                ? new Team[0]
+                : new List<Team>() { deltaBet.HomeTeamBet, deltaBet.AwayTeamBet }.ToArray();
         }
     }
 }
