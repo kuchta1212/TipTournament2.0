@@ -48,7 +48,9 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.renderDeltaBet();
+            : !this.state.isEditable && this.state.teams.possibleHomeTeams.length == 0
+                ? <div/>
+                : this.renderDeltaBet();
 
         return (
             <div>
