@@ -1,16 +1,10 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Group, Match, TournamentStage, UpdateStatus } from "../../typings/index"
+import { Group, Match } from "../../typings/index"
 import { Loader } from './../Loader'
 import './../../custom.css'
-import authService from './../api-authorization/AuthorizeService'
-import { TeamPlaceBet } from '../Bets/TeamPlaceBet';
-import { BestShooterBet } from '../Bets/BestShooterBet';
-import { MatchBetRow } from '../Bets/MatchBetRow';
 import { MatchRowAdminView } from './MatchRowAdminView';
 import { Table } from 'reactstrap';
-import { GroupTable } from '../Bets/GroupTable';
-import { GroupTableAdmin } from './GroupTableAdmin';
 
 interface AdminMatchViewState {
     matches: Match[],

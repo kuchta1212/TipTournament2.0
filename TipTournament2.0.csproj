@@ -165,69 +165,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29 - Copy.js">
-      <DependentUpon>AdminPage - Copy (2).js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29 - Copy.js.map">
-      <DependentUpon>AdminPage - Copy (2).js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29.js">
-      <DependentUpon>AdminPage.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %282%29.js.map">
-      <DependentUpon>AdminPage.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %283%29.js">
-      <DependentUpon>AdminPage.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy %283%29.js.map">
-      <DependentUpon>AdminPage.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy %282%29.js">
-      <DependentUpon>AdminPage - Copy.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy %282%29.js.map">
-      <DependentUpon>AdminPage - Copy.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy - Copy.js">
-      <DependentUpon>AdminPage - Copy - Copy.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy - Copy.js.map">
-      <DependentUpon>AdminPage - Copy - Copy.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy.js">
-      <DependentUpon>AdminPage - Copy.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy - Copy.js.map">
-      <DependentUpon>AdminPage - Copy.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy.js">
-      <DependentUpon>AdminPage.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\Admin\AdminPage - Copy.js.map">
-      <DependentUpon>AdminPage.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\api\Api - Copy - Copy.js">
-      <DependentUpon>Api.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\api\Api - Copy - Copy.js.map">
-      <DependentUpon>Api.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\api\Api - Copy.js">
-      <DependentUpon>Api.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\api\Api - Copy.js.map">
-      <DependentUpon>Api.js.map</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\TeamCell - Copy.js">
-      <DependentUpon>TeamCell.js</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\components\TeamCell - Copy.js.map">
-      <DependentUpon>TeamCell.js.map</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
