@@ -249,8 +249,8 @@
         public Group[] GetGroups(bool includeMatches = false)
         {
             return includeMatches
-                ? this.dbContext.Groups.Include(g => g.Matches).ToArray()
-                : this.dbContext.Groups.ToArray();
+                ? this.dbContext.Groups.Include(g => g.Result).Include(g => g.Matches).ToArray()
+                : this.dbContext.Groups.Include(g => g.Result).ToArray();
         }
 
         public Match GetMatchById(string matchId)
@@ -489,6 +489,33 @@
             }
 
             betsStatus.ModifyStage(stage);
+            this.dbContext.SaveChanges();
+        }
+
+        public Group GetGroupById(string groupId)
+        {
+            return this.dbContext.Groups
+                .Where(g => g.Id == groupId)
+                .Include(g => g.Result)
+                .FirstOrDefault();
+        }
+
+        public GroupResult SaveResult(GroupResult result)
+        {
+            this.dbContext.Add(result);
+            this.dbContext.SaveChanges();
+            return result;
+        }
+
+        public void UpdateResult(GroupResult result)
+        {
+            this.dbContext.Update(result);
+            this.dbContext.SaveChanges();
+        }
+
+        public void UpdateGroup(Group group)
+        {
+            this.dbContext.Update(group);
             this.dbContext.SaveChanges();
         }
     }

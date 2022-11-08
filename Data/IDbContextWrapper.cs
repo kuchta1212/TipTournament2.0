@@ -70,11 +70,18 @@
 
         void UpsertDeltaBet(DeltaBet deltaBet, string matchId, string userId);
 
+        Group GetGroupById(string groupId);
+
         List<DeltaBet> GetDeltaBetsForUserAndStage(TournamentStage stage, string userId);
+        GroupResult SaveResult(GroupResult result);
 
         void ConfirmBetsStatus(TournamentStage stage, string userId);
 
         void ModifyBetsStatus(TournamentStage stage, string userId);
+
+        void UpdateResult(GroupResult result);
+
+        void UpdateGroup(Group group);
 
         SpecificTeamPlaceBet GetTeamPlaceBet(string userId, bool isWinnerBet);
 

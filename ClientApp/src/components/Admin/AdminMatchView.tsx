@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { BetsStageStatus, Match, TournamentStage, UpdateStatus } from "../../typings/index"
+import { Group, Match, TournamentStage, UpdateStatus } from "../../typings/index"
 import { Loader } from './../Loader'
 import './../../custom.css'
 import authService from './../api-authorization/AuthorizeService'
@@ -9,9 +9,12 @@ import { BestShooterBet } from '../Bets/BestShooterBet';
 import { MatchBetRow } from '../Bets/MatchBetRow';
 import { MatchRowAdminView } from './MatchRowAdminView';
 import { Table } from 'reactstrap';
+import { GroupTable } from '../Bets/GroupTable';
+import { GroupTableAdmin } from './GroupTableAdmin';
 
 interface AdminMatchViewState {
     matches: Match[],
+    groups: Group[],
     loading: boolean
 }
 
@@ -25,7 +28,8 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
         super(props);
         this.state = {
             loading: true,
-            matches: {} as Match[]
+            matches: {} as Match[],
+            groups: {} as Group[]
         }
     }
 
@@ -48,7 +52,8 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
 
     private async getData() {
         const matches = await getApi().getAllMatches();
-        this.setState({ matches: matches, loading: false });
+        const groups = await getApi().getGroups();
+        this.setState({ matches: matches, groups: groups, loading: false });
     }
 
 
@@ -60,7 +65,7 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                         <div className="row" style={{ justifyContent: 'space-between' }}>
                             <h5 className="mb-0">
                                 <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-matches-card" aria-expanded="false" aria-controls="collapse-matches-card">
-                                    Zápasy
+                                    Skupinové zápasy
                                 </button>
                             </h5>
                         </div>
@@ -77,7 +82,26 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                         </div>
                     </div>
                 </div>
-
+                <div className="card opacity-card">
+                    <div className="card-header" id="heading-groups-card">
+                        <div className="row" style={{ justifyContent: 'space-between' }}>
+                            <h5 className="mb-0">
+                                <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-groups-card" aria-expanded="false" aria-controls="collapse-groups-card">
+                                    Skupiny
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                    <div id="collapse-groups-card" className="collapse" aria-labelledby="groups-card" data-parent="#accordionExample">
+                        <div className="card-body">
+                            <Table className="table table-striped opacity-table">
+                                {this.state.groups.map((group, index) => {
+                                    return <GroupTableAdmin key={group.id} group={group} />
+                                })}
+                            </Table>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

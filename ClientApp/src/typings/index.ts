@@ -26,6 +26,7 @@ export interface Group {
     id: string;
     groupName: string;
     matches: Match[];
+    result: GroupResult;
 }
 
 export interface Result {
@@ -164,3 +165,12 @@ export interface DeltaBetResult {
     isAwayTeamCorrect: boolean;
     points: boolean
 }
+
+export interface GroupResult {
+    id: string;
+    firstId: string;
+    secondId: string;
+    thirdId: string;
+    fourthId: string;
+}
+

@@ -50,6 +50,24 @@
             //this.RecalculatePoints();
         }
 
+        public void UploadGroupResult(string groupId, GroupResult result)
+        {
+            var group = this.dbContextWrapper.GetGroupById(groupId);
+            if (group.Result == null)
+            {
+                var savedResult = this.dbContextWrapper.SaveResult(result);
+                group.Result = savedResult;
+            } 
+            else
+            {
+                this.dbContextWrapper.UpdateResult(result);
+            }
+
+            this.dbContextWrapper.UpdateGroup(group);
+
+            //this.RecalculatePoints();
+        }
+
         private List<Match> UpsertResults(Dictionary<Match, Result> matchesWithResult)
         {
             foreach(var matchWithResult in matchesWithResult)
@@ -91,5 +109,7 @@
 
             this.dbContextWrapper.UpdateUsers(users);
         }
+
+
     }
 }

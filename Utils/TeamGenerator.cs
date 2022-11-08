@@ -21,6 +21,14 @@
             this.omikronStageOptions = omikronStageOptions;
         }
 
+        public DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound)
+        {
+            return isFirstRound
+             ? this.GenerateTeamsFirstRound(matchId)
+             : this.GenerateTeams(matchId);
+
+        }
+
         public DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId)
         {
             return isFirstRound
@@ -55,6 +63,35 @@
 
             return result;
         }
+
+        private DeltaBetTeams GenerateTeamsFirstRound(string matchId)
+        {
+            var matchOption = this.deltaStageOptions.Value.FirstRound.Where(f => f.MatchId == matchId).First();
+
+            var result = new DeltaBetTeams
+            {
+                PossibleHomeTeams = new List<Team>() { this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Winner).Result?.FirstId) },
+                PossibleAwayTeams = new List<Team>() { this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Runner).Result?.SecondId) }
+            };
+
+            return result;
+        }
+
+        private DeltaBetTeams GenerateTeams(string matchId)
+        {
+            var matchOption = this.deltaStageOptions.Value.NextRounds.Where(f => f.MatchId == matchId).First();
+
+            var homeMatch = this.dbContextWrapper.GetMatchById(matchOption.Matches[0]);
+            var awayMatch = this.dbContextWrapper.GetMatchById(matchOption.Matches[1]);
+            var result = new DeltaBetTeams()
+            {
+                PossibleHomeTeams = new List<Team>(new[] { this.dbContextWrapper.GetTeam(homeMatch.HomeId), this.dbContextWrapper.GetTeam(homeMatch.AwayId) }),
+                PossibleAwayTeams = new List<Team>(new[] { this.dbContextWrapper.GetTeam(awayMatch.HomeId), this.dbContextWrapper.GetTeam(awayMatch.AwayId) })
+            };
+
+            return result;
+        }
+
 
         public Team[] GenerateSpecificBetTeams()
         {

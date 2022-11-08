@@ -60,9 +60,16 @@
         }
         
         [HttpPost("result")]
-        public async Task<IActionResult> UploadResult([FromQuery] string matchId, [FromBody] Result result)
+        public IActionResult UploadResult([FromQuery] string matchId, [FromBody] Result result)
         {
             this.resultCoordinator.UploadNewResult(matchId, result);
+            return new OkResult();
+        }
+
+        [HttpPost("group/result")]
+        public IActionResult UploadGroupResult([FromQuery] string groupId, [FromBody] GroupResult result)
+        {
+            this.resultCoordinator.UploadGroupResult(groupId, result);
             return new OkResult();
         }
 

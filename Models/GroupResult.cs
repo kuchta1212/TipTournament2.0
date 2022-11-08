@@ -13,12 +13,24 @@
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
+        public string FirstId { get; set; }
+
+        [ForeignKey("FirstId")]
         public Team First { get; set; }
 
+        public string SecondId { get; set; }
+
+        [ForeignKey("SecondId")]
         public Team Second { get; set; }
 
+        public string ThirdId { get; set; }
+        
+        [ForeignKey("ThirdId")]
         public Team Third { get; set; }
 
+        public string FourthId { get; set; }
+
+        [ForeignKey("FourthId")]
         public Team Fourth { get; set; }
     }
 }

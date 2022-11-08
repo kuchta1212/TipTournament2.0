@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -7,6 +7,9 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api';
 
 export class Api implements IApi {
+    async uploadGroupResult(result: GroupResult, id: string): Promise<void> {
+        await post(`${API_URL}/admin/group/result?groupId=${id}`, result);
+    }
     async uploadMatchResult(result: Result, id: string): Promise<void> {
         await post(`${API_URL}/admin/result?matchId=${id}`, result);
     }

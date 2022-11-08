@@ -46,6 +46,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\components\Admin\AdminMatchView.tsx" />
     <None Remove="ClientApp\src\components\Admin\AdminPage.tsx" />
+    <None Remove="ClientApp\src\components\Admin\GroupTableAdmin.tsx" />
     <None Remove="ClientApp\src\components\Admin\MatchLoader.tsx" />
     <None Remove="ClientApp\src\components\Admin\MatchRowAdminView.tsx" />
     <None Remove="ClientApp\src\components\Admin\UpdateChecker.tsx" />
@@ -98,6 +99,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\Admin\AdminMatchView.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\GroupTableAdmin.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\MatchRowAdminView.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\UserRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\UserOverview.tsx" />

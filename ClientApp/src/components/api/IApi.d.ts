@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet } from "../../typings";
+﻿import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
@@ -30,4 +30,5 @@ export interface IApi {
     getGroupTeams(groupId: string): Promise<Team[]>;
     getGroups(): Promise<Group[]>
     uploadGroupBet(bet: GroupBet, groupId: string): Promise<void>;
+    uploadGroupResult(result: GroupResult, id: string): Promise<void>
 }

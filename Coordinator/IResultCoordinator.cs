@@ -11,5 +11,6 @@
         Task<int> Coordinate();
 
         void UploadNewResult(string matchId, Result result);
+        void UploadGroupResult(string groupId, GroupResult result);
     }
 }
