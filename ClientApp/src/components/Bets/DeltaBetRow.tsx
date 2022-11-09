@@ -48,7 +48,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.props.isReadOnly && !this.state.bet.id
+            : this.props.isReadOnly && !this.state.bet.homeTeamBet
                 ? <div> Ještě sis nevsadil! </div>
                 : this.renderDeltaBet();
 
@@ -61,11 +61,11 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
     private async getData() {
         const bet = await getApi().getDeltaBet(this.props.match.id);
+        const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage);
         if (!bet.id) {
-            const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage)
             this.setState({ loading: false, teams: teams });
         } else {
-            this.setState({ bet: bet, loading: false, isEditable: false });
+            this.setState({ bet: bet, loading: false, isEditable: false, teams: teams});
 
         }
     }

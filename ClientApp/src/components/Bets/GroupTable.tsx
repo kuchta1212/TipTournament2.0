@@ -37,7 +37,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
         this.state = {
             bet: {} as GroupBet,
             loading: true,
-            isEditable: false,
+            isEditable: !this.props.isReadOnly,
             teams: {} as Team[],
             selection: {} as BetSelection
         }
@@ -65,7 +65,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
         const bet = await getApi().getGroupBet(this.props.group.id);
         const teams = await getApi().getGroupTeams(this.props.group.id);
         if (!bet.id) {
-            this.setState({ isEditable: true, loading: false, teams: teams });
+            this.setState({ isEditable: true && !this.props.isReadOnly, loading: false, teams: teams });
         } else {
             const selection = this.convertToSelection(bet);
             this.setState({ bet: bet, loading: false, isEditable: false, teams: teams, selection: selection });
@@ -93,7 +93,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                     <tbody>
                         <tr className={this.getClass(1)}>
                             <td>1.</td>
-                            {this.state.isEditable
+                            {this.state.isEditable && !this.props.isReadOnly
                                 ? <td>
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
@@ -112,7 +112,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                         </tr>
                         <tr className={this.getClass(2)}>
                             <td>2.</td>
-                            {this.state.isEditable
+                            {this.state.isEditable && !this.props.isReadOnly
                                 ? <td>
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
@@ -130,7 +130,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                         </tr>
                         <tr className={this.getClass(3)}>
                             <td>3.</td>
-                            {this.state.isEditable
+                            {this.state.isEditable && !this.props.isReadOnly
                                 ? <td>
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
@@ -148,7 +148,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                         </tr>
                         <tr className={this.getClass(4)}>
                             <td>4.</td>
-                            {this.state.isEditable
+                            {this.state.isEditable && !this.props.isReadOnly
                                 ? <td>
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
@@ -200,51 +200,25 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
 
     private onSelect(event: any) {
         let selection = this.state.selection;
-        let correct = false;
         switch (event.id) {
             case "inputFirstTeamSelect":
-                if (event.value !== selection.secondId && event.value !== selection.thirdId && event.value !== selection.fourthId) {
-                    selection.firstId = event.value;
-                    correct = true;
-                } else {
-                    correct = false;
-                }
+                selection.firstId = event.value;
                 break;
 
             case "inputSecondTeamSelect":
-                if (event.value !== selection.firstId && event.value !== selection.thirdId && event.value !== selection.fourthId) {
-                    selection.secondId = event.value;
-                    correct = true;
-                } else {
-                    correct = false;
-                }
+                selection.secondId = event.value;
                 break;
 
             case "inputThirdTeamSelect":
-                if (event.value !== selection.secondId && event.value !== selection.firstId && event.value !== selection.fourthId) {
                 selection.thirdId = event.value;
-                    correct = true;
-                } else {
-                    correct = false;
-                }
                 break;
 
             case "inputFourthTeamSelect":
-                if (event.value !== selection.secondId && event.value !== selection.thirdId && event.value !== selection.firstId) {
-                    selection.fourthId = event.value;
-                    correct = true;
-                } else {
-                    correct = false;
-                }
+                selection.fourthId = event.value;
                 break;
         }
 
-        if (correct) {
-            this.setState({ selection: selection });
-        } else {
-            event.value = "default";
-        }
-
+        this.setState({ selection: selection });
     }
 
     private modify() {
@@ -262,11 +236,15 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
     }
 
     private validateSelection(selection: BetSelection): boolean {
-        if (!!selection.firstId && !!selection.secondId && !!selection.thirdId && !!selection.fourthId) {
+        if (selection.firstId != selection.secondId && selection.firstId != selection.thirdId && selection.firstId != selection.fourthId &&
+            selection.secondId != selection.thirdId && selection.secondId != selection.fourthId &&
+            selection.thirdId != selection.fourthId &&
+            !!selection.firstId && !!selection.secondId && !!selection.thirdId && !!selection.fourthId &&
+            selection.firstId != "default" && selection.secondId != "default" && selection.thirdId != "default" && selection.fourthId != "default") {
             return true;
         }
 
-        alert("Něco není vyplněné");
+        alert("Něco není vyplněné nebo tam je něco dvakrát");
         return false;
     }
 

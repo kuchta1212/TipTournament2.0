@@ -70,7 +70,6 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
 
         const teams = await getApi().getTeamsForTeamPlaceBet(this.props.isWinnerBet);
         if (!bet.id) {
-            
             this.setState({ loading: false, isEditable: true, possible: teams })
         } else {
             this.setState({ loading: false, isEditable: false, bet: bet, possible: teams });
@@ -175,7 +174,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
     }
 
     private async confirm(): Promise<void> {
-        if (!this.state.selection.teamId) {
+        if (!this.state.selection.teamId || this.state.selection.teamId == 'default' || this.state.selection.stage == undefined) {
             alert("Něco není vyplněno");
         } else {
             const bet = await getApi().uploadTeamPlaceBet(this.props.isWinnerBet ? TournamentStage.Winner : this.state.selection.stage, this.state.selection.teamId, this.props.isWinnerBet);
