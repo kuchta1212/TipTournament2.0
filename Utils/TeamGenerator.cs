@@ -40,10 +40,16 @@
         {
             var matchOption = this.deltaStageOptions.Value.FirstRound.Where(f => f.MatchId == matchId).First();
 
+            var homeTeamBetOption = this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Winner, userId);
+            var awayTeamBetOption = this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Runner, userId);
+            if (homeTeamBetOption == null || awayTeamBetOption == null)
+            {
+                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
+            }
             var result = new DeltaBetTeams
             {
-                PossibleHomeTeams = new List<Team>() { this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Winner, userId)?.First },
-                PossibleAwayTeams = new List<Team>() { this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Runner, userId)?.Second }
+                PossibleHomeTeams = new List<Team>() { homeTeamBetOption.First },
+                PossibleAwayTeams = new List<Team>() { awayTeamBetOption.Second }
             };
 
             return result;

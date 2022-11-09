@@ -50,7 +50,9 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.renderGroupsBets();
+            : this.props.isReadOnly && !this.state.bet.id
+                ? <div> Ještě sis nevsadil! </div>
+                : this.renderGroupsBets();
 
         return (
             <div>
@@ -99,7 +101,8 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                                         </div>
                                         <select className="custom-select" id="inputFirstTeamSelect" defaultValue={this.state.selection.firstId ?? "default"} onChange={(event) => this.onSelect(event.target)}>
                                             <option key="default-id" value="default" >Vyber tým</option>
-                                            {this.state.teams.map((team, index) => {
+                                            {
+                                                this.state.teams.map((team, index) => {
                                                 return <option key={team.id} value={team.id}>{team.name}</option>
                                             })}
                                         </select>

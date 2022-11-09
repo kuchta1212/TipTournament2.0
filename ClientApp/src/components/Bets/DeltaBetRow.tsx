@@ -48,8 +48,8 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : !this.state.isEditable && this.state.teams.possibleHomeTeams.length == 0
-                ? <div/>
+            : this.props.isReadOnly && !this.state.bet.id
+                ? <div> Ještě sis nevsadil! </div>
                 : this.renderDeltaBet();
 
         return (
@@ -91,7 +91,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                                     </div>
                                     : <TeamCell team={this.state.bet.homeTeamBet} />}
                             </td>
-                            <td className={this.getClass(1)}>
+                            <td className={this.getClass(2)}>
                                 {this.state.isEditable
                                 ?   <div className="input-group mb-3">
                                         <div className="input-group-prepend">

@@ -44,7 +44,9 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.renderDeltaBet();
+            : this.props.isReadOnly && !this.state.bet.id
+                ? <div>Ještě sis nevsadil!</div>
+                : this.renderDeltaBet();
 
         return (
             <div>

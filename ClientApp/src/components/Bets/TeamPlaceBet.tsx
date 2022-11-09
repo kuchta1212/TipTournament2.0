@@ -46,9 +46,11 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.props.status != BetsStageStatus.NotReady
-                ? this.renderTable()
-                : <div />
+            : this.props.status == BetsStageStatus.NotReady
+                ? <div />
+                : this.props.status == BetsStageStatus.Done && this.state.isEditable
+                    ? <div> Ještě sis nevsadil! </div>
+                    : this.renderTable()
 
         return (
             <div>
@@ -104,7 +106,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
                                                 <label className="input-group-text" htmlFor="inputGroupSelect02">Fáze</label>
                                             </div>
                                             <select className="custom-select" id="inputStageSelect" defaultValue={!!this.state.selection.stage ? this.state.selection.stage.toString() : "default"} onChange={(event) => this.onStageChange(event.target)}>
-                                                <option key="default-id" value="default" >Vyber tým</option>
+                                                <option key="default-id" value="default" >Vyber fázi turnaje</option>
                                                 <option key={TournamentStage.Group.toString()} value={TournamentStage.Group.toString()}>{this.stageToString(TournamentStage.Group)}</option>
                                                 <option key={TournamentStage.FirstRound.toString()} value={TournamentStage.FirstRound.toString()}>{this.stageToString(TournamentStage.FirstRound)}</option>
                                                 <option key={TournamentStage.Quarterfinal.toString()} value={TournamentStage.Quarterfinal.toString()}>{this.stageToString(TournamentStage.Quarterfinal)}</option>
@@ -173,7 +175,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
     }
 
     private async confirm(): Promise<void> {
-        if (!this.state.selection.teamId || (!this.state.selection.stage && !this.props.isWinnerBet)) {
+        if (!this.state.selection.teamId) {
             alert("Něco není vyplněno");
         } else {
             const bet = await getApi().uploadTeamPlaceBet(this.props.isWinnerBet ? TournamentStage.Winner : this.state.selection.stage, this.state.selection.teamId, this.props.isWinnerBet);
