@@ -10,6 +10,7 @@
     using TipTournament2._0.Data;
     using TipTournament2._0.MatchClient;
     using TipTournament2._0.Models;
+    using TipTournament2._0.Utils;
 
     [ApiController]
     [Authorize]
@@ -19,13 +20,15 @@
     {
         private readonly IDbContextWrapper context;
         private readonly IMatchClient matchClient;
-        private readonly IResultCoordinator resultCoordinator;
+        private readonly IResultCoordinatorFactory resultCoordinatorFactory;
+        private readonly ITeamGenerator teamGenerator;
 
-        public AdminController(IDbContextWrapper context, IMatchClient matchClient, IResultCoordinator resultCoordinator)
+        public AdminController(IDbContextWrapper context, IMatchClient matchClient, IResultCoordinatorFactory resultCoordinatorFactory, ITeamGenerator teamGenerator)
         {
             this.matchClient = matchClient;
             this.context = context;
-            this.resultCoordinator = resultCoordinator;
+            this.resultCoordinatorFactory = resultCoordinatorFactory;
+            this.teamGenerator = teamGenerator;
         }
 
         [HttpGet]
@@ -53,25 +56,37 @@
         //    return new OkObjectResult(matches.Count);
         //}
 
-        [HttpGet("matches/check")]
-        public async Task<IActionResult> CheckForUpdates()
-        {
-            return new OkObjectResult(await this.resultCoordinator.Coordinate());
-        }
+        //[HttpGet("matches/check")]
+        //public async Task<IActionResult> CheckForUpdates()
+        //{
+        //    return new OkObjectResult(await this.resultCoordinatorFactory.C.Coordinate());
+        //}
         
         [HttpPost("result")]
         public IActionResult UploadResult([FromQuery] string matchId, [FromBody] Result result)
         {
-            this.resultCoordinator.UploadNewResult(matchId, result);
+            this.resultCoordinatorFactory.Create(TournamentStage.Group).UploadNewResult(matchId, result);
             return new OkResult();
         }
 
         [HttpPost("group/result")]
         public IActionResult UploadGroupResult([FromQuery] string groupId, [FromBody] GroupResult result)
         {
-            this.resultCoordinator.UploadGroupResult(groupId, result);
+            this.resultCoordinatorFactory.Create(TournamentStage.Group, true).UploadNewResult(groupId, result);
             return new OkResult();
         }
 
+        [HttpGet("delta/teams")]
+        public IActionResult GetPossibleTeams([FromQuery] string matchId, [FromQuery] TournamentStage stage)
+        {
+            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.FirstRound));
+        }
+        
+        [HttpPost("match")]
+        public IActionResult SetTeamsForMatch([FromQuery] string matchId, [FromQuery] string homeTeamId, [FromQuery] string awayTeamId)
+        {
+            this.resultCoordinatorFactory.Create(TournamentStage.FirstRound).UploadNewResult(matchId, new Tuple<string, string>(homeTeamId, awayTeamId));
+            return new OkResult();
+        }
     }
 }

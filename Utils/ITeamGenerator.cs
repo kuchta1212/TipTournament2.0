@@ -10,6 +10,8 @@
     {
         DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId);
 
+        DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound);
+
         Team[] GenerateSpecificBetTeams();
 
         Team[] GetFinalists(string userId);

@@ -9,5 +9,9 @@
     public interface IBetResultMaker
     {
         List<MatchBet> UpdateBetResult(List<MatchBet> bets, Result result);
+
+        List<GroupBet> UpdateGroupBetsResult(List<GroupBet> bets, GroupResult result);
+
+        List<DeltaBet> UpdateDeltaBetsResult(List<DeltaBet> bets, Match match);
     }
 }

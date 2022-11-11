@@ -6,8 +6,8 @@
     using System.Threading.Tasks;
     using TipTournament2._0.Models;
 
-    public interface IResultCoordinator
+    public interface IResultCoordinatorFactory
     {
-        void UploadNewResult<TResultType>(string id, TResultType result);
+        IResultCoordinator Create(TournamentStage stage, bool noMatches = false);
     }
 }

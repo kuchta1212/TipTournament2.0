@@ -63,9 +63,9 @@
             var awayTeamBetOptions = this.dbContextWrapper.GetDeltaBetByMatchId(userId, matchOption.Matches[1]);
             if (homeTeamBetOptions == null || awayTeamBetOptions == null)
             {
-                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() }; 
+                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
             }
-            
+
             var result = new DeltaBetTeams()
             {
                 PossibleHomeTeams = new List<Team>(new[] { homeTeamBetOptions?.HomeTeamBet, homeTeamBetOptions?.AwayTeamBet }),
@@ -79,10 +79,17 @@
         {
             var matchOption = this.deltaStageOptions.Value.FirstRound.Where(f => f.MatchId == matchId).First();
 
+            var possibleHomeTeam = this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Winner).Result?.FirstId);
+            var possibleAwayTeam = this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Runner).Result?.SecondId);
+            if (possibleHomeTeam == null || possibleAwayTeam == null)
+            {
+                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
+            }
+
             var result = new DeltaBetTeams
             {
-                PossibleHomeTeams = new List<Team>() { this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Winner).Result?.FirstId) },
-                PossibleAwayTeams = new List<Team>() { this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Runner).Result?.SecondId) }
+                PossibleHomeTeams = new List<Team>() { possibleHomeTeam },
+                PossibleAwayTeams = new List<Team>() { possibleAwayTeam }
             };
 
             return result;
@@ -94,6 +101,12 @@
 
             var homeMatch = this.dbContextWrapper.GetMatchById(matchOption.Matches[0]);
             var awayMatch = this.dbContextWrapper.GetMatchById(matchOption.Matches[1]);
+
+            if (homeMatch.Home == null|| homeMatch.Away == null || awayMatch.Home == null || awayMatch.Away == null )
+            {
+                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
+            }
+
             var result = new DeltaBetTeams()
             {
                 PossibleHomeTeams = new List<Team>(new[] { this.dbContextWrapper.GetTeam(homeMatch.HomeId), this.dbContextWrapper.GetTeam(homeMatch.AwayId) }),

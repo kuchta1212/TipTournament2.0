@@ -410,7 +410,10 @@
 
         public List<GroupBet> GetGroupBetsForUser(string userId)
         {
-            return this.dbContext.GroupBets.Where(gb => gb.UserId == userId).ToList();
+            return this.dbContext.GroupBets
+                .Where(gb => gb.UserId == userId)
+                .Include(gb => gb.Result)
+                .ToList();
         }
 
         public SpecificTeamPlaceBet GetTeamPlaceBet(string userId, bool isWinnerBet)
@@ -516,6 +519,34 @@
         public void UpdateGroup(Group group)
         {
             this.dbContext.Update(group);
+            this.dbContext.SaveChanges();
+        }
+
+        public List<DeltaBet> GetDeltaBetsByMatchId(string matchId)
+        {
+            return this.dbContext.DeltaBets
+                .Where(d => d.MatchId == matchId)
+                .Include(d => d.Result)
+                .ToList();
+        }
+
+        public void UpdateDeltaBets(List<DeltaBet> updateBets)
+        {
+            this.dbContext.UpdateRange(updateBets);
+            this.dbContext.SaveChanges();
+        }
+
+        public List<GroupBet> GetGroupBetsByGroupId(string groupId)
+        {
+            return this.dbContext.GroupBets
+                .Where(d => d.GroupId == groupId)
+                .Include(d => d.Result)
+                .ToList();
+        }
+
+        public void UpdateGroupBets(List<GroupBet> updateBets)
+        {
+            this.dbContext.UpdateRange(updateBets);
             this.dbContext.SaveChanges();
         }
     }

@@ -18,17 +18,18 @@ namespace TipTournament2._0.Jobs
             this.contextWrapper = contextWrapper;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
-            try
-            {
-                var amountOfUpdates = await this.coordinator.Coordinate();
-                this.contextWrapper.StoreUpdateStatus(new Models.UpdateStatus() { Date = DateTime.Now, AmountOfUpdates = amountOfUpdates });
-            }
-            catch(Exception ex)
-            {
-                this.contextWrapper.StoreUpdateStatus(new Models.UpdateStatus() { Date = DateTime.Now, ErrorMessage = ex.ToString() });
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    var amountOfUpdates = await this.coordinator.Coordinate();
+            //    this.contextWrapper.StoreUpdateStatus(new Models.UpdateStatus() { Date = DateTime.Now, AmountOfUpdates = amountOfUpdates });
+            //}
+            //catch(Exception ex)
+            //{
+            //    this.contextWrapper.StoreUpdateStatus(new Models.UpdateStatus() { Date = DateTime.Now, ErrorMessage = ex.ToString() });
+            //}
             
         }
 

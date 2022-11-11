@@ -100,7 +100,7 @@ namespace TipTournament2._0
             services.AddTransient<IDbContextWrapper, DbContextWrapper>();
             services.AddTransient<IMatchClient, MatchClient.MatchClient>();
             services.AddTransient<IBetResultMaker, BetResultMaker>();
-            services.AddTransient<IResultCoordinator, ResultCoordinator>();
+            services.AddTransient<IResultCoordinatorFactory, ResultCoordinatorFactory>();
             services.AddTransient<ITeamGenerator, TeamGenerator>();
             services.AddTransient<IBetGenerator, BetGenerator>();
         }

@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { getApi } from "../api/ApiFactory"
+import { getAdminApi, getApi } from "../api/ApiFactory"
 import { Bet, Match, Result } from "../../typings/index"
 import { TeamCell } from '../TeamCell'
 
@@ -77,7 +77,7 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
 
     private async uploadResult(): Promise<void> {
         document.body.style.cursor = "wait";
-        await getApi().uploadMatchResult(this.state.match.result, this.props.match.id);
+        await getAdminApi().uploadMatchResult(this.state.match.result, this.props.match.id);
         document.body.style.cursor = "normal";
         this.setState({ withResult: true })
     }

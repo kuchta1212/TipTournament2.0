@@ -51,9 +51,9 @@
         UpdateStatus GetLatestUpdateStatus();
 
         GroupBet GetGroupBetByGroupId(string groupId, string userId);
-
+        List<DeltaBet> GetDeltaBetsByMatchId(string id);
         List<GroupBet> GetGroupBetsForUser(string userId);
-
+        void UpdateDeltaBets(List<DeltaBet> updateBets);
         Team[] GetGroupTeams(string groupId);
 
         Group[] GetGroups(bool includeMatches = false);
@@ -73,10 +73,11 @@
         Group GetGroupById(string groupId);
 
         List<DeltaBet> GetDeltaBetsForUserAndStage(TournamentStage stage, string userId);
+        List<GroupBet> GetGroupBetsByGroupId(string id);
         GroupResult SaveResult(GroupResult result);
 
         void ConfirmBetsStatus(TournamentStage stage, string userId);
-
+        void UpdateGroupBets(List<GroupBet> updateBets);
         void ModifyBetsStatus(TournamentStage stage, string userId);
 
         void UpdateResult(GroupResult result);

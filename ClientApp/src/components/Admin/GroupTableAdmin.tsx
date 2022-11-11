@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { getApi } from "../api/ApiFactory"
+import { getAdminApi, getApi } from "../api/ApiFactory"
 import { Match, Bet, Team, Group, GroupBet, GroupBetResult, GroupResult, BetResult } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { Loader } from '../Loader'
@@ -203,7 +203,7 @@ export class GroupTableAdmin extends React.Component<GroupTableAdminProps, Group
     private async confirm(): Promise<void> {
         if (this.validateResult(this.state.result)) {
 
-            await getApi().uploadGroupResult(this.state.result, this.props.group.id);
+            await getAdminApi().uploadGroupResult(this.state.result, this.props.group.id);
             this.setState({ isEditable: false })
         }
     }

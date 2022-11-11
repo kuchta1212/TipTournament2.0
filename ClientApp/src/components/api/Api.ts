@@ -7,12 +7,6 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api';
 
 export class Api implements IApi {
-    async uploadGroupResult(result: GroupResult, id: string): Promise<void> {
-        await post(`${API_URL}/admin/group/result?groupId=${id}`, result);
-    }
-    async uploadMatchResult(result: Result, id: string): Promise<void> {
-        await post(`${API_URL}/admin/result?matchId=${id}`, result);
-    }
     uploadShooterBet(bet: string): Promise<TopShooterBet> {
         return convert<TopShooterBet>(post(`${API_URL}/bets/shooter?name=${bet}`));
     }

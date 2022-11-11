@@ -19,6 +19,65 @@
             return bets;
         }
 
+        public List<DeltaBet> UpdateDeltaBetsResult(List<DeltaBet> bets, Match match)
+        {
+           foreach(var bet in bets)
+            {
+                var result = new DeltaBetResult();
+                result.IsHomeTeamCorrect = bet.HomeTeamBetId == match.HomeId;
+                result.IsAwayTeamCorrect = bet.AwayTeamBetId == match.AwayId;
+                
+                if (result.IsHomeTeamCorrect)
+                {
+                    result.Points += 2;
+                }
+
+                if (result.IsAwayTeamCorrect)
+                {
+                    result.Points += 2;
+                }
+
+                bet.Result = result;
+            }
+            return bets;
+        }
+
+        public List<GroupBet> UpdateGroupBetsResult(List<GroupBet> bets, GroupResult groupResult)
+        {
+
+            foreach (var bet in bets)
+            {
+                var result = new GroupBetResult();
+                result.IsFirstCorrect = bet.FirstId == groupResult.FirstId;
+                result.IsSecondCorrect = bet.SecondId == groupResult.SecondId;
+                result.IsThirdCorrect = bet.ThirdId == groupResult.ThirdId;
+                result.IsFourthCorrect = bet.FourthId == groupResult.FourthId;
+
+                if (result.IsFirstCorrect)
+                {
+                    result.Points++;
+                }
+
+                if (result.IsSecondCorrect)
+                {
+                    result.Points++;
+                }
+
+                if (result.IsThirdCorrect)
+                {
+                    result.Points++;
+                }
+
+                if (result.IsFourthCorrect)
+                {
+                    result.Points++;
+                }
+
+                bet.Result = result;
+            }
+            return bets;
+        }
+
         private BetResult GetBetResult(Result result, MatchBet bet)
         {
             if ((result.HomeTeam == bet.Tip.HomeTeam) && (result.AwayTeam == bet.Tip.AwayTeam))
