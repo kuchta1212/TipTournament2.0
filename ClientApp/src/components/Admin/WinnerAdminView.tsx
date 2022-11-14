@@ -50,8 +50,10 @@ export class WinnerAdminViewRow extends React.Component<WinnerAdminViewRowProps,
     private async getData() {
         const deltaTeams = await getAdminApi().getTeamForMatch("match_64", TournamentStage.Winner);
         const teams = [];
-        teams.push(deltaTeams.possibleHomeTeams[0]);
-        teams.push(deltaTeams.possibleAwayTeams[0]);
+        if (deltaTeams.possibleHomeTeams?.length > 0) {
+            teams.push(deltaTeams.possibleHomeTeams[0]);
+            teams.push(deltaTeams.possibleAwayTeams[0]);
+        }
         this.setState({ loading: false, teams: teams });
     }
 
