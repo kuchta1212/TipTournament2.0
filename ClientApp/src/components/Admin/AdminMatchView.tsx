@@ -7,6 +7,9 @@ import { MatchRowAdminView } from './MatchRowAdminView';
 import { Table } from 'reactstrap';
 import { GroupTableAdmin } from './GroupTableAdmin';
 import { DeltaBetAdminViewRow } from './DeltaAdminViewRow';
+import { WinnerAdminViewRow } from './WinnerAdminView';
+import { ShooterBetAdminView } from './ShooterBetAdminView';
+import { TeamPlaceBetAdminView } from './TeamPlaceBetAdminView';
 
 interface AdminMatchViewState {
     matches: Match[],
@@ -191,6 +194,54 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                                     }
                                 </Table>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="card opacity-card">
+                    <div className="card-header" id="heading-winner-card">
+                        <div className="row" style={{ justifyContent: 'space-between' }}>
+                            <h5 className="mb-0">
+                                <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-winner-card" aria-expanded="false" aria-controls="collapse-winner-card">
+                                    Vítěz
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                    <div id="collapse-winner-card" className="collapse" aria-labelledby="winner-card" data-parent="#accordionExample">
+                        <div className="card-body">
+                          <WinnerAdminViewRow />
+                        </div>
+                    </div>
+                </div>
+                <div className="card opacity-card">
+                    <div className="card-header" id="heading-lambda-card">
+                        <div className="row" style={{ justifyContent: 'space-between' }}>
+                            <h5 className="mb-0">
+                                <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-lambda-card" aria-expanded="false" aria-controls="collapse-lambda-card">
+                                    Lambda
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                    <div id="collapse-lambda-card" className="collapse" aria-labelledby="lambda-card" data-parent="#accordionExample">
+                        <div className="card-body">
+                            <ShooterBetAdminView />
+                        </div>
+                    </div>
+                </div>
+                <div className="card opacity-card">
+                    <div className="card-header" id="heading-omikron-card">
+                        <div className="row" style={{ justifyContent: 'space-between' }}>
+                            <h5 className="mb-0">
+                                <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-omikron-card" aria-expanded="false" aria-controls="collapse-omikron-card">
+                                    Omikron
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                    <div id="collapse-omikron-card" className="collapse" aria-labelledby="lambda-card" data-parent="#accordionExample">
+                        <div className="card-body">
+                            <TeamPlaceBetAdminView />
                         </div>
                     </div>
                 </div>

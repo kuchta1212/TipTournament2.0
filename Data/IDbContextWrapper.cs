@@ -29,11 +29,11 @@
         void SaveMatches(List<Match> matches);
 
         List<Match> GetNotEndedMatches();
-
+        List<TopShooterBet> GetShooterBets();
         List<MatchBet> GetBetsForMatch(Match match);
 
         MatchBet GetBetForMatchAndUser(Match match, string userId);
-
+        void UpdateLambdaBets(List<TopShooterBet> updateBets);
         void UpdateBets(List<MatchBet> bets);
 
         List<ApplicationUser> GetAllUsers();
@@ -93,5 +93,9 @@
         void UpsertShooterBet(string name, string userId);
 
         TopShooterBet GetShooterBet(string userId);
+
+        List<SpecificTeamPlaceBet> GetOmikronBets(bool isWinnerBet);
+
+        void UpdateOmikronBets(List<SpecificTeamPlaceBet> updatedBets);
     }
 }

@@ -78,6 +78,38 @@
             return bets;
         }
 
+        public List<TopShooterBet> UpdateLambdaResults(List<TopShooterBet> bets, string name)
+        {
+            foreach(var bet in bets)
+            {
+                bet.IsCorrect = bet.ShoterName == name;
+                bet.Points = bet.IsCorrect ? 7 : 0;
+            }
+
+            return bets;
+        }
+
+        public List<SpecificTeamPlaceBet> UpdateOmikronBets(List<SpecificTeamPlaceBet> bets, List<SpecificTeamPlaceBet> actualResults)
+        {
+            foreach(var bet in bets)
+            {
+                var result = actualResults.Where(r => r.teamId == bet.teamId).First();
+                bet.IsCorrect = bet.StageBet == result.StageBet;
+            }
+
+            return bets;
+        }
+
+        public List<SpecificTeamPlaceBet> UpdateWinnerBets(List<SpecificTeamPlaceBet> bets, string winnerId)
+        {
+            foreach(var bet in bets)
+            {
+                bet.IsCorrect = bet.teamId == winnerId;
+            }
+
+            return bets;
+        }
+
         private BetResult GetBetResult(Result result, MatchBet bet)
         {
             if ((result.HomeTeam == bet.Tip.HomeTeam) && (result.AwayTeam == bet.Tip.AwayTeam))

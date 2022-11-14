@@ -1,5 +1,6 @@
 ﻿namespace TipTournament2._0.Coordinator
 {
+    using Microsoft.Extensions.Options;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -8,18 +9,21 @@
     using TipTournament2._0.Data;
     using TipTournament2._0.MatchClient;
     using TipTournament2._0.Models;
+    using TipTournament2._0.Utils;
 
     public class ResultCoordinatorFactory : IResultCoordinatorFactory
     {
         private readonly IMatchClient matchClient;
         private readonly IDbContextWrapper dbContextWrapper;
         private readonly IBetResultMaker betResultMaker;
+        private readonly IOptions<OmikronStageOptions> omikronStageOptions;
 
-        public ResultCoordinatorFactory(IMatchClient matchClient, IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker)
+        public ResultCoordinatorFactory(IMatchClient matchClient, IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker, IOptions<OmikronStageOptions> omikronStageOptions)
         {
             this.matchClient = matchClient;
             this.dbContextWrapper = dbContextWrapper;
             this.betResultMaker = betResultMaker;
+            this.omikronStageOptions = omikronStageOptions;
         }
         public IResultCoordinator Create(TournamentStage stage, bool noMatches)
         {
@@ -36,6 +40,12 @@
                 case TournamentStage.Semifinal:
                 case TournamentStage.Final:
                     return new DeltaResultCoordinator(this.matchClient, this.dbContextWrapper, this.betResultMaker);
+                case TournamentStage.Winner:
+                    return new WinnerResultCoordinator(this.dbContextWrapper, this.betResultMaker);
+                case TournamentStage.Omikron:
+                    return new OmikronResultCoordinator(this.dbContextWrapper, this.betResultMaker, this.omikronStageOptions);
+                case TournamentStage.Lambda:
+                    return new LambdaResultCoordinator(this.dbContextWrapper, this.betResultMaker);
                 default:
                     throw new NotSupportedException("Si se posral v kině");
             }

@@ -1,6 +1,10 @@
 ﻿import { DeltaBetTeams, GroupResult, Result, TournamentStage, User } from "../../typings";
 
 export interface IAdminApi {
+    evaluateTopShooter(name: string);
+
+    setWinner(matchId: string, winner: string);
+
     getTeamForMatch(id: string, stage: TournamentStage): Promise<DeltaBetTeams>;
 
     updateMatch(id: string, homeTeamId: string, awayTeamId: string): Promise<void>;
@@ -14,4 +18,6 @@ export interface IAdminApi {
     loadMatches(): Promise<number>;
 
     payed(userId: string, payed: boolean): Promise<void>;
+
+    evalateTeamPlaceBets(): Promise<void>;
 }

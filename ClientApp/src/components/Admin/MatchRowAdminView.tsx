@@ -16,9 +16,16 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
     constructor(props: MatchRowAdminViewProps) {
         super(props);
 
+        const match = this.props.match;
+        if (!match.ended) {
+            match.result = {} as Result;
+            match.result.homeTeam = 0;
+            match.result.awayTeam = 0;
+        }
+
         this.state = {
-            withResult: !!this.props.match.result,
-            match: this.props.match
+            withResult: this.props.match.ended,
+            match: match
         }
     }
 
@@ -79,6 +86,7 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
         document.body.style.cursor = "wait";
         await getAdminApi().uploadMatchResult(this.state.match.result, this.props.match.id);
         document.body.style.cursor = "normal";
+        this.state.match
         this.setState({ withResult: true })
     }
 }

@@ -10,7 +10,7 @@
     {
         DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId);
 
-        DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound);
+        DeltaBetTeams GenerateTeams(string matchId, TournamentStage stage);
 
         Team[] GenerateSpecificBetTeams();
 

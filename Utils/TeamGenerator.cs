@@ -21,12 +21,17 @@
             this.omikronStageOptions = omikronStageOptions;
         }
 
-        public DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound)
+        public DeltaBetTeams GenerateTeams(string matchId, TournamentStage stage)
         {
-            return isFirstRound
-             ? this.GenerateTeamsFirstRound(matchId)
-             : this.GenerateTeams(matchId);
-
+            switch(stage)
+            {
+                case TournamentStage.FirstRound:
+                    return this.GenerateTeamsFirstRound(matchId);
+                case TournamentStage.Winner:
+                    return this.GenerateTeamsWinner(matchId);
+                default:
+                    return this.GenerateTeams(matchId);
+            }
         }
 
         public DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId)
@@ -102,7 +107,7 @@
             var homeMatch = this.dbContextWrapper.GetMatchById(matchOption.Matches[0]);
             var awayMatch = this.dbContextWrapper.GetMatchById(matchOption.Matches[1]);
 
-            if (homeMatch.Home == null|| homeMatch.Away == null || awayMatch.Home == null || awayMatch.Away == null )
+            if (homeMatch.HomeId == null|| homeMatch.AwayId == null || awayMatch.HomeId == null || awayMatch.AwayId == null )
             {
                 return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
             }
@@ -116,6 +121,23 @@
             return result;
         }
 
+        private DeltaBetTeams GenerateTeamsWinner(string matchId)
+        {
+            var match = this.dbContextWrapper.GetMatchById(matchId);
+
+            if (match.HomeId == null || match.AwayId == null)
+            {
+                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
+            }
+
+            var result = new DeltaBetTeams
+            {
+                PossibleHomeTeams = new List<Team>() { this.dbContextWrapper.GetTeam(match.HomeId) },
+                PossibleAwayTeams = new List<Team>() { this.dbContextWrapper.GetTeam(match.AwayId) }
+            };
+
+            return result;
+        }
 
         public Team[] GenerateSpecificBetTeams()
         {

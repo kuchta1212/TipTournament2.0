@@ -50,9 +50,12 @@
     <None Remove="ClientApp\src\components\Admin\GroupTableAdmin.tsx" />
     <None Remove="ClientApp\src\components\Admin\MatchLoader.tsx" />
     <None Remove="ClientApp\src\components\Admin\MatchRowAdminView.tsx" />
+    <None Remove="ClientApp\src\components\Admin\ShooterBetAdminView.tsx" />
+    <None Remove="ClientApp\src\components\Admin\TeamPlaceBetAdminView.tsx" />
     <None Remove="ClientApp\src\components\Admin\UpdateChecker.tsx" />
     <None Remove="ClientApp\src\components\Admin\UserOverview.tsx" />
     <None Remove="ClientApp\src\components\Admin\UserRow.tsx" />
+    <None Remove="ClientApp\src\components\Admin\WinnerAdminView.tsx" />
     <None Remove="ClientApp\src\components\api\AdminApi.ts" />
     <None Remove="ClientApp\src\components\api\Api.ts" />
     <None Remove="ClientApp\src\components\api\ApiFactory.ts" />
@@ -100,9 +103,16 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\Admin\AdminMatchView.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\ShooterBetAdminView.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\WinnerAdminView.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\Admin\DeltaAdminViewRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\GroupTableAdmin.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\MatchRowAdminView.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Admin\TeamPlaceBetAdminView.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\UserRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\UserOverview.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\UpdateChecker.tsx" />

@@ -13,5 +13,10 @@
         List<GroupBet> UpdateGroupBetsResult(List<GroupBet> bets, GroupResult result);
 
         List<DeltaBet> UpdateDeltaBetsResult(List<DeltaBet> bets, Match match);
+
+        List<SpecificTeamPlaceBet> UpdateOmikronBets(List<SpecificTeamPlaceBet> bets, List<SpecificTeamPlaceBet> actualResults);
+
+        List<SpecificTeamPlaceBet> UpdateWinnerBets(List<SpecificTeamPlaceBet> bets, string winnerId);
+        List<TopShooterBet> UpdateLambdaResults(List<TopShooterBet> bets, string v);
     }
 }

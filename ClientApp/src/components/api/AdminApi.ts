@@ -6,6 +6,15 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api/admin';
 
 export class AdminApi implements IAdminApi {
+    async evaluateTopShooter(name: string): Promise<void> {
+        await post(`${API_URL}/shooter?name=${name}`);
+    }
+    async setWinner(matchId: string, winner: string): Promise<void> {
+        await post(`${API_URL}/winner?teamId=${winner}`);
+    }
+    async evalateTeamPlaceBets(): Promise<void> {
+        await post(`${API_URL}/omikron`);
+    }
     getTeamForMatch(id: string, stage: TournamentStage): Promise<DeltaBetTeams> {
         return convert<DeltaBetTeams>(get(`${API_URL}/delta/teams?matchId=${id}&stage=${stage}`));
     }

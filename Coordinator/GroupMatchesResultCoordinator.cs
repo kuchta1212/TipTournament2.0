@@ -27,6 +27,7 @@
             var dbResult = this.dbContextWrapper.SaveResult(result as Result);
             var match = this.dbContextWrapper.GetMatchById(matchId);
             match.Result = dbResult;
+            match.Ended = true;
             this.dbContextWrapper.UpdateMatch(match);
             this.UpdateBetsResult(match);
             this.RecalculatePoints(match);

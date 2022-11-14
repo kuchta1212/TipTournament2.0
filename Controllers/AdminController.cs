@@ -79,13 +79,34 @@
         [HttpGet("delta/teams")]
         public IActionResult GetPossibleTeams([FromQuery] string matchId, [FromQuery] TournamentStage stage)
         {
-            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.FirstRound));
+            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage));
         }
         
         [HttpPost("match")]
         public IActionResult SetTeamsForMatch([FromQuery] string matchId, [FromQuery] string homeTeamId, [FromQuery] string awayTeamId)
         {
             this.resultCoordinatorFactory.Create(TournamentStage.FirstRound).UploadNewResult(matchId, new Tuple<string, string>(homeTeamId, awayTeamId));
+            return new OkResult();
+        }
+
+        [HttpPost("omikron")]
+        public IActionResult EvaluateOmikron()
+        {
+            this.resultCoordinatorFactory.Create(TournamentStage.Omikron).UploadNewResult<object>(string.Empty, new object());
+            return new OkResult();
+        }
+
+        [HttpPost("winner")]
+        public IActionResult SetWinner([FromQuery] string teamId)
+        {
+            this.resultCoordinatorFactory.Create(TournamentStage.Winner).UploadNewResult<string>("match_64", teamId);
+            return new OkResult();
+        }
+
+        [HttpPost("shooter")]
+        public IActionResult EvaluateShooter([FromQuery] string name)
+        {
+            this.resultCoordinatorFactory.Create(TournamentStage.Lambda).UploadNewResult<string>(string.Empty, name);
             return new OkResult();
         }
     }

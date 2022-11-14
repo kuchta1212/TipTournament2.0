@@ -549,5 +549,27 @@
             this.dbContext.UpdateRange(updateBets);
             this.dbContext.SaveChanges();
         }
+
+        public List<SpecificTeamPlaceBet> GetOmikronBets(bool isWinnerBet)
+        {
+            return this.dbContext.TeamPlaceBets.Where(b => b.IsWinnerBet == isWinnerBet).ToList();
+        }
+
+        public void UpdateOmikronBets(List<SpecificTeamPlaceBet> updatedBets)
+        {
+            this.dbContext.UpdateRange(updatedBets);
+            this.dbContext.SaveChanges();
+        }
+
+        public List<TopShooterBet> GetShooterBets()
+        {
+            return this.dbContext.TopShooterBets.ToList();
+        }
+
+        public void UpdateLambdaBets(List<TopShooterBet> updateBets)
+        {
+            this.dbContext.UpdateRange(updateBets);
+            this.dbContext.SaveChanges();
+        }
     }
 }

@@ -91,7 +91,7 @@ export class DeltaBetAdminViewRow extends React.Component<DeltaBetAdminViewRowPr
                                             })}
                                         </select>
                                     </div>
-                                    : <TeamCell team={this.state.teams.possibleHomeTeams.filter(t => t.id == this.state.homeTeamId)[0]} />}
+                                    : <TeamCell team={this.state.teams.possibleAwayTeams.filter(t => t.id == this.state.awayTeamId)[0]} />}
                             </td>
                         </tr>
                         <tr>
