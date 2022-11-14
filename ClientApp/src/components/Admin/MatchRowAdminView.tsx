@@ -85,7 +85,7 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
     private async uploadResult(): Promise<void> {
         document.body.style.cursor = "wait";
         await getAdminApi().uploadMatchResult(this.state.match.result, this.props.match.id);
-        document.body.style.cursor = "normal";
+        document.body.style.cursor = "pointer";
         this.state.match.ended = true;
         this.setState({ withResult: true })
     }
