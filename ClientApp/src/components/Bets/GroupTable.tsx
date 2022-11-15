@@ -213,7 +213,7 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
             case 3:
                 return this.state.bet.result.isThirdCorrect ? "border-success" : "border-fail";
             case 4:
-                return this.state.bet.result.isThirdCorrect ? "border-success" : "border-fail";
+                return this.state.bet.result.isFourthCorrect ? "border-success" : "border-fail";
         }
 
         return "";
