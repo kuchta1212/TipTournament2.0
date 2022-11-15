@@ -1,7 +1,8 @@
 ﻿import * as React from 'react';
+import ReactTooltip from "react-tooltip";
 import { getApi } from "../api/ApiFactory"
 import { Match, Bet, User, Group, GroupBet, TournamentStage, BetsStageStatus } from "../../typings/index"
-import { Table } from 'reactstrap';
+import { Table, Tooltip } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from '../Loader'
 import { WarningNotification, WarningTypes } from '../WarningNotification';
@@ -23,6 +24,7 @@ interface CardBetProps {
     modify: (stage: TournamentStage) => Promise<void>,
     hideConfirmButton?: boolean,
     showGenerateButton?: boolean,
+    tooltip: string;
 }
 
 export class CardBet extends React.Component<CardBetProps, CardBetState> {
@@ -53,10 +55,10 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
                 <div className="card-header" id={this.getId()}>
                     <div className="row" style={{ justifyContent: 'space-between' }}>
                         <h5 className="mb-0">
-                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target={this.getCollapseId(true)} aria-expanded="false" aria-controls={this.getCollapseId(false)}>
+                            <button className="btn btn-link collapsed" data-tip data-for={this.getCollapseId(false)+"_dataId"} type="button" data-toggle="collapse" data-target={this.getCollapseId(true)} aria-expanded="false" aria-controls={this.getCollapseId(false)}>
                                 {this.props.text}
                             </button>
-                        </h5>
+                       </h5>
                         <div>
                             {!!this.props.hideConfirmButton
                                 ? <div />
@@ -82,6 +84,10 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
                             : this.props.component}
                     </div>
                 </div>
+
+                <ReactTooltip id={this.getCollapseId(false) + "_dataId"} place="right" effect="solid">
+                    {this.props.tooltip}
+                </ReactTooltip>
             </div>
         );
     }
