@@ -91,6 +91,7 @@
     <None Remove="ClientApp\src\components\MainPage\UserBetRow.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserBets.tsx" />
     <None Remove="ClientApp\src\components\MainPage\UserRow.tsx" />
+    <None Remove="ClientApp\src\components\RulePage.tsx" />
     <None Remove="ClientApp\src\components\TeamCell.tsx" />
     <None Remove="ClientApp\src\components\WarningNotification.tsx" />
     <None Remove="ClientApp\src\typings\Dictionary.ts" />
@@ -170,6 +171,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\Loader.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\RulePage.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\TeamCell.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\WarningNotification.tsx" />
     <TypeScriptCompile Include="ClientApp\src\typings\Dictionary.ts" />

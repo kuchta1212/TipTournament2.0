@@ -45,6 +45,9 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
                 <NavItem>
                   <NavLink tag={Link} className="text-light" to="/bets/all">Všechny sázky</NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink tag={Link} className="text-light" to="/rules">Pravidla</NavLink>
+                </NavItem>
                 {/*<NavItem>*/}
                 {/*    <NavLink tag={Link} className="text-dark" to="/admin">Admin</NavLink>*/}
                 {/*</NavItem>*/}

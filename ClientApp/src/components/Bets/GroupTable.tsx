@@ -165,8 +165,8 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
                                 : <TeamCell team={this.state.bet.fourth} />}
                         </tr>
                         {
-                            this.props.showResult 
-                                ? <tr><td>Body:</td><td>{this.state.bet.result?.points ?? 0}</td></tr>
+                            this.props.showResult
+                                ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.state.bet.result?.points ?? 0}</td></tr>
                                 : this.props.isReadOnly
                                     ? <div />
                                     : this.state.isEditable
@@ -179,6 +179,27 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
         );
     }
 
+    private getBackgroundClass(): string {
+        if (!this.props.showResult || !this.state.bet.result) {
+            return "";
+        }
+
+        const points = this.state.bet.result?.points ?? 0;
+        switch (points) {
+            case 0:
+                return "bg-danger";
+            case 1:
+                return "bg-info";
+            case 2:
+            case 3:
+                return "bg-warning";
+            case 4:
+                return "bg-success";
+            default:
+                return "";
+        }
+    }
+
     private getClass(order: number): string {
         if (!this.props.showResult || !this.state.bet.result) {
             return "";
@@ -186,13 +207,13 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
 
         switch (order) {
             case 1:
-                return this.state.bet.result.isFirstCorrect ? "border border-success" : "border border-danger";
+                return this.state.bet.result.isFirstCorrect ? "border-success" : "border-fail";
             case 2:
-                return this.state.bet.result.isSecondCorrect ? "border border-success" : "border border-danger";
+                return this.state.bet.result.isSecondCorrect ? "border-success" : "border-fail";
             case 3:
-                return this.state.bet.result.isThirdCorrect ? "border border-success" : "border border-danger";
+                return this.state.bet.result.isThirdCorrect ? "border-success" : "border-fail";
             case 4:
-                return this.state.bet.result.isThirdCorrect ? "border border-success" : "border border-danger";
+                return this.state.bet.result.isThirdCorrect ? "border-success" : "border-fail";
         }
 
         return "";

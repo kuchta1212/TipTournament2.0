@@ -163,7 +163,7 @@ export interface DeltaBetResult {
     id: string;
     isHomeTeamCorrect: boolean;
     isAwayTeamCorrect: boolean;
-    points: boolean
+    points: number
 }
 
 export interface GroupResult {

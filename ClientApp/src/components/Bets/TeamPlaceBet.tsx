@@ -123,7 +123,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
                         <tr>
                             <td>
                                 {this.props.showResult
-                                    ? <tr><td>Body:</td><td>{this.state.bet.isCorrect ? 3 : 0}</td></tr>
+                                    ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.state.bet.isCorrect ? 3 : 0}</td></tr>
                                     : this.props.status == BetsStageStatus.Done
                                         ? <div />
                                         : this.state.isEditable
@@ -137,12 +137,22 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
         );
     }
 
+    private getBackgroundClass(): string {
+        if (!this.props.showResult) {
+            return "";
+        }
+
+        return this.state.bet.isCorrect
+            ? "bg-success"
+            : "bg-danger";
+    }
+
     private getClass(): string {
         if (!this.props.showResult) {
             return "";
         }
 
-        return this.state.bet.isCorrect ? "border border-success" : "border border-danger";
+        return this.state.bet.isCorrect ? "border-success" : "border-fail";
     }
 
     private stageToString(stage: TournamentStage) {

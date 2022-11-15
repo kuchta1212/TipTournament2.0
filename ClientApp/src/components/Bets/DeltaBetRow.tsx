@@ -110,7 +110,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         <tr>
                             <td />
                             {this.props.showResult
-                                ? <tr><td>Body:</td><td>{this.state.bet.result?.points ?? 0}</td></tr>
+                                ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.state.bet.result?.points ?? 0}</td></tr>
                                 : this.props.isReadOnly
                                     ? <div />
                                     : this.state.isEditable
@@ -123,6 +123,24 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         );
     }
 
+    private getBackgroundClass(): string {
+        if (!this.props.showResult || !this.state.bet.result) {
+            return "";
+        }
+
+        const points = this.state.bet.result?.points ?? 0;
+        switch (points) {
+            case 0:
+                return "bg-danger";
+            case 2:
+                return "bg-warning";
+            case 4:
+                return "bg-success";
+            default:
+                return "";
+        }
+    }
+     
     private getClass(order: number): string {
         if (!this.props.showResult || !this.state.bet.result) {
             return "";
@@ -130,9 +148,9 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
         switch (order) {
             case 1:
-                return this.state.bet.result.isHomeTeamCorrect ? "border border-success" : "border border-danger";
+                return this.state.bet.result.isHomeTeamCorrect ? "border-success" : "border-fail";
             case 2:
-                return this.state.bet.result.isAwayTeamCorrect ? "border border-success" : "border border-danger";
+                return this.state.bet.result.isAwayTeamCorrect ? "border-success" : "border-fail";
         }
 
         return "";

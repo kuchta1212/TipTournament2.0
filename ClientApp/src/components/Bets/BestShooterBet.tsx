@@ -86,7 +86,7 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
                             <td>
                                 {
                                     this.props.showResult
-                                        ? <tr><td>Body:</td><td>{this.state.bet.isCorrect ? this.state.bet.points : 0}</td></tr>
+                                        ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.state.bet.isCorrect ? this.state.bet.points : 0}</td></tr>
                                         : this.props.isReadOnly
                                             ? <div />
                                             : this.state.isEditable
@@ -100,12 +100,22 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
         );
     }
 
+    private getBackgroundClass(): string {
+        if (!this.props.showResult) {
+            return "";
+        }
+
+        return this.state.bet.isCorrect
+            ? "bg-success"
+            : "bg-danger";
+    }
+
     private getClass(): string {
         if (!this.props.showResult) {
             return "";
         }
 
-        return this.state.bet.isCorrect ? "border border-success" : "border border-danger";
+        return this.state.bet.isCorrect ? "border-success" : "border-fail";
     }
 
     private onChange(event: any) {
