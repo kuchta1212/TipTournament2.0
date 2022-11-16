@@ -184,7 +184,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
     }
 
     private async confirm(): Promise<void> {
-        if (!this.state.selection.teamId || this.state.selection.teamId == 'default' || this.state.selection.stage == undefined) {
+        if (!this.state.selection.teamId || this.state.selection.teamId == 'default' || (this.state.selection.stage == undefined && !this.props.isWinnerBet)) {
             alert("Něco není vyplněno");
         } else {
             const bet = await getApi().uploadTeamPlaceBet(this.props.isWinnerBet ? TournamentStage.Winner : this.state.selection.stage, this.state.selection.teamId, this.props.isWinnerBet);
