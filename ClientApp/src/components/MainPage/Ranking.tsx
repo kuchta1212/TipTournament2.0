@@ -89,17 +89,17 @@ export class Ranking extends React.Component<RankingProps, RankingState> {
     private getSortedData(): User[] {
         switch (this.state.sortBy) {
             case SortBy.Total:
-                return this.state.ranking.sort(u => u.totalPoints);
+                return this.state.ranking.sort((u1, u2) => { return u1.totalPoints >= u2.totalPoints ? -1 : 1 });
             case SortBy.AlfaBeta:
-                return this.state.ranking.sort(u => u.alfaPoints);
+                return this.state.ranking.sort((u1, u2) => { return u1.alfaPoints >= u2.alfaPoints ? -1 : 1 });
             case SortBy.Gamma:
-                return this.state.ranking.sort(u => u.gamaPoints);
+                return this.state.ranking.sort((u1, u2) => { return u1.gamaPoints >= u2.gamaPoints ? -1 : 1 });
             case SortBy.Delta:
-                return this.state.ranking.sort(u => u.deltaPoints);
+                return this.state.ranking.sort((u1, u2) => { return u1.deltaPoints >= u2.deltaPoints ? -1 : 1 });
             case SortBy.Lambda:
-                return this.state.ranking.sort(u => u.lambdaPoints);
+                return this.state.ranking.sort((u1, u2) => { return u1.lambdaPoints >= u2.lambdaPoints ? -1 : 1 });
             case SortBy.Omikron:
-                return this.state.ranking.sort(u => u.omikronPoints);
+                return this.state.ranking.sort((u1, u2) => { return u1.omikronPoints >= u2.omikronPoints ? -1 : 1 });
             default:
                 return this.state.ranking;
         }
