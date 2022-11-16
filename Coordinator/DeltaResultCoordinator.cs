@@ -27,9 +27,13 @@
             var match = this.dbContextWrapper.GetMatchById(matchId);
             match.HomeId = (result as Tuple<string, string>).Item1;
             match.AwayId = (result as Tuple<string, string>).Item2;
+            match.Ended = true;
             this.dbContextWrapper.UpdateMatch(match);
-            this.UpdateDeltaBetsResults(match);
-            this.RecalculatePoints(match.Id);
+            if (match.Stage != TournamentStage.FirstRound)
+            {
+                this.UpdateDeltaBetsResults(match);
+                this.RecalculatePoints(match.Id);
+            }
         }
 
         private void UpdateDeltaBetsResults(Match match)
