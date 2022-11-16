@@ -73,6 +73,7 @@ export class RulePage extends React.Component<RulePageProps> {
                         Účastníci ve vyřazovacích kolech
                         <ul>
                             <li>2 - KAŽDÉ SPRÁVNÉ ÚČASTNÍKA KOL</li>
+                            <li>3 - ZA CELKOVÉHO VÍTĚZE</li>
                         </ul>
                     </div>
                     <div className="col-md-4">
