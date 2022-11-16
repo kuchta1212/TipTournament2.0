@@ -24,7 +24,7 @@ export class MatchRow extends React.Component<MatchRowProps> {
                 <TeamCell team={this.props.match.home} />
                 <TeamCell team={this.props.match.away} />
                 <td>{this.props.match.result.homeTeam} : {this.props.match.result.awayTeam}</td>
-                <td><a href={this.props.match.link}>Záznam</a></td>
+                {/*<td><a href={this.props.match.link}>Záznam</a></td>*/}
             </React.Fragment>
         );
     }
@@ -35,7 +35,7 @@ export class MatchRow extends React.Component<MatchRowProps> {
                 <TeamCell team={this.props.match.home} />
                 <TeamCell team={this.props.match.away} />
                 <td>{new Date(this.props.match.startTime).toLocaleDateString('cs-CS')}</td>
-                <td><a href={this.props.match.link}>Záznam</a></td>
+                {/*<td><a href={this.props.match.link}>Záznam</a></td>*/}
             </React.Fragment>
         );
     }
