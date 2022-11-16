@@ -91,7 +91,7 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
                                             ? <div />
                                             : this.state.isEditable
                                                 ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
-                                                    : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
+                                                : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
                             </td>
                         </tr>
                     </tbody>

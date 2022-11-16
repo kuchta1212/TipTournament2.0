@@ -69,7 +69,7 @@ var RulePage = /** @class */ (function (_super) {
                         React.createElement("li", null, "3 - ZA CELKOV\u00C9HO V\u00CDT\u011AZE"))),
                 React.createElement("div", { className: "col-md-4" },
                     React.createElement("h2", null, "Lambda"),
-                    "Tip na nejlep\u0161\u00EDho st\u0159elce",
+                    "Tip na nejlep\u0161\u00EDho st\u0159elce Za jm\u00E9no st\u0159elce se pova\u017Euje jenom p\u0159ijim\u00E9n\u00ED! (Nap\u0159. Messi, Mbapp\u00E9, Lewandovski, Ronaldo....) V p\u0159\u00EDpad\u011B, \u017Ee bude jm\u00E9no \u0161patn\u011B napsan\u00E9, nebude uzn\u00E1no!",
                     React.createElement("ul", null,
                         React.createElement("li", null, "7 - ZA SPR\u00C1VN\u00C9HO NEJLEP\u0160\u00CDHO ST\u0158ELCE"))),
                 React.createElement("div", { className: "col-md-4" },

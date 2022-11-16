@@ -79,6 +79,8 @@ export class RulePage extends React.Component<RulePageProps> {
                     <div className="col-md-4">
                         <h2>Lambda</h2>
                         Tip na nejlepšího střelce
+                        Za jméno střelce se považuje jenom přijiméní! (Např. Messi, Mbappé, Lewandovski, Ronaldo....)
+                        V případě, že bude jméno špatně napsané, nebude uznáno!
                         <ul>
                             <li>7 - ZA SPRÁVNÉHO NEJLEPŠÍHO STŘELCE</li>
                         </ul>
