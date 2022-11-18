@@ -54,7 +54,7 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
                     <div className="col">
                         <MainInnerPage activeStage={this.state.activeStage} />
                     </div>
-                    <div className="col col-lg-2">
+                    <div className="col col-lg-3">
                         <Ranking currentUser={this.state.currentUser} />
                     </div>
                 </div>

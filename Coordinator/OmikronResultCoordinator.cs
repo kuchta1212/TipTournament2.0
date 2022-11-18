@@ -137,8 +137,11 @@
             foreach (var user in users)
             {
                 var betForUser = this.dbContextWrapper.GetTeamPlaceBet(user.Id, false);
-                user.OmikronPoints += betForUser.IsCorrect ? 3 : 0;
-                user.TotalPoints += betForUser.IsCorrect ? 3 : 0;
+                if(betForUser != null)
+                {
+                    user.OmikronPoints += betForUser.IsCorrect ? 3 : 0;
+                    user.TotalPoints += betForUser.IsCorrect ? 3 : 0;
+                }
             }
 
             this.dbContextWrapper.UpdateUsers(users);
