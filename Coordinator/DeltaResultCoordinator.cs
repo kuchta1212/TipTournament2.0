@@ -49,8 +49,11 @@
             foreach (var user in users)
             {
                 var betForUser = this.dbContextWrapper.GetDeltaBetByMatchId(user.Id, matchId);
-                user.DeltaPoints += betForUser.Result.Points;
-                user.TotalPoints += betForUser.Result.Points;
+                if(betForUser != null)
+                {
+                    user.DeltaPoints += betForUser.Result.Points;
+                    user.TotalPoints += betForUser.Result.Points;
+                }
             }
 
             this.dbContextWrapper.UpdateUsers(users);

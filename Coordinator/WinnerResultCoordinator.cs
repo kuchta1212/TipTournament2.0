@@ -36,8 +36,11 @@
             foreach (var user in users)
             {
                 var betForUser = this.dbContextWrapper.GetTeamPlaceBet(user.Id, true);
-                user.DeltaPoints += betForUser.IsCorrect ? 3 : 0;
-                user.TotalPoints += betForUser.IsCorrect ? 3 : 0;
+                if (betForUser != null)
+                {
+                    user.DeltaPoints += betForUser.IsCorrect ? 3 : 0;
+                    user.TotalPoints += betForUser.IsCorrect ? 3 : 0;
+                }
             }
 
             this.dbContextWrapper.UpdateUsers(users);

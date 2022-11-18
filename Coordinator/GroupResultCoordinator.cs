@@ -45,8 +45,11 @@
             foreach (var user in users)
             {
                 var betForUser = this.dbContextWrapper.GetGroupBetByGroupId(groupId, user.Id);
-                user.GamaPoints += betForUser.Result.Points;
-                user.TotalPoints += betForUser.Result.Points;
+                if(betForUser != null)
+                {
+                    user.GamaPoints += betForUser.Result.Points;
+                    user.TotalPoints += betForUser.Result.Points;
+                }
             }
             this.dbContextWrapper.UpdateUsers(users);
         }

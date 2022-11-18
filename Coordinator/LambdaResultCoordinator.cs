@@ -32,8 +32,11 @@
             foreach (var user in users)
             {
                 var betForUser = this.dbContextWrapper.GetShooterBet(user.Id);
-                user.LambdaPoints += betForUser.Points;
-                user.TotalPoints += betForUser.Points;
+                if(betForUser != null)
+                {
+                    user.LambdaPoints += betForUser.Points;
+                    user.TotalPoints += betForUser.Points;
+                }
             }
 
             this.dbContextWrapper.UpdateUsers(users);

@@ -95,21 +95,9 @@ body.waiting * {
     }
 }
 
-@media (min-width: 768px) {
-    .groupList {
-        column-count: 2;
-    }
-}
-
 @media (min-width: 1200px) {
     .groupList {
-        column-count: 3;
-    }
-}
-
-@media (min-width: 2400px) {
-    .groupList {
-        column-count: 4;
+        column-count: 2;
     }
 }
 

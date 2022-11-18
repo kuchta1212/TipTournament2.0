@@ -46,8 +46,11 @@
             foreach(var user in users)
             {
                 var betForUser = this.dbContextWrapper.GetBetForMatchAndUser(match, user.Id);
-                user.AlfaPoints += (int)betForUser.Result;
-                user.TotalPoints += (int)betForUser.Result;
+                if (betForUser != null)
+                {
+                    user.AlfaPoints += (int)betForUser.Result;
+                    user.TotalPoints += (int)betForUser.Result;
+                }
             }
 
             this.dbContextWrapper.UpdateUsers(users);
