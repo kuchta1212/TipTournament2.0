@@ -24,7 +24,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
     constructor(props: BetsMainPageProps) {
         super(props);
         this.state = {
-            afterLimit: new Date() > new Date("2022-11-20 19:00"),
+            afterLimit: new Date() > new Date("2022-11-20 17:00"),
             status: {} as BetsStatus,
             loading: true
         }
