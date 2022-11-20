@@ -264,7 +264,7 @@
         public void UploadGroupBet(GroupBet groupBet, string groupId, string userId)
         {
             var existing = this.dbContext.GroupBets
-                .Where(gb => gb.GroupId == groupBet.GroupId && gb.UserId == groupBet.UserId)
+                .Where(gb => gb.GroupId == groupId && gb.UserId == groupBet.UserId)
                 .FirstOrDefault();
 
             if(existing == null)
