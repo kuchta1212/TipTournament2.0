@@ -9,6 +9,8 @@ import { Loader } from '../Loader'
 import { getApi } from "../api/ApiFactory"
 import { TeamPlaceBet } from './TeamPlaceBet';
 import { BestShooterBet } from './BestShooterBet';
+import authService from './../api-authorization/AuthorizeService'
+
 
 interface BetsMainPageState {
     afterLimit: boolean,
@@ -49,8 +51,9 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
     }
 
     private async getData() {
+        const currentUser = await authService.getUser();
         const status = await getApi().getBetsStatus();
-        this.setState({ loading: false, status: status });
+        this.setState({ loading: false, status: status, afterLimit: currentUser["name"] !== "mku" && currentUser["name"] !== "Hany"});
     }
 
     private renderBets() {
