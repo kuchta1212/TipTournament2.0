@@ -81,7 +81,23 @@ export class Api implements IApi {
     }
 
     getBetsForUsers(users: User[]): Promise<any> {
-        return convert<any>(post(`${API_URL}/bets/users?userIds`, users.map((user) => { if (!!user) { return user.id } })))
+        return convert<any>(post(`${API_URL}/bets/users`, users.map((user) => { if (!!user) { return user.id } })))
+    }
+
+    getGroupBetsForUsers(users: User[]): Promise<any> {
+        return convert<any>(post(`${API_URL}/bets/users/group`, users.map((user) => { if (!!user) { return user.id } })))
+    }
+
+    getDeltaForUsers(users: User[], stage: TournamentStage): Promise<any> {
+        return convert<any>(post(`${API_URL}/bets/users/delta?stage=${stage}`, users.map((user) => { if (!!user) { return user.id } })))
+    }
+
+    getLambdaForUsers(users: User[]): Promise<any> {
+        return convert<any>(post(`${API_URL}/bets/users/lambda`, users.map((user) => { if (!!user) { return user.id } })))
+    }
+
+    getOmikronBetsForUsers(users: User[], isWinner: boolean): Promise<any> {
+        return convert<any>(post(`${API_URL}/bets/users/omikron?isWinner=${isWinner}`, users.map((user) => { if (!!user) { return user.id } })))
     }
 
     async uploadTip(tip: Result, matchId: string): Promise<void> {

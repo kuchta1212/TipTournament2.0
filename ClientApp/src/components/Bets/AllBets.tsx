@@ -1,11 +1,13 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { BetsStageStatus, User } from "../../typings/index"
+import { BetsStageStatus, TournamentStage, User } from "../../typings/index"
 import { Bets } from './Bets';
 import { Loader } from './../Loader'
 import { UserSelector } from './UserSelector';
 import { WarningNotification, WarningTypes } from '../WarningNotification';
 import { Dictionary, IDictionary } from "../../typings/Dictionary";
+import { GroupBetsView } from './GroupBetsView'
+import { MatchCard } from '../MainPage/MatchCard';
 
 interface AllBetsState {
     users: User[];
@@ -21,6 +23,17 @@ interface AllBetsProps {
 }
 
 export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
+    private data = [
+        { text: "Alfa + Beta - Skupinová fáze", component: <Bets key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} status={BetsStageStatus.Done} />, stage: TournamentStage.Group },
+        { text: "Gamma - Skupiny", component: <GroupBetsView key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} />, stage: TournamentStage.Group },
+    //    { text: "Delta - Osmifinále", component: <DeltaView stage={TournamentStage.FirstRound} />, stage: TournamentStage.FirstRound },
+    //    { text: "Delta - Čtvrtfinále", component: <DeltaView stage={TournamentStage.Quarterfinal} />, stage: TournamentStage.Quarterfinal },
+    //    { text: "Delta - Semifinále", component: <DeltaView stage={TournamentStage.Semifinal} />, stage: TournamentStage.Semifinal },
+    //    { text: "Delta - Finále", component: <DeltaView stage={TournamentStage.Final} />, stage: TournamentStage.Final },
+    //    { text: "Delta - Vítěz", component: <TeamPlaceBet isWinnerBet={true} status={BetsStageStatus.Done} showResult={true} />, stage: TournamentStage.Winner },
+    //    { text: "Lambda - Nejlepší střelec", component: <BestShooterBet isReadOnly={true} showResult={true} />, stage: TournamentStage.Winner },
+    //    { text: "Omikron - Sázka na tým", component: <TeamPlaceBet isWinnerBet={false} status={BetsStageStatus.Done} showResult={true} />, stage: TournamentStage.Omikron },
+    ]
 
     constructor(props: AllBetsProps) {
         super(props);
@@ -70,7 +83,15 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
             <React.Fragment>
                 {this.renderUserSelectors()}    
                 <button className="btn btn-link" onClick={() => this.addUserSelector()}><img src={process.env.PUBLIC_URL + 'icons/add.svg'} width="25" height="25" /></button>
-                <Bets key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} status={BetsStageStatus.Done} />
+                <div className="accordion" id="accordionExample">
+                    {
+                        this.data.map(d => {
+                            return <MatchCard component={d.component} stage={d.stage} text={d.text} />
+                        })
+                    }
+
+                </div>
+                
             </React.Fragment>
             );
     }

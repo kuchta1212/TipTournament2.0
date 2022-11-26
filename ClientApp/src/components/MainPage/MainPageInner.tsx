@@ -71,7 +71,6 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
                          return <MatchCard component={d.component} stage={d.stage} text={d.text} />
                     })
                 }
-
             </div>
         );
     }

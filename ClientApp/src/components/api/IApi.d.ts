@@ -29,4 +29,8 @@ export interface IApi {
     getGroupTeams(groupId: string): Promise<Team[]>;
     getGroups(): Promise<Group[]>
     uploadGroupBet(bet: GroupBet, groupId: string): Promise<void>;
+    getGroupBetsForUsers(users: User[]): Promise<any>;
+    getDeltaForUsers(users: User[], stage: TournamentStage): Promise<any>;
+    getLambdaForUsers(users: User[]): Promise<any>;
+    getOmikronBetsForUsers(users: User[], isWinner: boolean): Promise<any>;
 }

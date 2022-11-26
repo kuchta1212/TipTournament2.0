@@ -171,26 +171,10 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.context.GetShooterBet(userId));
         }
 
-        [HttpPost("users")]
-        public IActionResult GetBets([FromBody] string[] userIds)
-        {
-            var result = new Dictionary<string, MatchBet[]>();
-            foreach (var userId in userIds)
-            {
-                var bets = this.context.GetBetsForUser(userId);
-                result.Add(userId, bets.ToArray());
-            }
-            return new OkObjectResult(result);
-        }
-
-
         private string GetUserId()
         {
             return this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
         }
-
-
-
 
     }
 }
