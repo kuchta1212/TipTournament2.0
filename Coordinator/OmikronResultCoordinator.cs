@@ -83,8 +83,8 @@
 
             var bets = this.dbContextWrapper.GetOmikronBets(false);
             var updatedBets = this.betResultMaker.UpdateOmikronBets(bets, results);
-            //this.dbContextWrapper.UpdateOmikronBets(updatedBets);
-            //this.RecalculatePoints();
+            this.dbContextWrapper.UpdateOmikronBets(updatedBets);
+            this.RecalculatePoints();
 
         }
 
