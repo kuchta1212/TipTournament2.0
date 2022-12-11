@@ -30,23 +30,23 @@
             var results = this.GetResults(TournamentStage.FirstRound, TournamentStage.Group, teamIds.ToList<string>());
             if (results.Count < 3)
             {
-                results.AddRange(this.GetResults(TournamentStage.Quarterfinal, TournamentStage.FirstRound, teamIds.ToList<string>()));
+                results.AddRange(this.GetResults(TournamentStage.Quarterfinal, TournamentStage.FirstRound, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                 if (results.Count < 3)
                 {
-                    results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList<string>()));
+                    results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                     if (results.Count < 3)
                     {
-                        results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList<string>()));
+                        results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                         if (results.Count < 3)
                         {
-                            results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList<string>()));
+                            results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                             if (results.Count < 3)
                             {
-                                results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList<string>()));
+                                results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                                 if (results.Count < 3)
                                 {
@@ -83,8 +83,8 @@
 
             var bets = this.dbContextWrapper.GetOmikronBets(false);
             var updatedBets = this.betResultMaker.UpdateOmikronBets(bets, results);
-            this.dbContextWrapper.UpdateOmikronBets(updatedBets);
-            this.RecalculatePoints();
+            //this.dbContextWrapper.UpdateOmikronBets(updatedBets);
+            //this.RecalculatePoints();
 
         }
 
@@ -118,13 +118,13 @@
 
                     if (match.HomeId == team)
                     {
-                        res.Add(team, true);
+                        res[team] = true;
                         break;
                     }
 
                     if (match.AwayId == team)
                     {
-                        res.Add(team, true);
+                        res[team] = true;
                     }
                 }
             }
