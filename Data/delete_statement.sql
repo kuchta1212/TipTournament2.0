@@ -1,0 +1,12 @@
+delete from dbo.Bets
+delete from dbo.BetsStatuses
+delete from dbo.TopShooterBets
+delete from dbo.UpdateStatuses
+delete from dbo.TeamPlaceBets
+delete from dbo.Results
+delete from dbo.GroupBetResults
+delete from dbo.GroupBets
+delete from dbo.GroupResults
+delete from dbo.Matches
+delete from dbo.Groups
+delete from dbo.Teams
