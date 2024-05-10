@@ -99,10 +99,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="ClientApp\src\images\background.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\Admin\AdminMatchView.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Admin\ShooterBetAdminView.tsx">
       <SubType>Code</SubType>
