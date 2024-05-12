@@ -23,24 +23,56 @@
         {
            foreach(var bet in bets)
             {
-                var result = new DeltaBetResult();
-                result.IsHomeTeamCorrect = bet.HomeTeamBetId == match.HomeId;
-                result.IsAwayTeamCorrect = bet.AwayTeamBetId == match.AwayId;
-                
-                if (result.IsHomeTeamCorrect)
+                bet.Result ??= new DeltaBetResult();
+
+                bet.Result.IsHomeTeamCorrect = bet.HomeTeamBetId == match.HomeId;
+                bet.Result.IsAwayTeamCorrect = bet.AwayTeamBetId == match.AwayId;
+
+                if (bet.Result.IsHomeTeamCorrect)
                 {
-                    result.Points += 2;
+                    bet.Result.Points += 2;
                 }
 
-                if (result.IsAwayTeamCorrect)
+                if (bet.Result.IsAwayTeamCorrect)
                 {
-                    result.Points += 2;
+                    bet.Result.Points += 2;
                 }
-
-                bet.Result = result;
             }
             return bets;
         }
+
+        public List<DeltaBet> UpdateAdditionalDeltaBetsResult(List<DeltaBet> bets, Match match)
+        {
+            var finalBetsList = new List<DeltaBet>();
+            foreach (var bet in bets)
+            {
+                var additionalHomeTeamCorrect = bet.HomeTeamBetId == match.HomeId || bet.HomeTeamBetId == match.AwayId;
+                var addtionalAwayTeamCorrect = bet.AwayTeamBetId == match.AwayId || bet.AwayTeamBetId == match.HomeId;
+
+                if (additionalHomeTeamCorrect || addtionalAwayTeamCorrect)
+                {
+                    bet.Result ??= new DeltaBetResult();
+                    bet.Result.AdditionalResult ??= new DeltaBetResult();
+
+                    bet.Result.AdditionalResult.IsHomeTeamCorrect = additionalHomeTeamCorrect;
+                    bet.Result.AdditionalResult.IsAwayTeamCorrect = addtionalAwayTeamCorrect;
+
+                    if (bet.Result.AdditionalResult.IsHomeTeamCorrect)
+                    {
+                        bet.Result.AdditionalResult.Points += 1;
+                    }
+
+                    if (bet.Result.AdditionalResult.IsAwayTeamCorrect)
+                    {
+                        bet.Result.AdditionalResult.Points += 1;
+                    }
+
+                    finalBetsList.Add(bet);
+                }
+            }
+            return finalBetsList;
+        }
+
 
         public List<GroupBet> UpdateGroupBetsResult(List<GroupBet> bets, GroupResult groupResult)
         {

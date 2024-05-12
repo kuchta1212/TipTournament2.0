@@ -30,27 +30,27 @@
             var teamIds = this.omikronStageOptions.Value.TeamIds;
 
             var results = this.GetResults(TournamentStage.FirstRound, TournamentStage.Group, teamIds.ToList<string>());
-            if (results.Count < 3)
+            if (results.Count < teamIds.Length)
             {
                 results.AddRange(this.GetResults(TournamentStage.Quarterfinal, TournamentStage.FirstRound, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                if (results.Count < 3)
+                if (results.Count < teamIds.Length)
                 {
                     results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                    if (results.Count < 3)
+                    if (results.Count < teamIds.Length)
                     {
                         results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                        if (results.Count < 3)
+                        if (results.Count < teamIds.Length)
                         {
                             results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                            if (results.Count < 3)
+                            if (results.Count < teamIds.Length)
                             {
                                 results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                                if (results.Count < 3)
+                                if (results.Count < teamIds.Length)
                                 {
                                     var final = this.dbContextWrapper.GetMatchById(this.generalConfig.FinalMatchId);
                                     if (final.Result.IsHomeTeamWinner())

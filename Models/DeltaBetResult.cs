@@ -18,5 +18,9 @@
         public bool IsAwayTeamCorrect { get; set; }
 
         public int Points { get; set; }
+
+        [ForeignKey("AdditionalResultId")]
+        public DeltaBetResult AdditionalResult { get; set; }
+        public string AdditionalResultId { get; set; }
     }
 }

@@ -109,10 +109,18 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                                 }
                             </td>
                         </tr>
+                        {(this.state.bet.result?.additionalResult && <tr>
+                            <td className={this.getAdditionalClass(this.state.bet.result?.additionalResult?.isHomeTeamCorrect)}>
+                                {(this.state.bet.result?.additionalResult?.isHomeTeamCorrect && <p style={{ fontSize: 'small'}}>Dodatečné body za postup týmu, přes jinou část pavkouka</p>)}
+                            </td>
+                            <td className={this.getAdditionalClass(this.state.bet.result?.additionalResult?.isAwayTeamCorrect)}>
+                                {(this.state.bet.result?.additionalResult?.isAwayTeamCorrect && <p style={{ fontSize: 'small'}}>Dodatečné body za postup týmu, přes jinou část pavkouka</p>)}
+                            </td>
+                        </tr>)}
                         <tr>
                             <td />
                             {this.props.showResult
-                                ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.state.bet.result?.points ?? 0}</td></tr>
+                                ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.getTotalPoints()}</td></tr>
                                 : this.props.isReadOnly
                                     ? <div />
                                     : this.state.isEditable
@@ -125,16 +133,23 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         );
     }
 
+    private getTotalPoints(): number {
+        return (this.state.bet.result?.points ?? 0) + (this.state.bet.result?.additionalResult?.points ?? 0);
+    }
+
     private getBackgroundClass(): string {
         if (!this.props.showResult || !this.state.bet.result) {
             return "";
         }
 
-        const points = this.state.bet.result?.points ?? 0;
+        const points = this.getTotalPoints();
+
         switch (points) {
             case 0:
                 return "bg-danger";
+            case 1:
             case 2:
+            case 3:
                 return "bg-warning";
             case 4:
                 return "bg-success";
@@ -156,6 +171,10 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         }
 
         return "";
+    }
+
+    private getAdditionalClass(isTeamCorrect: boolean): string {
+        return isTeamCorrect ? "border-success" : "";
     }
 
     private onSelect(event: any) {

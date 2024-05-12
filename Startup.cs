@@ -68,6 +68,12 @@ namespace TipTournament2._0
                 opt.MatchCount = Configuration.GetSection("General:matchCount").Get<Dictionary<TournamentStage, int>>();
             });
 
+            services.Configure<FeatureFlags>(opt =>
+            {
+                opt.AdditionalDeltaEvaluation = Configuration.GetSection("FeatureFlags:additionalDeltaEvaluation").Get<bool>();
+            });
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 

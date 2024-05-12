@@ -330,6 +330,7 @@
                 .Include(db => db.HomeTeamBet)
                 .Include(db => db.AwayTeamBet)
                 .Include(db => db.Result)
+                .Include(db => db.Result.AdditionalResult)
                 .FirstOrDefault();
         }
 
@@ -599,6 +600,16 @@
         {
             this.dbContext.UpdateRange(updateBets);
             this.dbContext.SaveChanges();
+        }
+
+        public List<DeltaBet> GetDeltaBetByStage(TournamentStage stage, string matchId)
+        {
+            var query = from db in this.dbContext.DeltaBets.Where(db => db.MatchId != matchId).Include(db => db.Result).Include(db => db.Result.AdditionalResult)
+                        join match in this.dbContext.Matches.Where(m => m.Stage == stage)
+                        on db.MatchId equals match.Id
+                        select db;
+
+            return query.ToList();
         }
     }
 }

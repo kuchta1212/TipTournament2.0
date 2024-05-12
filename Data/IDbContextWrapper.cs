@@ -97,5 +97,7 @@
         List<SpecificTeamPlaceBet> GetOmikronBets(bool isWinnerBet);
 
         void UpdateOmikronBets(List<SpecificTeamPlaceBet> updatedBets);
+        
+        List<DeltaBet> GetDeltaBetByStage(TournamentStage stage, string matchId);
     }
 }
