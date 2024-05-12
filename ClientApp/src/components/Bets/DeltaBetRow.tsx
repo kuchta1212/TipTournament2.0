@@ -62,7 +62,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     private async getData() {
         const bet = await getApi().getDeltaBet(this.props.match.id);
         const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage);
-        if (!bet.id) {
+        if (!bet.id || (!bet.homeTeamBet || !bet.awayTeamBet)) {
             this.setState({ loading: false, teams: teams });
         } else {
             this.setState({ bet: bet, loading: false, isEditable: false, teams: teams});
@@ -89,7 +89,8 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                                             })}
                                         </select>
                                     </div>
-                                    : <TeamCell team={this.state.bet.homeTeamBet} />}
+                                    : (this.state.bet.homeTeamBet && <TeamCell team={this.state.bet.homeTeamBet} />)
+                                }
                             </td>
                             <td className={this.getClass(2)}>
                                 {this.state.isEditable
@@ -104,7 +105,8 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                                             })}
                                         </select>
                                     </div>
-                                    : <TeamCell team={this.state.bet.awayTeamBet} />}
+                                    : (this.state.bet.awayTeamBet && <TeamCell team={this.state.bet.awayTeamBet} />)
+                                }
                             </td>
                         </tr>
                         <tr>

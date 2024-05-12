@@ -15,12 +15,14 @@
         private readonly IOptions<OmikronStageOptions> omikronStageOptions;
         private readonly IDbContextWrapper dbContextWrapper;
         private readonly IBetResultMaker betResultMaker;
+        private readonly GeneralOption generalConfig;
 
-        public OmikronResultCoordinator(IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker, IOptions<OmikronStageOptions> omikronStageOptions)
+        public OmikronResultCoordinator(IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker, IOptions<OmikronStageOptions> omikronStageOptions, IOptions<GeneralOption> generalOption)
         {
             this.omikronStageOptions = omikronStageOptions;
             this.dbContextWrapper = dbContextWrapper;
             this.betResultMaker = betResultMaker;
+            this.generalConfig = generalOption.Value;
         }
 
         public void UploadNewResult<TResultType>(string id, TResultType r)
@@ -50,7 +52,7 @@
 
                                 if (results.Count < 3)
                                 {
-                                    var final = this.dbContextWrapper.GetMatchById("match_64");
+                                    var final = this.dbContextWrapper.GetMatchById(this.generalConfig.FinalMatchId);
                                     if (final.Result.IsHomeTeamWinner())
                                     {
                                         if (teamIds.Contains(final.HomeId))

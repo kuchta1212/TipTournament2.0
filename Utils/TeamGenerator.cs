@@ -45,19 +45,15 @@
         {
             var matchOption = this.deltaStageOptions.Value.FirstRound.Where(f => f.MatchId == matchId).First();
 
-            var homeTeamBetOption = this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Winner, userId);
-            var awayTeamBetOption = this.dbContextWrapper.GetGroupBetByGroupId(matchOption.Groups.Runner, userId);
-            if (homeTeamBetOption == null || awayTeamBetOption == null)
-            {
-                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
-            }
-            var result = new DeltaBetTeams
-            {
-                PossibleHomeTeams = new List<Team>() { homeTeamBetOption.First },
-                PossibleAwayTeams = new List<Team>() { awayTeamBetOption.Second }
-            };
+            var possibleHomeTeams = this.GetPossibleTeamsByTeamOption(matchOption.Home, userId);
+            var possibleAwayTeams = this.GetPossibleTeamsByTeamOption(matchOption.Away, userId);
 
-            return result;
+
+            return new DeltaBetTeams
+            {
+                PossibleHomeTeams = possibleHomeTeams,
+                PossibleAwayTeams = possibleAwayTeams
+            };
         }
 
         private DeltaBetTeams GenerateTeams(string matchId, string userId)
@@ -73,8 +69,8 @@
 
             var result = new DeltaBetTeams()
             {
-                PossibleHomeTeams = new List<Team>(new[] { homeTeamBetOptions?.HomeTeamBet, homeTeamBetOptions?.AwayTeamBet }),
-                PossibleAwayTeams = new List<Team>(new[] { awayTeamBetOptions?.HomeTeamBet, awayTeamBetOptions?.AwayTeamBet })
+                PossibleHomeTeams = new List<Team>(new[] { homeTeamBetOptions?.HomeTeamBet ?? new Team(), homeTeamBetOptions?.AwayTeamBet ?? new Team() }),
+                PossibleAwayTeams = new List<Team>(new[] { awayTeamBetOptions?.HomeTeamBet ?? new Team(), awayTeamBetOptions?.AwayTeamBet ?? new Team() })
             };
 
             return result;
@@ -84,17 +80,17 @@
         {
             var matchOption = this.deltaStageOptions.Value.FirstRound.Where(f => f.MatchId == matchId).First();
 
-            var possibleHomeTeam = this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Winner).Result?.FirstId);
-            var possibleAwayTeam = this.dbContextWrapper.GetTeam(this.dbContextWrapper.GetGroupById(matchOption.Groups.Runner).Result?.SecondId);
-            if (possibleHomeTeam == null || possibleAwayTeam == null)
+            var possibleHomeTeams = this.GetPossibleTeamsByTeamOption(matchOption.Home);
+            var possibleAwayTeams = this.GetPossibleTeamsByTeamOption(matchOption.Away);
+            if (possibleHomeTeams == null || possibleAwayTeams == null)
             {
                 return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
             }
 
             var result = new DeltaBetTeams
             {
-                PossibleHomeTeams = new List<Team>() { possibleHomeTeam },
-                PossibleAwayTeams = new List<Team>() { possibleAwayTeam }
+                PossibleHomeTeams = possibleHomeTeams,
+                PossibleAwayTeams = possibleAwayTeams
             };
 
             return result;
@@ -155,10 +151,79 @@
 
         public Team[] GetFinalists(string userId)
         {
-            var deltaBet = this.dbContextWrapper.GetDeltaBetByMatchId(userId, "match_64");
+            var deltaBet = this.dbContextWrapper.GetDeltaBetByMatchId(userId, "match_51");
             return deltaBet == null
                 ? new Team[0]
                 : new List<Team>() { deltaBet.HomeTeamBet, deltaBet.AwayTeamBet }.ToArray();
+        }
+
+        private List<Team> GetPossibleTeamsByTeamOption(TeamOption teamOption, string userId)
+        {
+            var result = new List<Team>();
+            if (teamOption.Type == TeamOptionType.Winner || teamOption.Type == TeamOptionType.Runner)
+            {
+                var groupBetResult = this.dbContextWrapper.GetGroupBetByGroupId(teamOption.GroupId, userId);
+                
+                switch (teamOption.Type)
+                {
+                    case TeamOptionType.Winner:
+                        result.Add(groupBetResult.First);
+                        break;
+                    case TeamOptionType.Runner:
+                        result.Add(groupBetResult.Second);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                foreach (var groupId in teamOption.GroupIds)
+                {
+                    var groupBetResult = this.dbContextWrapper.GetGroupBetByGroupId(groupId, userId);
+                    result.Add(groupBetResult.Third);
+                }
+            }
+
+            return result;
+        }
+
+        private List<Team> GetPossibleTeamsByTeamOption(TeamOption teamOption)
+        {
+            var result = new List<Team>();
+            if (teamOption.Type == TeamOptionType.Winner || teamOption.Type == TeamOptionType.Runner)
+            {
+                var groupResult = this.dbContextWrapper.GetGroupById(teamOption.GroupId).Result;
+                if (groupResult == null)
+                {
+                    return new List<Team>();
+                }
+
+                switch (teamOption.Type)
+                {
+                    case TeamOptionType.Winner:
+                        result.Add(groupResult.First);
+                        break;
+                    case TeamOptionType.Runner:
+                        result.Add(groupResult.Second);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                foreach (var groupId in teamOption.GroupIds)
+                {
+                    var groupResult = this.dbContextWrapper.GetGroupById(groupId).Result;
+                    if (groupResult != null)
+                    {
+                        result.Add(groupResult.Third);
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

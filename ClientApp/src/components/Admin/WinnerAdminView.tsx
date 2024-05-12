@@ -48,7 +48,7 @@ export class WinnerAdminViewRow extends React.Component<WinnerAdminViewRowProps,
     }
 
     private async getData() {
-        const deltaTeams = await getAdminApi().getTeamForMatch("match_64", TournamentStage.Winner);
+        const deltaTeams = await getAdminApi().getTeamForMatch("match_51", TournamentStage.Winner);
         const teams = [];
         if (deltaTeams.possibleHomeTeams?.length > 0) {
             teams.push(deltaTeams.possibleHomeTeams[0]);
@@ -98,7 +98,7 @@ export class WinnerAdminViewRow extends React.Component<WinnerAdminViewRowProps,
     }
 
     private async confirm(): Promise<void> {
-        await getAdminApi().setWinner("match_64", this.state.winner);
+        await getAdminApi().setWinner("match_51", this.state.winner);
         this.setState({ evaluated: true });
     }
 }

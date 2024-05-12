@@ -101,6 +101,7 @@ export interface BetsStatus {
     id: string,
     matchesInGroupsDone: boolean,
     groupStagesDone: boolean,
+    firstStagesDones: boolean,
     querterfinalStageDone: boolean,
     semifinalStageDone: boolean,
     finalStageDone: boolean,

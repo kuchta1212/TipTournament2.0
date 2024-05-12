@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.CodeAnalysis.Options;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -22,13 +23,15 @@
         private readonly IMatchClient matchClient;
         private readonly IResultCoordinatorFactory resultCoordinatorFactory;
         private readonly ITeamGenerator teamGenerator;
+        private readonly GeneralOption generalConfig;
 
-        public AdminController(IDbContextWrapper context, IMatchClient matchClient, IResultCoordinatorFactory resultCoordinatorFactory, ITeamGenerator teamGenerator)
+        public AdminController(IDbContextWrapper context, IMatchClient matchClient, IResultCoordinatorFactory resultCoordinatorFactory, ITeamGenerator teamGenerator, Microsoft.Extensions.Options.IOptions<GeneralOption> generalOptions)
         {
             this.matchClient = matchClient;
             this.context = context;
             this.resultCoordinatorFactory = resultCoordinatorFactory;
             this.teamGenerator = teamGenerator;
+            this.generalConfig = generalOptions.Value;
         }
 
         [HttpGet]
@@ -46,21 +49,6 @@
             this.context.SetUserPaymentInfo(userId, payed);
             return new OkResult();
         }
-
-        //[HttpGet("matches/load")]
-        //public async Task<IActionResult> ImportMatches()
-        //{
-        //    var matches = await this.matchClient.LoadMatches();
-        //    this.context.SaveMatches(matches);
-
-        //    return new OkObjectResult(matches.Count);
-        //}
-
-        //[HttpGet("matches/check")]
-        //public async Task<IActionResult> CheckForUpdates()
-        //{
-        //    return new OkObjectResult(await this.resultCoordinatorFactory.C.Coordinate());
-        //}
         
         [HttpPost("result")]
         public IActionResult UploadResult([FromQuery] string matchId, [FromBody] Result result)
@@ -99,7 +87,7 @@
         [HttpPost("winner")]
         public IActionResult SetWinner([FromQuery] string teamId)
         {
-            this.resultCoordinatorFactory.Create(TournamentStage.Winner).UploadNewResult<string>("match_64", teamId);
+            this.resultCoordinatorFactory.Create(TournamentStage.Winner).UploadNewResult<string>(generalConfig.FinalMatchId, teamId);
             return new OkResult();
         }
 

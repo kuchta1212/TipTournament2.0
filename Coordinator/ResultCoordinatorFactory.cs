@@ -17,13 +17,15 @@
         private readonly IDbContextWrapper dbContextWrapper;
         private readonly IBetResultMaker betResultMaker;
         private readonly IOptions<OmikronStageOptions> omikronStageOptions;
+        private readonly IOptions<GeneralOption> generalOption;
 
-        public ResultCoordinatorFactory(IMatchClient matchClient, IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker, IOptions<OmikronStageOptions> omikronStageOptions)
+        public ResultCoordinatorFactory(IMatchClient matchClient, IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker, IOptions<OmikronStageOptions> omikronStageOptions, IOptions<GeneralOption> generalOption)
         {
             this.matchClient = matchClient;
             this.dbContextWrapper = dbContextWrapper;
             this.betResultMaker = betResultMaker;
             this.omikronStageOptions = omikronStageOptions;
+            this.generalOption = generalOption;
         }
         public IResultCoordinator Create(TournamentStage stage, bool noMatches)
         {
@@ -43,7 +45,7 @@
                 case TournamentStage.Winner:
                     return new WinnerResultCoordinator(this.dbContextWrapper, this.betResultMaker);
                 case TournamentStage.Omikron:
-                    return new OmikronResultCoordinator(this.dbContextWrapper, this.betResultMaker, this.omikronStageOptions);
+                    return new OmikronResultCoordinator(this.dbContextWrapper, this.betResultMaker, this.omikronStageOptions, this.generalOption);
                 case TournamentStage.Lambda:
                     return new LambdaResultCoordinator(this.dbContextWrapper, this.betResultMaker);
                 default:

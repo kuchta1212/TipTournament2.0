@@ -12,7 +12,10 @@
         [DataMember(Name = "matchId")]
         public string MatchId { get; set; }
 
-        [DataMember(Name = "groups")]
-        public GroupOptions Groups { get; set; }
+        [DataMember(Name = "home")]
+        public TeamOption Home { get; set; }
+
+        [DataMember(Name = "away")]
+        public TeamOption Away { get; set; }
     }
 }
