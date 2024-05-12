@@ -101,6 +101,7 @@ export interface BetsStatus {
     id: string,
     matchesInGroupsDone: boolean,
     groupStagesDone: boolean,
+    firstStagesDones: boolean,
     querterfinalStageDone: boolean,
     semifinalStageDone: boolean,
     finalStageDone: boolean,
@@ -163,7 +164,8 @@ export interface DeltaBetResult {
     id: string;
     isHomeTeamCorrect: boolean;
     isAwayTeamCorrect: boolean;
-    points: number
+    points: number;
+    additionalResult: DeltaBetResult
 }
 
 export interface GroupResult {

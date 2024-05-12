@@ -18,5 +18,6 @@
 
         List<SpecificTeamPlaceBet> UpdateWinnerBets(List<SpecificTeamPlaceBet> bets, string winnerId);
         List<TopShooterBet> UpdateLambdaResults(List<TopShooterBet> bets, string v);
+        List<DeltaBet> UpdateAdditionalDeltaBetsResult(List<DeltaBet> bets, Match match);
     }
 }

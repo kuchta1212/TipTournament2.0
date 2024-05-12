@@ -330,6 +330,7 @@
                 .Include(db => db.HomeTeamBet)
                 .Include(db => db.AwayTeamBet)
                 .Include(db => db.Result)
+                .Include(db => db.Result.AdditionalResult)
                 .FirstOrDefault();
         }
 
@@ -354,16 +355,31 @@
                 {
                     MatchId = matchId,
                     UserId = userId,
-                    HomeTeamBetId = deltaBet.HomeTeamBet.Id,
-                    AwayTeamBetId = deltaBet.AwayTeamBet.Id
                 };
+
+                if (deltaBet.HomeTeamBet != null)
+                {
+                    db.HomeTeamBetId = deltaBet.HomeTeamBet.Id;
+                }
+
+                if (deltaBet.AwayTeamBet != null)
+                {
+                    db.AwayTeamBetId = deltaBet.AwayTeamBet.Id;
+                }
 
                 this.dbContext.DeltaBets.Add(db);
             }
             else
             {
-                current.HomeTeamBetId = deltaBet.HomeTeamBet.Id;
-                current.AwayTeamBetId = deltaBet.AwayTeamBet.Id;
+                if (deltaBet.HomeTeamBet != null)
+                {
+                    current.HomeTeamBetId = deltaBet.HomeTeamBet.Id;
+                }
+
+                if (deltaBet.AwayTeamBet != null)
+                {
+                    current.AwayTeamBetId = deltaBet.AwayTeamBet.Id;
+                }
 
                 this.dbContext.Update(current);
             }
@@ -500,6 +516,20 @@
             return this.dbContext.Groups
                 .Where(g => g.Id == groupId)
                 .Include(g => g.Result)
+                .Include(g => g.Result.First)
+                .Include(g => g.Result.Second)
+                .Include(g => g.Result.Third)
+                .FirstOrDefault();
+        }
+
+        public Group GetGroupResultByGroupId(string groupId)
+        {
+            return this.dbContext.Groups
+                .Where(g => g.Id == groupId)
+                .Include(g => g.Result)
+                .Include(g => g.Result.First)
+                .Include(g => g.Result.Second)
+                .Include(g => g.Result.Third)
                 .FirstOrDefault();
         }
 
@@ -570,6 +600,16 @@
         {
             this.dbContext.UpdateRange(updateBets);
             this.dbContext.SaveChanges();
+        }
+
+        public List<DeltaBet> GetDeltaBetByStage(TournamentStage stage, string matchId)
+        {
+            var query = from db in this.dbContext.DeltaBets.Where(db => db.MatchId != matchId).Include(db => db.Result).Include(db => db.Result.AdditionalResult)
+                        join match in this.dbContext.Matches.Where(m => m.Stage == stage)
+                        on db.MatchId equals match.Id
+                        select db;
+
+            return query.ToList();
         }
     }
 }

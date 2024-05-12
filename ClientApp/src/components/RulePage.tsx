@@ -10,7 +10,14 @@ export class RulePage extends React.Component<RulePageProps> {
         super(props);
     }
 
+
+
     public render() {
+        const myStyle = {
+            opacity: .8,
+            backgroundColor: 'white'
+        };
+
         return (
             <div>
                 <div className="row">
@@ -18,13 +25,13 @@ export class RulePage extends React.Component<RulePageProps> {
                 </div>
 
                 <div className="row">
-                        <div className="col-md-4">
+                    <div className="col-md-4" style={myStyle}>
                         <h2>O co jde?</h2>
                         <p>
-                            Jde o malý tipovací turnájek. Jehož cílem je zpestřit si sledování Mistovství světa 2022 a při troše štěstí, mít třeba i dobrý pocit z vítězství.
+                            Jde o malý tipovací turnájek. Jehož cílem je zpestřit si sledování EURO 2024 a při troše štěstí, mít třeba i dobrý pocit z vítězství.
                         </p>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={myStyle}>
                         <h2>Jak na to?</h2>
                         <ul>
                            <li> Je nutné se registrovat. </li>
@@ -33,16 +40,15 @@ export class RulePage extends React.Component<RulePageProps> {
                             <li> Úkolem je natipovat všechny tyto sekce a to pokud možno co nejpřesněji.</li>
                             <li> Po každém odehraném zápase se ti na základě tvého tipu určí body.</li>
                             <li>Body se postupně sčítájí a vítěz je ten kdo má nejvíce bodů (překvapivě)</li>
-                            <li>Aby teda bylo ještě o co hrát a vítěz(já protože mám přímý přístup do databáze a budu podvádět ;-) ) a popřípadě i vy ostatní něco vyhráli.
-                                Tak je určeno startovné 100Kč, které mi prosím buď dejte osobně, popřípadě pošlete po někom popřípadě pošlete na účet 1363633012/3030 a do předmětu napiště něco
-                                abych tomu rozuměl
-                            </li>
+                            <li>Aby teda bylo ještě o co hrát a vítěz(já protože mám přímý přístup do databáze a budu podvádět ;-) ) a popřípadě i vy ostatní něco vyhráli.</li>
+                            <li> Tak je určeno startovné 200Kč, viz. QR code dole. Do předmětu napiště svoje uživatelské jméno. </li>
+                            <li><img src={process.env.PUBLIC_URL + '/icons/QR.jpg'} width="200" height="200" /></li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
-                        <h2>Pravidla</h2>
+                    <div className="col-md-4" style={myStyle}>
+                        <h2>Co je třeba udělat</h2>
                         <ul>
-                            <li> Zadat všechny výsledky nejpozději do 20.11 do 19:00 </li>
+                            <li> Zadat všechny výsledky nejpozději do 14.6 do 21:00 </li>
                             <li> Zaplatit startovné </li>
                         </ul>
                     </div>
@@ -51,7 +57,7 @@ export class RulePage extends React.Component<RulePageProps> {
                     <h1>Sekce - přehled + bodování</h1>
                 </div>
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={myStyle}>
                         <h2>Alfa+Beta</h2>
                         Zápasy ve skupině. Tipuje se přesný výsledek.
                         <ul>
@@ -61,22 +67,22 @@ export class RulePage extends React.Component<RulePageProps> {
                             <li>0 - KDYŽ STE VEDLE</li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={myStyle}>
                         <h2>Gamma</h2>
                         Pořadí ve skupinách.
                         <ul>
                             <li>1 - KAŽDÉ SPRÁVNÉ MÍSTO</li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={myStyle}>
                         <h2>Delta</h2>
                         Účastníci ve vyřazovacích kolech
                         <ul>
-                            <li>2 - KAŽDÉ SPRÁVNÉ ÚČASTNÍKA KOL</li>
+                            <li>2 - KAŽDÉ SPRÁVNÉ ÚČASTNÍKA KOL (nemusí nutně jít vaší postupovou cestou. Příklad: Tip byl, že Německo vyhraje skupinu a postoupí do čtvrtfinále. Skutečnost je, že Němci byli druhý, ale i tak postoupili do čtvrtfinále. Získáváte body.)</li>
                             <li>3 - ZA CELKOVÉHO VÍTĚZE</li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={myStyle}>
                         <h2>Lambda</h2>
                         Tip na nejlepšího střelce
                         Za jméno střelce se považuje jenom přijiméní! (Např. Messi, Mbappé, Lewandovski, Ronaldo....)
@@ -85,9 +91,9 @@ export class RulePage extends React.Component<RulePageProps> {
                             <li>7 - ZA SPRÁVNÉHO NEJLEPŠÍHO STŘELCE</li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={myStyle}>
                         <h2>Omikron</h2>
-                        Normálně by zde byl tip, jak dopadne Český výběr, ale chyba lávky.... no tak tip jak dopadne jeden z trojce Polso, Srbsko, Uruguay
+                        Jak dopadne Český, popřípadě Slovenský výběr. 
                         <ul>
                             <li>3 - ZA SPRÁVNÉ UMÍSTĚNÍ VYBRANÉHO TÝMU</li>
                         </ul>

@@ -61,6 +61,19 @@ namespace TipTournament2._0
                 opt.TeamIds = Configuration.GetSection("OmikronStage:TeamIds").Get<string[]>();
             });
 
+            services.Configure<GeneralOption>(opt =>
+            {
+                opt.FinalMatchId = Configuration.GetSection("General:finalMatchId").Get<string>();
+                opt.GroupCount = Configuration.GetSection("General:groupCount").Get<int>();
+                opt.MatchCount = Configuration.GetSection("General:matchCount").Get<Dictionary<TournamentStage, int>>();
+            });
+
+            services.Configure<FeatureFlags>(opt =>
+            {
+                opt.AdditionalDeltaEvaluation = Configuration.GetSection("FeatureFlags:additionalDeltaEvaluation").Get<bool>();
+            });
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 

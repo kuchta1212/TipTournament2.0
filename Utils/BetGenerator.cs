@@ -11,19 +11,21 @@
     {
         private readonly IDbContextWrapper contextWrapper;
         private readonly ITeamGenerator teamGenerator;
-        private Dictionary<TournamentStage, int> countMap = new Dictionary<TournamentStage, int>()
-        {
-            { TournamentStage.Group, 48},
-            { TournamentStage.FirstRound, 8},
-            { TournamentStage.Quarterfinal, 4},
-            { TournamentStage.Semifinal, 2},
-            { TournamentStage.Final, 1 }
-        };
+        private readonly GeneralOption generalConfig;
+        //private Dictionary<TournamentStage, int> countMap = new Dictionary<TournamentStage, int>() //todo to config
+        //{
+        //    { TournamentStage.Group, 36},
+        //    { TournamentStage.FirstRound, 8},
+        //    { TournamentStage.Quarterfinal, 4},
+        //    { TournamentStage.Semifinal, 2},
+        //    { TournamentStage.Final, 1 }
+        //};
 
-        public BetGenerator(IDbContextWrapper contextWrapper, ITeamGenerator teamGenerator)
+        public BetGenerator(IDbContextWrapper contextWrapper, ITeamGenerator teamGenerator, Microsoft.Extensions.Options.IOptions<GeneralOption> generalOption)
         {
             this.contextWrapper = contextWrapper;
             this.teamGenerator = teamGenerator;
+            this.generalConfig = generalOption.Value;
         }
 
         public BetsStageStatus GetBetsStatus(TournamentStage stage, string userId)
@@ -92,8 +94,8 @@
                 var teams = this.teamGenerator.GenerateTeams(match.Id, true, userId);
                 var deltaBet = new DeltaBet()
                 {
-                    HomeTeamBet = teams.PossibleHomeTeams.First(),
-                    AwayTeamBet = teams.PossibleAwayTeams.First(),
+                    HomeTeamBet = teams.PossibleHomeTeams.Count == 1 ? teams.PossibleHomeTeams.First() : null,
+                    AwayTeamBet = teams.PossibleAwayTeams.Count == 1 ? teams.PossibleAwayTeams.First() : null,
                 };
                 this.contextWrapper.UpsertDeltaBet(deltaBet, match.Id, userId);
             }
@@ -124,14 +126,14 @@
         private bool CanConfirmGroupMatches(string userId)
         {
             var bets = this.contextWrapper.GetBetsForUser(userId);
-            return bets.Count == countMap[TournamentStage.Group];
+            return bets.Count == this.generalConfig.MatchCount[TournamentStage.Group];
         }
 
         private bool CanConfirmGroupStage(string userId)
         {
             var canConfirm = this.CanConfirmGroupMatches(userId);
             var groupBets = this.contextWrapper.GetGroupBetsForUser(userId);
-            return canConfirm && groupBets.Count == 8;
+            return canConfirm && groupBets.Count == this.generalConfig.GroupCount;
         }
 
         private bool CanConfirmDelta(TournamentStage stage, string userId)
@@ -139,7 +141,21 @@
             var deltaBets = this.contextWrapper.GetDeltaBetsForUserAndStage(stage, userId);
             var distinctDeltaBetCounts = deltaBets.Select(db => db.MatchId).Distinct().Count();
 
-            return distinctDeltaBetCounts == this.countMap[stage];
+            var count = distinctDeltaBetCounts == this.generalConfig.MatchCount[stage];
+
+            var duplicationHome = deltaBets
+                .GroupBy(obj => obj.HomeTeamBetId)
+                .Where(group => group.Count() > 1)
+                .SelectMany(group => group)
+                .Any();
+
+            var duplicationAway = deltaBets
+                .GroupBy(obj => obj.AwayTeamBetId)
+                .Where(group => group.Count() > 1)
+                .SelectMany(group => group)
+                .Any();
+
+            return count && !duplicationHome && !duplicationAway;
         }
 
         private TournamentStage GetLowerStage(TournamentStage stage)
@@ -156,9 +172,9 @@
                 case TournamentStage.Group:
                     return betsStatus.MatchesInGroupsDone ? BetsStageStatus.Done : BetsStageStatus.Ready;
                 case TournamentStage.FirstRound:
-                    return betsStatus.GroupStagesDone ? BetsStageStatus.Done : BetsStageStatus.NotReady;
+                    return betsStatus.GroupStagesDone ? betsStatus.FirstStagesDones ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
                 case TournamentStage.Quarterfinal:
-                    return betsStatus.GroupStagesDone ? betsStatus.QuerterfinalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
+                    return betsStatus.FirstStagesDones ? betsStatus.QuerterfinalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
                 case TournamentStage.Semifinal:
                     return betsStatus.QuerterfinalStageDone ? betsStatus.SemifinalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
                 case TournamentStage.Final:

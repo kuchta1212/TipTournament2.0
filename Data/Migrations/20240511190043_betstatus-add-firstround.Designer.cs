@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TipTournament2._0.Data;
 
 namespace TipTournament2._0.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240511190043_betstatus-add-firstround")]
+    partial class betstatusaddfirstround
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,9 +426,6 @@ namespace TipTournament2._0.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AdditionalResultId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsAwayTeamCorrect")
                         .HasColumnType("bit");
 
@@ -437,8 +436,6 @@ namespace TipTournament2._0.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdditionalResultId");
 
                     b.ToTable("DeltaBetResults");
                 });
@@ -828,13 +825,6 @@ namespace TipTournament2._0.Data.Migrations
                     b.HasOne("TipTournament2._0.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("TipTournament2._0.Models.DeltaBetResult", b =>
-                {
-                    b.HasOne("TipTournament2._0.Models.DeltaBetResult", "AdditionalResult")
-                        .WithMany()
-                        .HasForeignKey("AdditionalResultId");
                 });
 
             modelBuilder.Entity("TipTournament2._0.Models.Group", b =>

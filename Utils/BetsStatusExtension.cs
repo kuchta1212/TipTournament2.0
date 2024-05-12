@@ -16,6 +16,9 @@
                     betsStatus.MatchesInGroupsDone = true;
                     betsStatus.GroupStagesDone = true;
                     break;
+                case TournamentStage.FirstRound:
+                    betsStatus.FirstStagesDones = true;
+                    break;
                 case TournamentStage.Quarterfinal:
                     betsStatus.QuerterfinalStageDone = true;
                     break;
@@ -44,6 +47,9 @@
                 case TournamentStage.Group:
                     betsStatus.MatchesInGroupsDone = false;
                     betsStatus.GroupStagesDone = false;
+                    break;
+                case TournamentStage.FirstRound:
+                    betsStatus.FirstStagesDones = false;
                     break;
                 case TournamentStage.Quarterfinal:
                     betsStatus.QuerterfinalStageDone = false;

@@ -26,7 +26,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
     constructor(props: BetsMainPageProps) {
         super(props);
         this.state = {
-            afterLimit: new Date() > new Date("2022-11-20 17:00"),
+            afterLimit: new Date() > new Date("2024-06-14 21:00"),
             status: {} as BetsStatus,
             loading: true
         }
@@ -68,7 +68,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
                 </div>
 
                 <div className="card opacity-card">
-                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={true} tooltip="Osmifinále se netipuje ani nehodnotí, je automaticky generované na základě okruhu Gamma"/>
+                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={this.state.afterLimit} tooltip="Osmifinále se nehodnotí, větsina je automaticky generované na základě okruhu Gamma. Nicméně je nutné dotipovat postupující ze 3tích míst." />
                 </div>
 
                 <div className="card opacity-card">
@@ -103,9 +103,9 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
             case TournamentStage.Group:
                 return this.state.status.matchesInGroupsDone ? BetsStageStatus.Done : BetsStageStatus.Ready;
             case TournamentStage.FirstRound:
-                return this.state.status.groupStagesDone ? BetsStageStatus.Done : BetsStageStatus.NotReady;
+                return this.state.status.groupStagesDone ? this.state.status.firstStagesDones ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
             case TournamentStage.Quarterfinal:
-                return this.state.status.groupStagesDone ? this.state.status.querterfinalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
+                return this.state.status.firstStagesDones ? this.state.status.querterfinalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
             case TournamentStage.Semifinal:
                 return this.state.status.querterfinalStageDone ? this.state.status.semifinalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
             case TournamentStage.Final:
@@ -129,7 +129,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
         if (!!betsStatus.id) {
             this.setState({ status: betsStatus });
         } else {
-            alert("Nejsou vyplněny všechny výsledky");
+            alert("Nejsou vyplněny všechny výsledky, nebo jsou některé týmy vybrány vícekrát");
         }
     }
 
@@ -147,7 +147,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
     private showWarningMessage() {
         return this.state.afterLimit
                 ? <WarningNotification text="Prošvihl si to! Sázkám, už je konec." type={WarningTypes.error} />
-                : <WarningNotification text="Sázky se uzavřou s prvním zápasem. Takže 20.11 v 19:00." type={WarningTypes.warning} />
+                : <WarningNotification text="Sázky se uzavřou s prvním zápasem. Takže 14.6 v 21:00." type={WarningTypes.warning} />
     }
 }
 

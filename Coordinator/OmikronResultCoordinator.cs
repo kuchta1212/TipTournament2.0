@@ -15,12 +15,14 @@
         private readonly IOptions<OmikronStageOptions> omikronStageOptions;
         private readonly IDbContextWrapper dbContextWrapper;
         private readonly IBetResultMaker betResultMaker;
+        private readonly GeneralOption generalConfig;
 
-        public OmikronResultCoordinator(IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker, IOptions<OmikronStageOptions> omikronStageOptions)
+        public OmikronResultCoordinator(IDbContextWrapper dbContextWrapper, IBetResultMaker betResultMaker, IOptions<OmikronStageOptions> omikronStageOptions, IOptions<GeneralOption> generalOption)
         {
             this.omikronStageOptions = omikronStageOptions;
             this.dbContextWrapper = dbContextWrapper;
             this.betResultMaker = betResultMaker;
+            this.generalConfig = generalOption.Value;
         }
 
         public void UploadNewResult<TResultType>(string id, TResultType r)
@@ -28,29 +30,29 @@
             var teamIds = this.omikronStageOptions.Value.TeamIds;
 
             var results = this.GetResults(TournamentStage.FirstRound, TournamentStage.Group, teamIds.ToList<string>());
-            if (results.Count < 3)
+            if (results.Count < teamIds.Length)
             {
                 results.AddRange(this.GetResults(TournamentStage.Quarterfinal, TournamentStage.FirstRound, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                if (results.Count < 3)
+                if (results.Count < teamIds.Length)
                 {
                     results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                    if (results.Count < 3)
+                    if (results.Count < teamIds.Length)
                     {
                         results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                        if (results.Count < 3)
+                        if (results.Count < teamIds.Length)
                         {
                             results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                            if (results.Count < 3)
+                            if (results.Count < teamIds.Length)
                             {
                                 results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
-                                if (results.Count < 3)
+                                if (results.Count < teamIds.Length)
                                 {
-                                    var final = this.dbContextWrapper.GetMatchById("match_64");
+                                    var final = this.dbContextWrapper.GetMatchById(this.generalConfig.FinalMatchId);
                                     if (final.Result.IsHomeTeamWinner())
                                     {
                                         if (teamIds.Contains(final.HomeId))
