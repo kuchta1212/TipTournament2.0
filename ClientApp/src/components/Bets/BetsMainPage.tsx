@@ -127,6 +127,17 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
         const betsStatus = await getApi().confirmStageBets(stage);
         document.body.style.cursor = "pointer";
         if (!!betsStatus.id) {
+            if (betsStatus.finalStageDone
+                && betsStatus.firstStagesDones
+                && betsStatus.groupStagesDone
+                && betsStatus.lambdaStageDone
+                && betsStatus.matchesInGroupsDone
+                && betsStatus.omikronStageDone
+                && betsStatus.querterfinalStageDone
+                && betsStatus.semifinalStageDone
+                && betsStatus.winnerStageDone) {
+                    alert("Zvládnul si to, všechny sázky byly zadány!")
+                }
             this.setState({ status: betsStatus });
         } else {
             alert("Nejsou vyplněny všechny výsledky, nebo jsou některé týmy vybrány vícekrát");
