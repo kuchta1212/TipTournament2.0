@@ -141,12 +141,33 @@
                 var betForUser = this.dbContextWrapper.GetTeamPlaceBet(user.Id, false);
                 if(betForUser != null)
                 {
-                    user.OmikronPoints += betForUser.IsCorrect ? 3 : 0;
-                    user.TotalPoints += betForUser.IsCorrect ? 3 : 0;
+                    var points = this.GetPointsForCorrectBet(betForUser.StageBet);
+                    user.OmikronPoints += betForUser.IsCorrect  ? points : 0;
+                    user.TotalPoints += betForUser.IsCorrect ? points : 0;
                 }
             }
 
             this.dbContextWrapper.UpdateUsers(users);
+        }
+
+        private int GetPointsForCorrectBet(TournamentStage stage)
+        {
+            switch (stage)
+            {
+                case TournamentStage.Group:
+                case TournamentStage.FirstRound:
+                    return 3;
+                case TournamentStage.Quarterfinal:
+                    return 5;
+                case TournamentStage.Semifinal:
+                    return 8;
+                case TournamentStage.Final:
+                    return 12;
+                case TournamentStage.Winner:
+                    return 15;
+                default:
+                    return 3;
+            }
         }
     }
 }
