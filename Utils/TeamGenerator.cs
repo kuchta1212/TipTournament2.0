@@ -163,7 +163,11 @@
             if (teamOption.Type == TeamOptionType.Winner || teamOption.Type == TeamOptionType.Runner)
             {
                 var groupBetResult = this.dbContextWrapper.GetGroupBetByGroupId(teamOption.GroupId, userId);
-                
+                if (groupBetResult == null)
+                {
+                    return new List<Team>();
+                }
+
                 switch (teamOption.Type)
                 {
                     case TeamOptionType.Winner:
@@ -181,7 +185,10 @@
                 foreach (var groupId in teamOption.GroupIds)
                 {
                     var groupBetResult = this.dbContextWrapper.GetGroupBetByGroupId(groupId, userId);
-                    result.Add(groupBetResult.Third);
+                    if (groupBetResult != null)
+                    {
+                        result.Add(groupBetResult.Third);
+                    }
                 }
             }
 
