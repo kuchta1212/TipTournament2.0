@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 import { User } from "../../typings/index"
-
+import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 interface UserRowProps {
     user: User,
@@ -15,15 +16,14 @@ export class UserRow extends React.Component<UserRowProps> {
     }
 
     public render() {
-        let className = this.props.index >= 0 && this.props.index <= 2
-            ? "text-success"
-            : this.props.index > 2 && this.props.index < 5
-                ? "text-warning"
-                : "";
-        className += this.props.currentUser == this.props.user.id ? " bg-secondary" : "";
+        let className = this.getTextClassName();
+        className += this.props.currentUser === this.props.user.id ? " bg-secondary" : "";
+        let beforeLimit = new Date() <= new Date("2024-06-14 21:00");
         return (
             <React.Fragment>
-                <td className={className}>{this.props.index + 1}. {this.props.user.userName}  {this.didPay()}</td>
+                <td className={className}>
+                    {beforeLimit ? <div className={this.getTextClassName()}>{this.getContent()}</div> : <NavLink tag={Link} className={this.getTextClassName()} to={this.getLink()}>{this.getContent()}</NavLink>}
+                </td>
                 <td>{this.props.user.alfaPoints}</td>
                 <td>{this.props.user.gamaPoints}</td>
                 <td>{this.props.user.deltaPoints}</td>
@@ -35,8 +35,20 @@ export class UserRow extends React.Component<UserRowProps> {
 
     }
 
-    private didPay() {
-        return !this.props.user.payed ? <p className="font-weight-light text-danger">NEZAPLACENO</p> : <p/>
+    private getContent(): string {
+        return `${this.props.index + 1}. ${this.props.user.userName}`;
+    }
+
+    private getLink(): string {
+        return `/user/${this.props.user.id}`
+    }
+
+    private getTextClassName(): string {
+        return this.props.index >= 0 && this.props.index <= 2
+            ? "text-success"
+            : this.props.index > 2 && this.props.index < 5
+                ? "text-warning"
+                : "";
     }
 }
 

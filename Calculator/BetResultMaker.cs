@@ -59,12 +59,12 @@
 
                     if (bet.Result.AdditionalResult.IsHomeTeamCorrect)
                     {
-                        bet.Result.AdditionalResult.Points += 1;
+                        bet.Result.AdditionalResult.Points += 2;
                     }
 
                     if (bet.Result.AdditionalResult.IsAwayTeamCorrect)
                     {
-                        bet.Result.AdditionalResult.Points += 1;
+                        bet.Result.AdditionalResult.Points += 2;
                     }
 
                     finalBetsList.Add(bet);

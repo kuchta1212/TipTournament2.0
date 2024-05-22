@@ -60,7 +60,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
                     <button className="btn btn-link" onClick={() => this.addUserSelector()}><img src={process.env.PUBLIC_URL + 'icons/add.svg'} width="25" height="25" /></button> 
                 </React.Fragment>)
             : (<React.Fragment>
-                    <WarningNotification text="Sázky ostatních se otevřou s uzavřením sázek. Takže 14.6 v 21:00 " type={WarningTypes.error} />
+                <WarningNotification text="Sázky ostatních se otevřou s uzavřením sázek. Takže 14.6 v 21:00. Sázky ostatních bude také možné vidět klikem na jejich uživ. jméno v žebříčku." type={WarningTypes.error} />
                     {this.renderUserSelectors()}
                 </React.Fragment>)
     }

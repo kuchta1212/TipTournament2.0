@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { BetsStageStatus, MainData, TournamentStage, UpdateStatus } from "../../typings/index"
+import { BetsStageStatus, MainData, TournamentStage, UpdateStatus, User } from "../../typings/index"
 import { MatchCard } from "./MatchCard"
 import { AlfaMatches } from "./AlfaMatches"
 import { Ranking } from "./Ranking"
@@ -18,7 +18,8 @@ interface MainPageInnerState {
 }
 
 interface MainPageInnerProps {
-    activeStage: TournamentStage
+    activeStage: TournamentStage,
+    user: User | undefined
 }
 
 export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageInnerState> {
@@ -52,7 +53,7 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
 
         return (
             <div>
-                <h1 id="tabelLabel" >Zápasy, sázky, výsledky</h1>
+                {!!this.props.user ? <h1 id="tabelLabel" >{this.props.user.userName}</h1> : <h1 id="tabelLabel" >Zápasy, sázky, výsledky</h1>}
                 {contents}
             </div>
         );
