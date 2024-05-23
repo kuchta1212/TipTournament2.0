@@ -89,7 +89,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
                     <CardBet component={<BestShooterBet isReadOnly={this.getStageStatus(TournamentStage.Lambda) == BetsStageStatus.Done} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Lambda} status={this.getStageStatus(TournamentStage.Lambda)} text="Lambda - Nejlepší střelec" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH LAMBDA: Nejlepší střelec turnaje za 7 bodů. Pouze přijímení! Na špatně napsané přijímení nebude brán zřetel." />
                 </div>
                 <div className="card opacity-card">
-                    <CardBet component={<TeamPlaceBet isWinnerBet={false} status={this.getStageStatus(TournamentStage.Omikron)} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Omikron} status={this.getStageStatus(TournamentStage.Omikron)} text="Omikron - Sázka na tým" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH OMIKRON: Konečné umístění jednoho z trojce Srbsko, Polsko, Uruguay za 3 body (vítěz 10 bodů)"/>
+                    <CardBet component={<TeamPlaceBet isWinnerBet={false} status={this.getStageStatus(TournamentStage.Omikron)} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Omikron} status={this.getStageStatus(TournamentStage.Omikron)} text="Omikron - Sázka na tým" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH OMIKRON: Konečné umístění jednoho z dvojice Česko, Slovensko. Skupinové fáze a osmifinále je za 3b, čtvrtfinále za 5b, semifinále za 8b, finále za 12b a vítězství za 15b."/>
                 </div>
             </div>
         );
@@ -127,6 +127,17 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
         const betsStatus = await getApi().confirmStageBets(stage);
         document.body.style.cursor = "pointer";
         if (!!betsStatus.id) {
+            if (betsStatus.finalStageDone
+                && betsStatus.firstStagesDones
+                && betsStatus.groupStagesDone
+                && betsStatus.lambdaStageDone
+                && betsStatus.matchesInGroupsDone
+                && betsStatus.omikronStageDone
+                && betsStatus.querterfinalStageDone
+                && betsStatus.semifinalStageDone
+                && betsStatus.winnerStageDone) {
+                    alert("Zvládnul si to, všechny sázky byly zadány!")
+                }
             this.setState({ status: betsStatus });
         } else {
             alert("Nejsou vyplněny všechny výsledky, nebo jsou některé týmy vybrány vícekrát");

@@ -62,7 +62,8 @@ export class GroupTable extends React.Component<GroupTableProps, GroupTableState
     }
 
     private async getData() {
-        const bet = await getApi().getGroupBet(this.props.group.id);
+        let userId = window.location.pathname.startsWith('/user/') ? window.location.pathname.substring(6) : undefined;
+        const bet = await getApi().getGroupBet(this.props.group.id, userId);
         const teams = await getApi().getGroupTeams(this.props.group.id);
         if (!bet.id) {
             this.setState({ isEditable: true && !this.props.isReadOnly, loading: false, teams: teams });

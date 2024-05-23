@@ -10,8 +10,10 @@ export class Api implements IApi {
     uploadShooterBet(bet: string): Promise<TopShooterBet> {
         return convert<TopShooterBet>(post(`${API_URL}/bets/shooter?name=${bet}`));
     }
-    getShooterBet(): Promise<TopShooterBet> {
-        return convert<TopShooterBet>(get(`${API_URL}/bets/shooter`));
+    getShooterBet(userId: string | undefined): Promise<TopShooterBet> {
+        return !userId
+            ? convert<TopShooterBet>(get(`${API_URL}/bets/shooter`))
+            : convert<TopShooterBet>(get(`${API_URL}/bets/shooter?userId=${userId}`));
     }
     getTeamsForTeamPlaceBet(isWinnerBet: boolean): Promise<Team[]> {
         return convert<Team[]>(get(`${API_URL}/bets/teamplace/teams?isWinnerBet=${isWinnerBet}`));
@@ -19,11 +21,15 @@ export class Api implements IApi {
     uploadTeamPlaceBet(stage: TournamentStage, teamId: string, isWinnerBet: boolean): Promise<PlaceTeamBet> {
         return convert<PlaceTeamBet>(post(`${API_URL}/bets/teamplace?teamId=${teamId}&isWinnerBet=${isWinnerBet}&stage=${stage}`));
     }
-    getTeamPlaceBet(): Promise<PlaceTeamBet> {
-        return convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=false`));
+    getTeamPlaceBet(userId: string | undefined): Promise<PlaceTeamBet> {
+        return !userId
+            ? convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=false`))
+            : convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=false&userId=${userId}`))
     }
-    getWinnerBet(): Promise<PlaceTeamBet> {
-        return convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=true`));
+    getWinnerBet(userId: string | undefined): Promise<PlaceTeamBet> {
+        return !userId
+            ? convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=true`))
+            : convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=true&userId=${userId}`))
     }
     generateGroupBets(): Promise<boolean> {
         return convert<boolean>(post(`${API_URL}/bets/generate/groupbet`));
@@ -43,11 +49,15 @@ export class Api implements IApi {
     async uploadDeltaBet(bet: DeltaBet, matchId: string): Promise<void> {
         await post(`${API_URL}/bets/delta?matchId=${matchId}`, bet);
     }
-    getTeamsForDeltaBet(matchId: string, stage: TournamentStage) {
-        return convert<DeltaBetTeams>(get(`${API_URL}/bets/delta/teams?matchId=${matchId}&stage=${stage}`));
+    getTeamsForDeltaBet(matchId: string, stage: TournamentStage, userId: string | undefined) {
+        return !userId
+            ? convert<DeltaBetTeams>(get(`${API_URL}/bets/delta/teams?matchId=${matchId}&stage=${stage}`))
+            : convert<DeltaBetTeams>(get(`${API_URL}/bets/delta/teams?matchId=${matchId}&stage=${stage}&userId=${userId}`))
     }
-    getDeltaBet(matchId: string) {
-        return convert<DeltaBet>(get(`${API_URL}/bets/delta?matchId=${matchId}`));
+    getDeltaBet(matchId: string, userId: string | undefined) {
+        return !userId
+            ? convert<DeltaBet>(get(`${API_URL}/bets/delta?matchId=${matchId}`))
+            : convert<DeltaBet>(get(`${API_URL}/bets/delta?matchId=${matchId}&userId=${userId}`));
     }
     async uploadGroupBet(bet: GroupBet, groupId: string): Promise<void> {
         await post(`${API_URL}/bets/group?groupId=${groupId}`, bet);
@@ -55,8 +65,10 @@ export class Api implements IApi {
     getGroups(): Promise<Group[]> {
         return convert<Group[]>(get(`${API_URL}/bets/groups`));
     }
-    getGroupBet(groupId: string): Promise<GroupBet> {
-        return convert<GroupBet>(get(`${API_URL}/bets/group?groupId=${groupId}`));
+    getGroupBet(groupId: string, userId: string | undefined): Promise<GroupBet> {
+        return !userId 
+            ? convert<GroupBet>(get(`${API_URL}/bets/group?groupId=${groupId}`))
+            : convert<GroupBet>(get(`${API_URL}/bets/group?groupId=${groupId}&userId=${userId}`))
     }
     getGroupTeams(groupId: string): Promise<Team[]> {
         return convert<Team[]>(get(`${API_URL}/bets/group/teams?groupId=${groupId}`));
@@ -74,9 +86,9 @@ export class Api implements IApi {
         return convert<Match[]>(get(`${API_URL}/match?stage=${stage}`));
     }
 
-    getBets(user: User | undefined): Promise<Bet[]> {
-        return !!user
-            ? convert<Bet[]>(get(`${API_URL}/bets/${user.id}`))
+    getBets(userId?: string | undefined): Promise<Bet[]> {
+        return !!userId
+            ? convert<Bet[]>(get(`${API_URL}/bets/${userId}`))
             : convert<Bet[]>(get(`${API_URL}/bets/`));
     }
 

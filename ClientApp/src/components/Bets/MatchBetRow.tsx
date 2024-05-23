@@ -70,11 +70,9 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
         this.setState({ tips: newTips });
     }
 
-    private uploadTip() {
-        document.body.style.cursor = "wait";
+    private async uploadTip() {
         this.setState({ setted: true })
         getApi().uploadTip(this.state.tips[0], this.props.match.id);
-        document.body.style.cursor = "normal";
     }
 
     private modify() {

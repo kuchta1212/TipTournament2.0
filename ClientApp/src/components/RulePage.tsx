@@ -54,7 +54,7 @@ export class RulePage extends React.Component<RulePageProps> {
                     </div>
                 </div>
                 <div className="row">
-                    <h1>Sekce - přehled + bodování</h1>
+                    <h1>Sekce + bodování</h1>
                 </div>
                 <div className="row">
                     <div className="col-md-4" style={myStyle}>
@@ -78,7 +78,7 @@ export class RulePage extends React.Component<RulePageProps> {
                         <h2>Delta</h2>
                         Účastníci ve vyřazovacích kolech
                         <ul>
-                            <li>2 - KAŽDÉ SPRÁVNÉ ÚČASTNÍKA KOL (nemusí nutně jít vaší postupovou cestou. Příklad: Tip byl, že Německo vyhraje skupinu a postoupí do čtvrtfinále. Skutečnost je, že Němci byli druhý, ale i tak postoupili do čtvrtfinále. Získáváte body.)</li>
+                            <li>2 - ZA KAŽDÉHO SPRÁVNÉHO ÚČASTNÍKA KOLA (nemusí nutně jít vaší postupovou cestou. Příklad: Tip byl, že Německo vyhraje skupinu a postoupí do čtvrtfinále. Skutečnost je, že Němci byli druhý, ale i tak postoupili do čtvrtfinále.) Získáváte body.</li>
                             <li>3 - ZA CELKOVÉHO VÍTĚZE</li>
                         </ul>
                     </div>

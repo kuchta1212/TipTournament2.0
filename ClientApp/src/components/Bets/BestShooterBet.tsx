@@ -56,7 +56,8 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
     }
 
     private async getData() {
-        const bet = await getApi().getShooterBet();
+        let userId = window.location.pathname.startsWith('/user/') ? window.location.pathname.substring(6) : undefined;
+        const bet = await getApi().getShooterBet(userId);
         if (!bet.id) {
             this.setState({ loading: false });
         } else {

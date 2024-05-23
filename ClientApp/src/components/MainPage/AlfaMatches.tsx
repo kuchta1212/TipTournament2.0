@@ -1,9 +1,10 @@
 ﻿import * as React from 'react';
-import { Match, Bet, UpdateStatus, TournamentStage } from "../../typings/index"
+import { Match, Bet, UpdateStatus, TournamentStage, User } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MainRow } from './MainRow';
 import { Loader } from '../Loader';
 import { getApi } from '../api/ApiFactory';
+import { RouteComponentProps } from 'react-router-dom'
 
 interface AlfaMatchesState {
     matches: Match[],
@@ -12,7 +13,6 @@ interface AlfaMatchesState {
 }
 
 interface AlfaMatchesProps {
-
 }
 
 export class AlfaMatches extends React.Component<AlfaMatchesProps, AlfaMatchesState> {
@@ -45,7 +45,8 @@ export class AlfaMatches extends React.Component<AlfaMatchesProps, AlfaMatchesSt
 
     private async getData() {
         const matches = await getApi().getMatches(TournamentStage.Group);
-        const bets = await getApi().getBets(undefined);
+        let userId = window.location.pathname.startsWith('/user/') ? window.location.pathname.substring(6) : undefined;
+        const bets = !!userId ? await getApi().getBets(userId) : await getApi().getBets();
         this.setState({ matches: matches, bets: bets, loading: false });
     }
 

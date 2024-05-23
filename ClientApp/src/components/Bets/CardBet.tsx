@@ -133,7 +133,7 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
             <div>
                 Prosím nejdříve vyplň sázky z dřívějšího kola.
                 V případě, že jsou všechny vyplněny, zkus obnovit stránku.
-                V případě Osmifinále, nezapomeň, že musíš skupiny Potvrdit, tlačítkem Potvrdit!
+                Nezapoň každou fázi Potvrdit!
             </div>
         )
     }

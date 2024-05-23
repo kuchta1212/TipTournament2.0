@@ -60,13 +60,13 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     }
 
     private async getData() {
-        const bet = await getApi().getDeltaBet(this.props.match.id);
-        const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage);
+        let userId = window.location.pathname.startsWith('/user/') ? window.location.pathname.substring(6) : undefined;
+        const bet = await getApi().getDeltaBet(this.props.match.id, userId);
+        const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage, userId);
         if (!bet.id || (!bet.homeTeamBet || !bet.awayTeamBet)) {
             this.setState({ loading: false, teams: teams });
         } else {
             this.setState({ bet: bet, loading: false, isEditable: false, teams: teams});
-
         }
     }
 
