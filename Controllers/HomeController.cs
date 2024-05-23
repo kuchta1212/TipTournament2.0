@@ -22,12 +22,6 @@
             this.context = context;
         }
 
-        [HttpGet("bets/{userId}")]
-        public IActionResult GetBets([FromRoute] string userId)
-        {
-            return new OkObjectResult(this.context.GetBetsForUser(userId));
-        }
-
         [HttpGet("users")]
         public IActionResult GetUsers([FromQuery] bool orderByPoints)
         {

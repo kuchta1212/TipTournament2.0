@@ -64,9 +64,10 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
             this.setState({ loading: false, isEditable: false })
             return;
         }
+        let userId = window.location.pathname.startsWith('/user/') ? window.location.pathname.substring(6) : undefined;
         const bet = this.props.isWinnerBet
-            ? await getApi().getWinnerBet()
-            : await getApi().getTeamPlaceBet()
+            ? await getApi().getWinnerBet(userId)
+            : await getApi().getTeamPlaceBet(userId)
 
         const teams = await getApi().getTeamsForTeamPlaceBet(this.props.isWinnerBet);
         if (!bet.id) {

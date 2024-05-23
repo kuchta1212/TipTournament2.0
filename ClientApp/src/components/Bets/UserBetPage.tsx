@@ -52,7 +52,7 @@ export class UserBetPage extends React.Component<RouteComponentProps<UserBetPage
     private renderDataTable() {
         return (
             <div className="container body-content">
-                <MainInnerPage activeStage={TournamentStage.Group} />
+                <MainInnerPage activeStage={TournamentStage.Group} user={this.state.currentUser} />
             </div>
         );
     }

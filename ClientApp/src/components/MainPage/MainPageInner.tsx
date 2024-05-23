@@ -64,6 +64,10 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
         this.setState({ currentUser: currentUser["sub"] });
     }
 
+    private getUser() {
+        return this.props.user;
+    }
+
     private renderDataTable() {
         return (
             <div className="accordion" id="accordionExample">
