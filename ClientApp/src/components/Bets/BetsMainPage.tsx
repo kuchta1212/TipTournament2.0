@@ -68,7 +68,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
                 </div>
 
                 <div className="card opacity-card">
-                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={this.state.afterLimit} tooltip="Osmifinále se nehodnotí, větsina je automaticky generované na základě okruhu Gamma. Nicméně je nutné dotipovat postupující ze 3tích míst." />
+                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={this.state.afterLimit} tooltip="Osmifinále se nehodnotí, větsina je automaticky generované na základě okruhu Gamma. Nicméně je nutné dotipovat postupující ze 3tích míst. Pravidla pro postup ze třetích míst je popsáno v pravidlech." />
                 </div>
 
                 <div className="card opacity-card">
