@@ -1,29 +1,24 @@
 ﻿import * as React from 'react';
-import { getApi } from "../api/ApiFactory"
-import { BetsStageStatus, MainData, TournamentStage, UpdateStatus, User } from "../../typings/index"
-import { MatchCard } from "./MatchCard"
-import { AlfaMatches } from "./AlfaMatches"
-import { Ranking } from "./Ranking"
-import { Loader } from './../Loader'
-import './../../custom.css'
-import authService from './../api-authorization/AuthorizeService'
+import { BetsStageStatus, TournamentStage, User } from "../../typings/index";
+import { MatchCard } from "./MatchCard";
+import { AlfaMatches } from "./AlfaMatches";
 import { GammaView } from './GammaView';
 import { DeltaView } from './DeltaView';
 import { TeamPlaceBet } from '../Bets/TeamPlaceBet';
 import { BestShooterBet } from '../Bets/BestShooterBet';
+import authService from './../api-authorization/AuthorizeService';
+import './../../custom.css';
 
 interface MainPageInnerState {
     currentUser: string;
-    status: UpdateStatus
 }
 
 interface MainPageInnerProps {
-    activeStage: TournamentStage,
-    user: User | undefined
+    activeStage: TournamentStage;
+    user: User | undefined;
 }
 
 export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageInnerState> {
-
     private data = [
         { text: "Alfa + Beta - Skupinová fáze", component: <AlfaMatches />, stage: TournamentStage.Group },
         { text: "Gamma - Skupiny", component: <GammaView />, stage: TournamentStage.Group },
@@ -34,14 +29,13 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
         { text: "Delta - Vítěz", component: <TeamPlaceBet isWinnerBet={true} status={BetsStageStatus.Done} showResult={true} />, stage: TournamentStage.Winner },
         { text: "Lambda - Nejlepší střelec", component: <BestShooterBet isReadOnly={true} showResult={true} />, stage: TournamentStage.Winner },
         { text: "Omikron - Sázka na tým", component: <TeamPlaceBet isWinnerBet={false} status={BetsStageStatus.Done} showResult={true} />, stage: TournamentStage.Omikron },
-    ]
+    ];
 
     constructor(props: MainPageInnerProps) {
         super(props);
         this.state = {
             currentUser: "",
-            status: {} as UpdateStatus
-        }
+        };
     }
 
     public componentDidMount() {
@@ -49,12 +43,12 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
     }
 
     public render() {
-        let contents = this.renderDataTable();
-
         return (
             <div>
-                {!!this.props.user ? <h1 id="tabelLabel" >{this.props.user.userName}</h1> : <h1 id="tabelLabel" >Zápasy, sázky, výsledky</h1>}
-                {contents}
+                <h1 id="tabelLabel" className="header">{
+                    !!this.props.user ? this.props.user.userName : "Zápasy, sázky, výsledky"
+                }</h1>
+                {this.renderDataTable()}
             </div>
         );
     }
@@ -64,21 +58,11 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
         this.setState({ currentUser: currentUser["sub"] });
     }
 
-    private getUser() {
-        return this.props.user;
-    }
-
     private renderDataTable() {
         return (
             <div className="accordion" id="accordionExample">
-                {
-                    this.data.map(d => {
-                         return <MatchCard component={d.component} stage={d.stage} text={d.text} />
-                    })
-                }
-
+                {this.data.map(d => <MatchCard key={d.text} component={d.component} stage={d.stage} text={d.text} />)}
             </div>
         );
     }
 }
-

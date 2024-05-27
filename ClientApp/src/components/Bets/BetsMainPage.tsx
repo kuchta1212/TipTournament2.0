@@ -59,38 +59,15 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
     private renderBets() {
         return (
             <div className="accordion" id="accordionExample">
-                <div className="card opacity-card" >
                     <CardBet component={<Bets users={undefined} status={this.getStageStatus(TournamentStage.Group)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Alfa + Beta - Skupinová fáze" hideConfirmButton={true} tooltip="Alfa: Jeden bod za správně určeného vítěze (1,0,2). Beta: Další 3 body za přesně trefený výsledek (tedy celkem 4 body za přesně trefený výsledek)" />
-                </div>
-
-                <div className="card opacity-card">
                     <CardBet component={<GamaBets isReadOnly={this.getStageStatus(TournamentStage.Group) == BetsStageStatus.Done} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Group} status={this.getStageStatus(TournamentStage.Group)} text="Gama - Skupiny" showGenerateButton={true} hideConfirmButton={this.state.afterLimit} tooltip="OKRUH GAMA: Pořadí ve skupinách - 1 bod za každé přesně trefené umístění" />
-                </div>
-
-                <div className="card opacity-card">
-                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={this.state.afterLimit} tooltip="Osmifinále se nehodnotí, větsina je automaticky generované na základě okruhu Gamma. Nicméně je nutné dotipovat postupující ze 3tích míst." />
-                </div>
-
-                <div className="card opacity-card">
+                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.FirstRound} status={this.getStageStatus(TournamentStage.FirstRound)} text="Delta - Osmifinále" hideConfirmButton={this.state.afterLimit} tooltip="Osmifinále se nehodnotí, větsina je automaticky generované na základě okruhu Gamma. Nicméně je nutné dotipovat postupující ze 3tích míst. Pravidla pro postup ze třetích míst je popsáno v pravidlech." />
                     <CardBet component={<DeltaBets stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Quarterfinal} status={this.getStageStatus(TournamentStage.Quarterfinal)} text="Delta - Čtvrtfinále" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" />
-                </div>
-
-                <div className="card opacity-card">
                     <CardBet component={<DeltaBets stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Semifinal} status={this.getStageStatus(TournamentStage.Semifinal)} text="Delta - Semifinále" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" />
-                </div>
-
-                <div className="card opacity-card">
                     <CardBet component={<DeltaBets stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Final} status={this.getStageStatus(TournamentStage.Final)} text="Delta - Finále" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" />
-                </div>
-                <div className="card opacity-card">
                     <CardBet component={<TeamPlaceBet isWinnerBet={true} status={this.getStageStatus(TournamentStage.Winner)} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Winner} status={this.getStageStatus(TournamentStage.Winner)} text="Delta - Vítěz" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" />
-                </div>
-                <div className="card opacity-card">
                     <CardBet component={<BestShooterBet isReadOnly={this.getStageStatus(TournamentStage.Lambda) == BetsStageStatus.Done} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Lambda} status={this.getStageStatus(TournamentStage.Lambda)} text="Lambda - Nejlepší střelec" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH LAMBDA: Nejlepší střelec turnaje za 7 bodů. Pouze přijímení! Na špatně napsané přijímení nebude brán zřetel." />
-                </div>
-                <div className="card opacity-card">
                     <CardBet component={<TeamPlaceBet isWinnerBet={false} status={this.getStageStatus(TournamentStage.Omikron)} showResult={false} />} confirm={this.confirm.bind(this)} modify={this.modify.bind(this)} stage={TournamentStage.Omikron} status={this.getStageStatus(TournamentStage.Omikron)} text="Omikron - Sázka na tým" hideConfirmButton={this.state.afterLimit} tooltip="OKRUH OMIKRON: Konečné umístění jednoho z dvojice Česko, Slovensko. Skupinové fáze a osmifinále je za 3b, čtvrtfinále za 5b, semifinále za 8b, finále za 12b a vítězství za 15b."/>
-                </div>
             </div>
         );
     }

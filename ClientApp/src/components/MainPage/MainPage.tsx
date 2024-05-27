@@ -1,22 +1,16 @@
 ﻿import * as React from 'react';
-import { getApi } from "../api/ApiFactory"
-import { MainData, TournamentStage } from "../../typings/index"
-import { Matches } from "./Matches"
-import { UserBets } from "./UserBets"
-import { Ranking } from "./Ranking"
-import { Loader } from './../Loader'
-import './../../custom.css'
-import authService from './../api-authorization/AuthorizeService'
+import authService from './../api-authorization/AuthorizeService';
 import { MainInnerPage } from './MainPageInner';
+import { Ranking } from './Ranking';
+import './../../custom.css';
+import { TournamentStage } from '../../typings';
 
 interface MainPageState {
     currentUser: string;
-    activeStage: TournamentStage
+    activeStage: TournamentStage;
 }
 
-interface MainPageProps {
-
-}
+interface MainPageProps { }
 
 export class MainPage extends React.Component<MainPageProps, MainPageState> {
 
@@ -25,7 +19,7 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
         this.state = {
             currentUser: "",
             activeStage: this.getActiveStage()
-        }
+        };
     }
 
     public componentDidMount() {
@@ -33,11 +27,16 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
     }
 
     public render() {
-        let contents = this.renderDataTable();
-
         return (
-            <div>
-                {contents}
+            <div className="container body-content">
+                <div className="row">
+                    <div className="col">
+                        <MainInnerPage activeStage={this.state.activeStage} user={undefined} />
+                    </div>
+                    <div className="col-lg-3">
+                        <Ranking currentUser={this.state.currentUser} />
+                    </div>
+                </div>
             </div>
         );
     }
@@ -45,21 +44,6 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
     private async getData() {
         const currentUser = await authService.getUser();
         this.setState({ currentUser: currentUser["sub"] });
-    }
-
-    private renderDataTable() {
-        return (
-            <div className="container body-content">
-                <div className="row">
-                    <div className="col">
-                        <MainInnerPage activeStage={this.state.activeStage} user={undefined} />
-                    </div>
-                    <div className="col col-lg-3">
-                        <Ranking currentUser={this.state.currentUser} />
-                    </div>
-                </div>
-            </div>
-        );
     }
 
     private getActiveStage(): TournamentStage {
@@ -83,4 +67,3 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
         return TournamentStage.Final;
     }
 }
-

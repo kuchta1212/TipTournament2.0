@@ -1,19 +1,18 @@
 ﻿import * as React from 'react';
-import { Match, Bet, UpdateStatus, TournamentStage, User } from "../../typings/index"
+import { Match, Bet, TournamentStage } from "../../typings/index";
 import { Table } from 'reactstrap';
 import { MainRow } from './MainRow';
 import { Loader } from '../Loader';
 import { getApi } from '../api/ApiFactory';
-import { RouteComponentProps } from 'react-router-dom'
+import './../../custom.css';
 
 interface AlfaMatchesState {
-    matches: Match[],
+    matches: Match[];
     bets: Bet[];
-    loading: boolean
+    loading: boolean;
 }
 
-interface AlfaMatchesProps {
-}
+interface AlfaMatchesProps { }
 
 export class AlfaMatches extends React.Component<AlfaMatchesProps, AlfaMatchesState> {
 
@@ -21,10 +20,10 @@ export class AlfaMatches extends React.Component<AlfaMatchesProps, AlfaMatchesSt
         super(props);
 
         this.state = {
-            matches: {} as Match[],
-            bets: {} as Bet[],
+            matches: [],
+            bets: [],
             loading: true
-        }
+        };
     }
 
     public componentDidMount() {
@@ -34,10 +33,10 @@ export class AlfaMatches extends React.Component<AlfaMatchesProps, AlfaMatchesSt
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.renderMatchTable()
+            : this.renderMatchTable();
 
         return (
-            <div className="col">
+            <div className="alfa-matches">
                 {contents}
             </div>
         );
@@ -52,21 +51,21 @@ export class AlfaMatches extends React.Component<AlfaMatchesProps, AlfaMatchesSt
 
     private renderMatchTable() {
         return (
-            <Table className="table table-striped opacity-table">
+            <Table className="table table-striped table-bordered">
                 <thead>
                 </thead>
                 <tbody>
-                    {this.state.matches.map((match, index) => (
+                    {this.state.matches.map((match) => (
                         <tr key={match.id}>
                             <MainRow match={match} bet={this.getBet(match)} />
-                        </tr>)
-                    )}
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         );
     }
 
     private getBet(match: Match): Bet | undefined {
-        return this.state.bets.find(b => b.match.id == match.id);
+        return this.state.bets.find(b => b.match.id === match.id);
     }
 }

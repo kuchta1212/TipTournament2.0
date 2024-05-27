@@ -1,32 +1,24 @@
 ﻿import * as React from 'react';
 import { Match, Bet } from "../../typings/index";
-import { MatchRow } from "./MatchRow"
-import { UserBetRow } from "./UserBetRow"
+import { MatchRow } from "./MatchRow";
+import { UserBetRow } from "./UserBetRow";
 
-interface MatchRowProps {
-    match: Match,
-    bet: Bet | undefined
+interface MainRowProps {
+    match: Match;
+    bet: Bet | undefined;
 }
 
-export class MainRow extends React.Component<MatchRowProps> {
-
-    constructor(props: MatchRowProps) {
+export class MainRow extends React.Component<MainRowProps> {
+    constructor(props: MainRowProps) {
         super(props);
     }
 
     public render() {
-
-
-        return !!this.props.bet
-            ? (
-                <React.Fragment>
-                    <MatchRow match={this.props.match} />
-                    <UserBetRow bet={this.props.bet} />
-                </React.Fragment>
-            )
-            : (<React.Fragment>
-                    <MatchRow match={this.props.match} />
-                </React.Fragment >);
+        return (
+            <>
+                <MatchRow match={this.props.match} />
+                {!!this.props.bet && <UserBetRow bet={this.props.bet} />}
+            </>
+        );
     }
 }
-
