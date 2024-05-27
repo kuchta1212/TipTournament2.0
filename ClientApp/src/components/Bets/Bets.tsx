@@ -109,7 +109,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
 
     private renderBetsTableForCurrentUser(matches: Match[], userBets: IDictionary<Bet[]>) {
         return (
-            <Table className="table table-striped opacity-table">
+            <Table className="table table-striped table-bordered">
                 <thead>
                 </thead>
                 <tbody>

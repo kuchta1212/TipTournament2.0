@@ -9,6 +9,7 @@ import { WarningNotification, WarningTypes } from '../WarningNotification';
 import { Dictionary, IDictionary } from "../../typings/Dictionary"
 import authService from '../api-authorization/AuthorizeService'
 import { GroupTable } from './GroupTable';
+import './../../custom.css';
 
 interface CardBetState {
     status: BetsStageStatus,
@@ -51,7 +52,7 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
 
     private renderData() {
         return (
-            <div>
+            <div className="card opacity-card mb-3">
                 <div className="card-header" id={this.getId()}>
                     <div className="row" style={{ justifyContent: 'space-between' }}>
                         <h5 className="mb-0">

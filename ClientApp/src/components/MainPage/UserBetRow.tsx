@@ -1,43 +1,31 @@
 ﻿import * as React from 'react';
-import { IApi } from "../api/IApi"
-import { Bet, BetResult } from "../../typings/index"
+import { Bet, BetResult } from "../../typings/index";
+import './../../custom.css';
 
 interface UserBetRowProps {
-    bet: Bet
+    bet: Bet;
 }
 
 export class UserBetRow extends React.Component<UserBetRowProps> {
-
     constructor(props: UserBetRowProps) {
         super(props);
     }
 
     public render() {
-
-        if (!!this.props.bet.match.ended) {
-            switch (this.props.bet.result) {
-                case BetResult.nothing:
-                    return this.renderPlayedMatchBet("text-danger", "bg-danger");
-                case BetResult.winner:
-                    return this.renderPlayedMatchBet("text-info", "bg-info");
-                case BetResult.difference:
-                    return this.renderPlayedMatchBet("text-warning", "bg-warning");
-                case BetResult.score:
-                    return this.renderPlayedMatchBet("text-success", "bg-success");
-                default:
-                    return this.renderPlayedMatchBet("text-info", "bg-info");
-            }
-        } else {
-            return this.renderNotPlayedMatchBet();
-        }
+        return this.props.bet.match.ended
+            ? this.renderPlayedMatchBet()
+            : this.renderNotPlayedMatchBet();
     }
 
-    private renderPlayedMatchBet(textClassName: string, backgroundClassName: string) {
+    private renderPlayedMatchBet() {
+        const { bet } = this.props;
+        const classNames = this.getClassNames(bet.result);
+
         return (
-            <React.Fragment>
-                <td className={textClassName}>{this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}</td>
-                <td className={backgroundClassName}>{this.props.bet.result}</td>
-            </React.Fragment>
+            <>
+                <td className={classNames.textClass}>{bet.tip.homeTeam} : {bet.tip.awayTeam}</td>
+                <td className={classNames.bgClass}>{bet.result}</td>
+            </>
         );
     }
 
@@ -49,20 +37,34 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
 
     private renderBetSetted() {
         return (
-            <React.Fragment>
+            <>
                 <td>{this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}</td>
                 <td />
-            </React.Fragment>
+            </>
         );
     }
 
     private renderNoBet() {
         return (
-            <React.Fragment>
+            <>
                 <td />
                 <td />
-            </React.Fragment>
+            </>
         );
     }
-}
 
+    private getClassNames(result: BetResult) {
+        switch (result) {
+            case BetResult.nothing:
+                return { textClass: "text-danger", bgClass: "bg-danger" };
+            case BetResult.winner:
+                return { textClass: "text-info", bgClass: "bg-info" };
+            case BetResult.difference:
+                return { textClass: "text-warning", bgClass: "bg-warning" };
+            case BetResult.score:
+                return { textClass: "text-success", bgClass: "bg-success" };
+            default:
+                return { textClass: "text-info", bgClass: "bg-info" };
+        }
+    }
+}

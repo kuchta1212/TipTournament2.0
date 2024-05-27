@@ -39,7 +39,7 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
                 {this.state.tips.map((tip) => {
                     return (<td key={tip.id}>{tip.homeTeam} : {tip.awayTeam}</td>)
                 })}
-                {!this.props.isReadOnly ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : <td/>} 
+                {!this.props.isReadOnly ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : null} 
             </React.Fragment>
         );
     }

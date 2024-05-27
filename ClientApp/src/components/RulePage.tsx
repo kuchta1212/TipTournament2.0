@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import './../custom.css';
 
 interface RulePageProps {
 

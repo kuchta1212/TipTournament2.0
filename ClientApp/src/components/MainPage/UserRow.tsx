@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { User } from "../../typings/index"
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 interface UserRowProps {
@@ -17,7 +17,7 @@ export class UserRow extends React.Component<UserRowProps> {
 
     public render() {
         let className = this.getTextClassName();
-        className += this.props.currentUser === this.props.user.id ? " bg-secondary" : "";
+        className += this.props.currentUser === this.props.user.id ? " bg-secondary text-white" : "";
         let beforeLimit = new Date() <= new Date("2024-06-14 21:00");
         return (
             <React.Fragment>
@@ -32,7 +32,6 @@ export class UserRow extends React.Component<UserRowProps> {
                 <td className="font-weight-bold">{this.props.user.totalPoints}</td>
             </React.Fragment>
         );
-
     }
 
     private getContent(): string {
@@ -48,7 +47,6 @@ export class UserRow extends React.Component<UserRowProps> {
             ? "text-success"
             : this.props.index > 2 && this.props.index < 5
                 ? "text-warning"
-                : "";
+                : "text-dark";
     }
 }
-
