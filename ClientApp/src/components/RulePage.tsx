@@ -102,16 +102,22 @@ export class RulePage extends React.Component<RulePageProps> {
                     <div className="col-md-4" style={myStyle}>
                         <h2>Lambda</h2>
                         <p>Tip na nejlepšího střelce</p>
-                        <p>Za jméno střelce se považuje jenom příjmení! (Např. Messi, Mbappé, Lewandowski, Ronaldo....). V případě, že bude jméno špatně napsané, nebude uznáno!</p>
+                        <p>Za jméno střelce se považuje jenom příjmení! (Např. Schick, Mbappé, Lewandowski, Ronaldo....). </p>
                         <ul>
                             <li>7 - ZA SPRÁVNÉHO NEJLEPŠÍHO STŘELCE</li>
                         </ul>
+                        <p>V případě, že bude jméno špatně napsané, nebude uznáno!</p>
                     </div>
                     <div className="col-md-4" style={myStyle}>
                         <h2>Omikron</h2>
                         <p>Jak dopadne Český, popřípadě Slovenský výběr.</p>
+                        <p>Body jsou za tipnutí správného finální umístění. Čím lépe bduete výběr tipovat, tím více bodů máte šanci získat</p>
                         <ul>
-                            <li>3 - ZA SPRÁVNÉ UMÍSTĚNÍ VYBRANÉHO TÝMU</li>
+                            <li>3 - SKUPINA/OSMIFINÁLE</li>
+                            <li>5 - ČTVRTFINÁLE</li>
+                            <li>8 - SEMIFINÁLE</li>
+                            <li>12 - FINÁLE</li>
+                            <li>15 - VÍTĚZ</li>
                         </ul>
                     </div>
                 </div>
