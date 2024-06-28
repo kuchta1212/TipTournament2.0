@@ -53,7 +53,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
     private async getData() {
         const currentUser = await authService.getUser();
         const status = await getApi().getBetsStatus();
-        this.setState({ loading: false, status: status, afterLimit: currentUser["name"] !== "kroupic" });
+        this.setState({ loading: false, status: status});
     }
 
     private renderBets() {
