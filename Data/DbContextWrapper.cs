@@ -604,12 +604,17 @@
 
         public List<DeltaBet> GetDeltaBetByStage(TournamentStage stage, string matchId)
         {
-            var query = from db in this.dbContext.DeltaBets.Where(db => db.MatchId != matchId).Include(db => db.Result).Include(db => db.Result.AdditionalResult)
-                        join match in this.dbContext.Matches.Where(m => m.Stage == stage)
-                        on db.MatchId equals match.Id
-                        select db;
+            if (stage != TournamentStage.Final)
+            {
+                var query = from db in this.dbContext.DeltaBets.Where(db => db.MatchId != matchId).Include(db => db.Result).Include(db => db.Result.AdditionalResult)
+                            join match in this.dbContext.Matches.Where(m => m.Stage == stage)
+                            on db.MatchId equals match.Id
+                            select db;
 
-            return query.ToList();
+                return query.ToList();
+            }
+
+            return this.dbContext.DeltaBets.Where(db => db.MatchId == matchId).Include(db => db.Result).Include(db => db.Result.AdditionalResult).ToList();
         }
     }
 }
