@@ -6,7 +6,7 @@
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
-    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**;TipTournament2.0.Tests\**</DefaultItemExcludes>
     <RootNamespace>TipTournament2._0</RootNamespace>
     <UserSecretsId>e58b3d7a-8d18-4c6c-9258-67bb8c66f054</UserSecretsId>
   </PropertyGroup>
