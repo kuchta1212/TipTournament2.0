@@ -1,7 +1,8 @@
-﻿import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult } from "../../typings";
+﻿import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
+    getDeadlines(): Promise<DeadlineInfo>;
     uploadShooterBet(bet: string): Promise<TopShooterBet>;
     getShooterBet(userId: string | undefined): Promise<TopShooterBet>;
     getTeamsForTeamPlaceBet(isWinnerBet: boolean): Promise<Team[]>

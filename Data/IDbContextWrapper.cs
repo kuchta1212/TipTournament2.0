@@ -99,5 +99,9 @@
         void UpdateOmikronBets(List<SpecificTeamPlaceBet> updatedBets);
         
         List<DeltaBet> GetDeltaBetByStage(TournamentStage stage, string matchId);
+
+        DateTime GetTournamentStartTime();
+
+        DateTime GetStageStartTime(TournamentStage stage);
     }
 }

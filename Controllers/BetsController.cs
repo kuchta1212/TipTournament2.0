@@ -1,4 +1,4 @@
-﻿
+
 namespace TipTournament2._0.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
@@ -55,9 +55,48 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.betGenerator.GetBetsStatus(stage, userId));
         }
 
+        [HttpGet("deadlines")]
+        public IActionResult GetDeadlines()
+        {
+            var stageDeadlines = new Dictionary<TournamentStage, DateTime>();
+            var tournamentStart = this.context.GetTournamentStartTime();
+
+            stageDeadlines[TournamentStage.Group] = tournamentStart;
+            stageDeadlines[TournamentStage.Winner] = tournamentStart;
+            stageDeadlines[TournamentStage.Lambda] = tournamentStart;
+            stageDeadlines[TournamentStage.Omikron] = tournamentStart;
+
+            var knockoutStages = new[] { TournamentStage.FirstRound, TournamentStage.Quarterfinal, TournamentStage.Semifinal, TournamentStage.Final };
+            foreach (var stage in knockoutStages)
+            {
+                try
+                {
+                    stageDeadlines[stage] = this.context.GetStageStartTime(stage);
+                }
+                catch
+                {
+                    // Stage may not have matches yet
+                    stageDeadlines[stage] = DateTime.MaxValue;
+                }
+            }
+
+            var deadlineInfo = new DeadlineInfo
+            {
+                TournamentStart = tournamentStart,
+                StageDeadlines = stageDeadlines
+            };
+
+            return new OkObjectResult(deadlineInfo);
+        }
+
         [HttpPost("status/{stage}/confirm")]
         public IActionResult ConfirmBetsStatus([FromRoute] TournamentStage stage)
         {
+            if (!this.IsStageOpen(stage))
+            {
+                return BadRequest("Sázky pro tuto fázi jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             return new OkObjectResult(this.betGenerator.ConfirmBetsStatus(stage, userId));
         }
@@ -65,6 +104,11 @@ namespace TipTournament2._0.Controllers
         [HttpPost("status/{stage}/modify")]
         public IActionResult ModifyBetsStatus([FromRoute] TournamentStage stage)
         {
+            if (!this.IsStageOpen(stage))
+            {
+                return BadRequest("Sázky pro tuto fázi jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             return new OkObjectResult(this.betGenerator.ModifyBetsStatus(stage, userId));
         }
@@ -131,6 +175,17 @@ namespace TipTournament2._0.Controllers
         [HttpPost("tip")]
         public IActionResult UploadTip([FromBody] UploadTipRequest request)
         {
+            var match = this.context.GetMatchById(request.MatchId);
+            if (match == null)
+            {
+                return BadRequest("Zápas nebyl nalezen.");
+            }
+
+            if (DateTime.UtcNow >= match.StartTime)
+            {
+                return BadRequest("Sázky na tento zápas jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UploadTip(request.Tip, request.MatchId, userId);
             return new OkResult();
@@ -139,6 +194,11 @@ namespace TipTournament2._0.Controllers
         [HttpPost("group")]
         public IActionResult UploadGroupBet([FromBody] GroupBet groupBet, [FromQuery] string groupId)
         {
+            if (!this.IsTournamentOpen())
+            {
+                return BadRequest("Sázky na skupiny jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UploadGroupBet(groupBet, groupId, userId);
             return new OkResult();
@@ -147,6 +207,17 @@ namespace TipTournament2._0.Controllers
         [HttpPost("delta")]
         public IActionResult UploadDeltaBet([FromBody] DeltaBet deltaBet, [FromQuery] string matchId)
         {
+            var match = this.context.GetMatchById(matchId);
+            if (match == null)
+            {
+                return BadRequest("Zápas nebyl nalezen.");
+            }
+
+            if (!this.IsStageOpen(match.Stage))
+            {
+                return BadRequest("Sázky pro tuto fázi jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UpsertDeltaBet(deltaBet, matchId, userId);
             return new OkResult();
@@ -156,6 +227,11 @@ namespace TipTournament2._0.Controllers
         [HttpPost("teamplace")]
         public IActionResult UploadTeamPlaceBet([FromQuery] string teamId, [FromQuery] bool isWinnerBet, [FromQuery] TournamentStage stage)
         {
+            if (!this.IsTournamentOpen())
+            {
+                return BadRequest("Sázky na umístění týmů jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UpsertTeamPlaceBet(teamId, userId, isWinnerBet, stage);
             return new OkObjectResult(this.context.GetTeamPlaceBet(userId, isWinnerBet));
@@ -165,6 +241,11 @@ namespace TipTournament2._0.Controllers
         [HttpPost("shooter")]
         public IActionResult UploadShooterBet([FromQuery] string name)
         {
+            if (!this.IsTournamentOpen())
+            {
+                return BadRequest("Sázky na nejlepšího střelce jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UpsertShooterBet(name, userId);
             return new OkObjectResult(this.context.GetShooterBet(userId));
@@ -188,8 +269,44 @@ namespace TipTournament2._0.Controllers
             return this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
         }
 
+        private bool IsTournamentOpen()
+        {
+            try
+            {
+                var tournamentStart = this.context.GetTournamentStartTime();
+                return DateTime.UtcNow < tournamentStart;
+            }
+            catch
+            {
+                return true;
+            }
+        }
 
-
-
+        private bool IsStageOpen(TournamentStage stage)
+        {
+            try
+            {
+                switch (stage)
+                {
+                    case TournamentStage.Group:
+                    case TournamentStage.Winner:
+                    case TournamentStage.Lambda:
+                    case TournamentStage.Omikron:
+                        return this.IsTournamentOpen();
+                    case TournamentStage.FirstRound:
+                    case TournamentStage.Quarterfinal:
+                    case TournamentStage.Semifinal:
+                    case TournamentStage.Final:
+                        var stageStart = this.context.GetStageStartTime(stage);
+                        return DateTime.UtcNow < stageStart;
+                    default:
+                        return true;
+                }
+            }
+            catch
+            {
+                return true;
+            }
+        }
     }
 }

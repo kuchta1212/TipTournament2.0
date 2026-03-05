@@ -616,5 +616,19 @@
 
             return this.dbContext.DeltaBets.Where(db => db.MatchId == matchId).Include(db => db.Result).Include(db => db.Result.AdditionalResult).ToList();
         }
+
+        public DateTime GetTournamentStartTime()
+        {
+            return this.dbContext.Matches
+                .Where(m => m.Stage == TournamentStage.Group)
+                .Min(m => m.StartTime);
+        }
+
+        public DateTime GetStageStartTime(TournamentStage stage)
+        {
+            return this.dbContext.Matches
+                .Where(m => m.Stage == stage)
+                .Min(m => m.StartTime);
+        }
     }
 }

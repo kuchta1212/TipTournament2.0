@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import ReactTooltip from "react-tooltip";
 import { getApi } from "../api/ApiFactory"
 import { Match, Bet, User, Group, GroupBet, TournamentStage, BetsStageStatus } from "../../typings/index"
@@ -26,6 +26,7 @@ interface CardBetProps {
     hideConfirmButton?: boolean,
     showGenerateButton?: boolean,
     tooltip: string;
+    deadlineText?: string;
 }
 
 export class CardBet extends React.Component<CardBetProps, CardBetState> {
@@ -59,6 +60,7 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
                             <button className="btn btn-link collapsed" data-tip data-for={this.getCollapseId(false)+"_dataId"} type="button" data-toggle="collapse" data-target={this.getCollapseId(true)} aria-expanded="false" aria-controls={this.getCollapseId(false)}>
                                 {this.props.text}
                             </button>
+                            {this.renderDeadlineInfo()}
                        </h5>
                         <div>
                             {!!this.props.hideConfirmButton
@@ -93,9 +95,15 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
         );
     }
 
+    private renderDeadlineInfo() {
+        if (!this.props.deadlineText) return null;
 
+        if (this.props.hideConfirmButton) {
+            return <small className="text-danger ml-2">Sázky uzavřeny</small>;
+        }
 
-
+        return <small className="text-muted ml-2">Uzavření: {this.props.deadlineText}</small>;
+    }
 
     private modify() {
         this.props.modify(this.props.stage);
@@ -139,4 +147,3 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
         )
     }
 }
-

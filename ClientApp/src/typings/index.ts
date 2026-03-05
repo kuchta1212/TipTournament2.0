@@ -176,3 +176,8 @@ export interface GroupResult {
     fourthId: string;
 }
 
+export interface DeadlineInfo {
+    tournamentStart: string;
+    stageDeadlines: { [key: number]: string };
+}
+

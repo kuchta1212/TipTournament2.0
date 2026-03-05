@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -7,6 +7,9 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api';
 
 export class Api implements IApi {
+    getDeadlines(): Promise<DeadlineInfo> {
+        return convert<DeadlineInfo>(get(`${API_URL}/bets/deadlines`));
+    }
     uploadShooterBet(bet: string): Promise<TopShooterBet> {
         return convert<TopShooterBet>(post(`${API_URL}/bets/shooter?name=${bet}`));
     }
