@@ -66,19 +66,21 @@ namespace TipTournament2._0.Controllers
             stageDeadlines[TournamentStage.Lambda] = tournamentStart;
             stageDeadlines[TournamentStage.Omikron] = tournamentStart;
 
-            var knockoutStages = new[] { TournamentStage.FirstRound, TournamentStage.Quarterfinal, TournamentStage.Semifinal, TournamentStage.Final };
-            foreach (var stage in knockoutStages)
+            // All knockout stages share the same deadline: first match of FirstRound
+            DateTime knockoutDeadline;
+            try
             {
-                try
-                {
-                    stageDeadlines[stage] = this.context.GetStageStartTime(stage);
-                }
-                catch
-                {
-                    // Stage may not have matches yet
-                    stageDeadlines[stage] = DateTime.MaxValue;
-                }
+                knockoutDeadline = this.context.GetStageStartTime(TournamentStage.FirstRound);
             }
+            catch
+            {
+                knockoutDeadline = DateTime.MaxValue;
+            }
+
+            stageDeadlines[TournamentStage.FirstRound] = knockoutDeadline;
+            stageDeadlines[TournamentStage.Quarterfinal] = knockoutDeadline;
+            stageDeadlines[TournamentStage.Semifinal] = knockoutDeadline;
+            stageDeadlines[TournamentStage.Final] = knockoutDeadline;
 
             var deadlineInfo = new DeadlineInfo
             {
@@ -135,7 +137,7 @@ namespace TipTournament2._0.Controllers
         public IActionResult GetTeamPlaceBetTeams([FromQuery] bool isWinnerBet)
         {
             var teams = isWinnerBet
-                ? this.teamGenerator.GetFinalists(this.GetUserId())
+                ? this.context.GetAllTeams().ToArray()
                 : this.teamGenerator.GenerateSpecificBetTeams();
 
             return new OkObjectResult(teams);
@@ -297,8 +299,8 @@ namespace TipTournament2._0.Controllers
                     case TournamentStage.Quarterfinal:
                     case TournamentStage.Semifinal:
                     case TournamentStage.Final:
-                        var stageStart = this.context.GetStageStartTime(stage);
-                        return DateTime.UtcNow < stageStart;
+                        var knockoutStart = this.context.GetStageStartTime(TournamentStage.FirstRound);
+                        return DateTime.UtcNow < knockoutStart;
                     default:
                         return true;
                 }

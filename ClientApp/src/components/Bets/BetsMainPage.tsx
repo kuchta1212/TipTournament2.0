@@ -119,7 +119,7 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
             case TournamentStage.Final:
                 return this.state.status.semifinalStageDone ? this.state.status.finalStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
             case TournamentStage.Winner:
-                return this.state.status.finalStageDone ? this.state.status.winnerStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready : BetsStageStatus.NotReady;
+                return this.state.status.winnerStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready;
             case TournamentStage.Lambda:
                 return this.state.status.lambdaStageDone ? BetsStageStatus.Done : BetsStageStatus.Ready;
             case TournamentStage.Omikron:

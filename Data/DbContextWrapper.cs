@@ -630,5 +630,10 @@
                 .Where(m => m.Stage == stage)
                 .Min(m => m.StartTime);
         }
+
+        public List<Team> GetAllTeams()
+        {
+            return this.dbContext.Teams.ToList();
+        }
     }
 }

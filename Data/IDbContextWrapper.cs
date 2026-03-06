@@ -103,5 +103,7 @@
         DateTime GetTournamentStartTime();
 
         DateTime GetStageStartTime(TournamentStage stage);
+
+        List<Team> GetAllTeams();
     }
 }
