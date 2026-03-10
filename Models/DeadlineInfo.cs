@@ -6,6 +6,6 @@ namespace TipTournament2._0.Models
     public class DeadlineInfo
     {
         public DateTime TournamentStart { get; set; }
-        public Dictionary<TournamentStage, DateTime> StageDeadlines { get; set; }
+        public Dictionary<string, DateTime> StageDeadlines { get; set; }
     }
 }

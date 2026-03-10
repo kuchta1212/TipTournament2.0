@@ -18,7 +18,7 @@ export class UserRow extends React.Component<UserRowProps> {
     public render() {
         let className = this.getTextClassName();
         className += this.props.currentUser === this.props.user.id ? " bg-secondary text-white" : "";
-        let beforeLimit = new Date() <= new Date("2024-06-14 21:00");
+        let beforeLimit = new Date() <= new Date("2024-06-14T21:00:00Z");
         return (
             <React.Fragment>
                 <td className={className}>

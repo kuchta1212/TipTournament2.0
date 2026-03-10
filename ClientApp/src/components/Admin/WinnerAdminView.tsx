@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getAdminApi, getApi } from "../api/ApiFactory"
-import { Match, BetsStageStatus, Team, DeltaBetTeams, TournamentStage } from "../../typings/index"
+import { Match, Team, DeltaBetTeams, TournamentStage } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { Loader } from '../Loader'
 import { WarningNotification, WarningTypes } from '../WarningNotification';

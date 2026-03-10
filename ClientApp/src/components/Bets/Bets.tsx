@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, Bet, User, TournamentStage, BetsStageStatus, DeadlineInfo } from "../../typings/index"
+import { Match, Bet, User, TournamentStage, DeadlineInfo } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from './../Loader'
-import { WarningNotification, WarningTypes } from '../WarningNotification';
 import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import authService from './../api-authorization/AuthorizeService'
 
 interface BetsState {
     matches: Match[],
@@ -16,7 +14,6 @@ interface BetsState {
 
 interface BetsProps {
     users: User[] | undefined,
-    status: BetsStageStatus,
     deadlines?: DeadlineInfo | null
 }
 
@@ -67,7 +64,6 @@ export class Bets extends React.Component<BetsProps, BetsState> {
     }
 
     private isMatchLocked(match: Match): boolean {
-        if (this.props.status === BetsStageStatus.Done) return true;
         if (!match.startTime) return false;
         return new Date() > new Date(match.startTime);
     }

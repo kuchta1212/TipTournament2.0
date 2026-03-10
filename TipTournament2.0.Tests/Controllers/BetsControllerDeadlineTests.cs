@@ -17,11 +17,10 @@ namespace TipTournament2._0.Tests.Controllers
     {
         private readonly Mock<IDbContextWrapper> mockDb = new Mock<IDbContextWrapper>();
         private readonly Mock<ITeamGenerator> mockTeamGen = new Mock<ITeamGenerator>();
-        private readonly Mock<IBetGenerator> mockBetGen = new Mock<IBetGenerator>();
 
         private BetsController CreateSut()
         {
-            var controller = new BetsController(this.mockDb.Object, this.mockTeamGen.Object, this.mockBetGen.Object);
+            var controller = new BetsController(this.mockDb.Object, this.mockTeamGen.Object);
 
             var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, "test-user") };
             var identity = new ClaimsIdentity(claims, "TestAuth");
@@ -48,10 +47,10 @@ namespace TipTournament2._0.Tests.Controllers
             var deadlines = result.Value as DeadlineInfo;
 
             Assert.Equal(tournamentStart, deadlines.TournamentStart);
-            Assert.Equal(tournamentStart, deadlines.StageDeadlines[TournamentStage.Group]);
-            Assert.Equal(tournamentStart, deadlines.StageDeadlines[TournamentStage.Winner]);
-            Assert.Equal(tournamentStart, deadlines.StageDeadlines[TournamentStage.Lambda]);
-            Assert.Equal(tournamentStart, deadlines.StageDeadlines[TournamentStage.Omikron]);
+            Assert.Equal(tournamentStart, deadlines.StageDeadlines[nameof(TournamentStage.Group)]);
+            Assert.Equal(tournamentStart, deadlines.StageDeadlines[nameof(TournamentStage.Winner)]);
+            Assert.Equal(tournamentStart, deadlines.StageDeadlines[nameof(TournamentStage.Lambda)]);
+            Assert.Equal(tournamentStart, deadlines.StageDeadlines[nameof(TournamentStage.Omikron)]);
         }
 
         [Fact]
@@ -66,10 +65,10 @@ namespace TipTournament2._0.Tests.Controllers
             var result = sut.GetDeadlines() as OkObjectResult;
             var deadlines = result.Value as DeadlineInfo;
 
-            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[TournamentStage.FirstRound]);
-            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[TournamentStage.Quarterfinal]);
-            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[TournamentStage.Semifinal]);
-            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[TournamentStage.Final]);
+            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.FirstRound)]);
+            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Quarterfinal)]);
+            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Semifinal)]);
+            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Final)]);
         }
 
         [Fact]
@@ -82,8 +81,8 @@ namespace TipTournament2._0.Tests.Controllers
             var result = sut.GetDeadlines() as OkObjectResult;
             var deadlines = result.Value as DeadlineInfo;
 
-            Assert.Equal(DateTime.MaxValue, deadlines.StageDeadlines[TournamentStage.FirstRound]);
-            Assert.Equal(DateTime.MaxValue, deadlines.StageDeadlines[TournamentStage.Quarterfinal]);
+            Assert.Equal(DateTime.MaxValue, deadlines.StageDeadlines[nameof(TournamentStage.FirstRound)]);
+            Assert.Equal(DateTime.MaxValue, deadlines.StageDeadlines[nameof(TournamentStage.Quarterfinal)]);
         }
 
         #endregion
@@ -271,75 +270,6 @@ namespace TipTournament2._0.Tests.Controllers
 
             Assert.IsType<OkObjectResult>(result);
             this.mockDb.Verify(d => d.UpsertShooterBet("Mbappe", "test-user"), Times.Once);
-        }
-
-        #endregion
-
-        #region ConfirmBetsStatus / ModifyBetsStatus deadline checks
-
-        [Theory]
-        [InlineData(TournamentStage.Group)]
-        [InlineData(TournamentStage.Winner)]
-        [InlineData(TournamentStage.Lambda)]
-        [InlineData(TournamentStage.Omikron)]
-        public void ConfirmBetsStatus_TournamentStartedStages_ReturnsBadRequest(TournamentStage stage)
-        {
-            this.mockDb.Setup(d => d.GetTournamentStartTime()).Returns(DateTime.UtcNow.AddHours(-1));
-
-            var sut = this.CreateSut();
-            var result = sut.ConfirmBetsStatus(stage);
-
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Theory]
-        [InlineData(TournamentStage.FirstRound)]
-        [InlineData(TournamentStage.Quarterfinal)]
-        [InlineData(TournamentStage.Semifinal)]
-        [InlineData(TournamentStage.Final)]
-        public void ConfirmBetsStatus_KnockoutStarted_ReturnsBadRequest(TournamentStage stage)
-        {
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Returns(DateTime.UtcNow.AddHours(-1));
-
-            var sut = this.CreateSut();
-            var result = sut.ConfirmBetsStatus(stage);
-
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
-        public void ConfirmBetsStatus_StageOpen_ReturnsOk()
-        {
-            this.mockDb.Setup(d => d.GetTournamentStartTime()).Returns(DateTime.UtcNow.AddHours(1));
-            this.mockBetGen.Setup(b => b.ConfirmBetsStatus(TournamentStage.Group, "test-user")).Returns(new BetsStatus());
-
-            var sut = this.CreateSut();
-            var result = sut.ConfirmBetsStatus(TournamentStage.Group);
-
-            Assert.IsType<OkObjectResult>(result);
-        }
-
-        [Fact]
-        public void ModifyBetsStatus_StageClosed_ReturnsBadRequest()
-        {
-            this.mockDb.Setup(d => d.GetTournamentStartTime()).Returns(DateTime.UtcNow.AddHours(-1));
-
-            var sut = this.CreateSut();
-            var result = sut.ModifyBetsStatus(TournamentStage.Lambda);
-
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
-        public void ModifyBetsStatus_StageOpen_ReturnsOk()
-        {
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Returns(DateTime.UtcNow.AddHours(1));
-            this.mockBetGen.Setup(b => b.ModifyBetsStatus(TournamentStage.Quarterfinal, "test-user")).Returns(new BetsStatus());
-
-            var sut = this.CreateSut();
-            var result = sut.ModifyBetsStatus(TournamentStage.Quarterfinal);
-
-            Assert.IsType<OkObjectResult>(result);
         }
 
         #endregion

@@ -37,7 +37,6 @@
         void UpdateBets(List<MatchBet> bets);
 
         List<ApplicationUser> GetAllUsers();
-        BetsStatus GetBetsStatus(string userId);
         Result SaveResult(Result result);
 
         void UpdateMatch(Match match);
@@ -76,9 +75,7 @@
         List<GroupBet> GetGroupBetsByGroupId(string id);
         GroupResult SaveResult(GroupResult result);
 
-        void ConfirmBetsStatus(TournamentStage stage, string userId);
         void UpdateGroupBets(List<GroupBet> updateBets);
-        void ModifyBetsStatus(TournamentStage stage, string userId);
 
         void UpdateResult(GroupResult result);
 

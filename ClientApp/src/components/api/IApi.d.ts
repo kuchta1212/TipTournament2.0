@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo } from "../../typings";
+import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
@@ -9,11 +9,6 @@ export interface IApi {
     uploadTeamPlaceBet(stage: TournamentStage, teamId: string, isWinnerBet: boolean): Promise<PlaceTeamBet>
     getTeamPlaceBet(userId: string | undefined): Promise<PlaceTeamBet>
     getWinnerBet(userId: string | undefined): Promise<PlaceTeamBet>;
-    generateGroupBets(): Promise<boolean>;
-    getBetsStatus(): Promise<BetsStatus>;
-    confirmStageBets(stage: TournamentStage): Promise<BetsStatus>;
-    modifyStageBet(stage: TournamentStage): Promise<BetsStatus>;
-    getBetsStageStatus(stage: TournamentStage): Promise<BetsStageStatus>;
     uploadDeltaBet(bet: DeltaBet, id: string);
     getTeamsForDeltaBet(id: string, stage: TournamentStage, userId: string | undefined);
     getDeltaBet(matchId: string, userId: string | undefined);
