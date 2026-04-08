@@ -31,31 +31,48 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
             : this.renderNotSettedBet()
     }
 
+    private isMatchLocked(): boolean {
+        if (!this.props.match.startTime) return this.props.isReadOnly;
+        return this.props.isReadOnly || new Date() > new Date(this.props.match.startTime);
+    }
+
+    private formatMatchTime(): string {
+        if (!this.props.match.startTime) return '';
+        const date = new Date(this.props.match.startTime);
+        return `${date.getDate()}.${date.getMonth() + 1}. ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    }
+
     private renderSettedBet() {
         return (
             <React.Fragment>
+                <td className="text-muted small">{this.formatMatchTime()}</td>
                 <TeamCell team={this.props.match.home} />
                 <TeamCell team={this.props.match.away} />
                 {this.state.tips.map((tip) => {
                     return (<td key={tip.id}>{tip.homeTeam} : {tip.awayTeam}</td>)
                 })}
-                {!this.props.isReadOnly ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : null} 
+                {!this.isMatchLocked() ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : null} 
             </React.Fragment>
         );
     }
 
     private renderNotSettedBet() {
-        return !this.props.isReadOnly ?
-            (
-                <React.Fragment>
-                    <TeamCell team={this.props.match.home} />
-                    <TeamCell team={this.props.match.away} />
-                    <td><input type="number" min="0" max="99" value={!!this.state.tips[0].homeTeam ? this.state.tips[0].homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
-                    <td><input type="number" min="0" max="99" value={!!this.state.tips[0].awayTeam ? this.state.tips[0].awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
-                    {<td><button className="btn btn-secondary" onClick={() => this.uploadTip()}>Uložit</button></td>}
-                </React.Fragment>
-            )
-            : null;
+        return (
+            <React.Fragment>
+                <td className="text-muted small">{this.formatMatchTime()}</td>
+                <TeamCell team={this.props.match.home} />
+                <TeamCell team={this.props.match.away} />
+                {!this.isMatchLocked() ? (
+                    <>
+                        <td><input type="number" min="0" max="99" value={!!this.state.tips[0].homeTeam ? this.state.tips[0].homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
+                        <td><input type="number" min="0" max="99" value={!!this.state.tips[0].awayTeam ? this.state.tips[0].awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
+                        <td><button className="btn btn-secondary" onClick={() => this.uploadTip()}>Uložit</button></td>
+                    </>
+                ) : (
+                    <td>-</td>
+                )}
+            </React.Fragment>
+        );
     }
 
     private setHomeTip(tip: string) {
@@ -71,11 +88,13 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
     }
 
     private async uploadTip() {
+        if (this.isMatchLocked()) return;
         this.setState({ setted: true })
         getApi().uploadTip(this.state.tips[0], this.props.match.id);
     }
 
     private modify() {
+        if (this.isMatchLocked()) return;
         this.setState({ setted: false });
     }
 }
