@@ -37,5 +37,7 @@
 
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
+
+        public int DixitBonus { get; set; }
     }
 }

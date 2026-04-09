@@ -40,6 +40,7 @@ export interface Bet {
     match: Match;
     tip: Result;
     result: BetResult;
+    dixitBonus: number;
     user: User;
 }
 
@@ -58,6 +59,7 @@ export interface DeltaBet {
     homeTeamBet: Team;
     awayTeamBet: Team;
     result: DeltaBetResult;
+    dixitBonus: number;
     user: User;
 }
 

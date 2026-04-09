@@ -24,7 +24,10 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
         return (
             <>
                 <td className={classNames.textClass}>{bet.tip.homeTeam} : {bet.tip.awayTeam}</td>
-                <td className={classNames.bgClass}>{bet.result}</td>
+                <td className={classNames.bgClass}>
+                    {bet.result}
+                    {bet.dixitBonus > 0 && <span className="dixit-bonus">+{bet.dixitBonus}</span>}
+                </td>
             </>
         );
     }

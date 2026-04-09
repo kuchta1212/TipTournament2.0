@@ -102,5 +102,29 @@ namespace TipTournament2._0.Tests.Coordinator
             Assert.Equal(0, user.AlfaPoints);
             Assert.Equal(0, user.TotalPoints);
         }
+
+        [Fact]
+        public void RecalculatePoints_IncludesDixitBonus()
+        {
+            var result = new Result { HomeTeam = 2, AwayTeam = 1 };
+            var savedResult = new Result { Id = "r1", HomeTeam = 2, AwayTeam = 1 };
+            var match = new Match { Id = "m1" };
+            var user = new ApplicationUser { Id = "u1", AlfaPoints = 0, TotalPoints = 0 };
+            var bet = new MatchBet { Result = BetResult.WINNER, DixitBonus = 2 };
+
+            this.mockDb.Setup(d => d.SaveResult(result)).Returns(savedResult);
+            this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
+            this.mockDb.Setup(d => d.GetBetsForMatch(It.IsAny<Match>())).Returns(new List<MatchBet>());
+            this.mockBetMaker.Setup(b => b.UpdateBetResult(It.IsAny<List<MatchBet>>(), It.IsAny<Result>())).Returns(new List<MatchBet>());
+            this.mockDb.Setup(d => d.GetAllUsers()).Returns(new List<ApplicationUser> { user });
+            this.mockDb.Setup(d => d.GetBetForMatchAndUser(match, "u1")).Returns(bet);
+
+            var sut = new GroupMatchesResultCoordinator(this.mockMatchClient.Object, this.mockDb.Object, this.mockBetMaker.Object);
+            sut.UploadNewResult("m1", result);
+
+            Assert.Equal(3, user.AlfaPoints);  // 1 (WINNER) + 2 (DixitBonus)
+            Assert.Equal(3, user.TotalPoints);
+        }
     }
 }
+

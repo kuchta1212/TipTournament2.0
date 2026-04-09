@@ -49,8 +49,9 @@
         private void UpdateDeltaBetsResults(Match match)
         {
             var bets = this.dbContextWrapper.GetDeltaBetsByMatchId(match.Id);
-            var updateBets = this.betResultMaker.UpdateDeltaBetsResult(bets, match);
-            this.dbContextWrapper.UpdateDeltaBets(updateBets);
+            var updatedBets = this.betResultMaker.UpdateDeltaBetsResult(bets, match);
+            DixitBonusCalculator.ApplyDixitBonus(updatedBets);
+            this.dbContextWrapper.UpdateDeltaBets(updatedBets);
         }
 
         private void RecalculatePoints(string matchId)
@@ -61,8 +62,8 @@
                 var betForUser = this.dbContextWrapper.GetDeltaBetByMatchId(user.Id, matchId);
                 if(betForUser != null)
                 {
-                    user.DeltaPoints += betForUser.Result.Points;
-                    user.TotalPoints += betForUser.Result.Points;
+                    user.DeltaPoints += betForUser.Result.Points + betForUser.DixitBonus;
+                    user.TotalPoints += betForUser.Result.Points + betForUser.DixitBonus;
                 }
             }
 
