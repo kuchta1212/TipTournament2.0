@@ -23,5 +23,7 @@
         public Result Tip { get; set; }
 
         public BetResult Result { get; set; }
+
+        public int DixitBonus { get; set; }
     }
 }

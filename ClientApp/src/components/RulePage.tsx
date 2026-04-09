@@ -130,6 +130,26 @@ export class RulePage extends React.Component<RulePageProps> {
                                 <span>Špatný tip</span>
                             </div>
                         </div>
+                        <div className="rules-note">
+                            <strong>Dixit bonus:</strong> Pokud správně tipneš výsledek zápasu a většina hráčů se mýlí, získáváš bonusové body:
+                        </div>
+                        <div className="rules-scoring">
+                            <div className="rules-score-row">
+                                <span className="rules-points rules-points-1">+1 b.</span>
+                                <span>Méně než 40 % hráčů tiplo správně</span>
+                            </div>
+                            <div className="rules-score-row">
+                                <span className="rules-points rules-points-2">+2 b.</span>
+                                <span>Méně než 20 % hráčů tiplo správně</span>
+                            </div>
+                            <div className="rules-score-row">
+                                <span className="rules-points rules-points-3">+3 b.</span>
+                                <span>Jako jediný jsi tipnul správně</span>
+                            </div>
+                        </div>
+                        <div className="rules-note">
+                            Bonusy se nesčítají — platí vždy nejvyšší dosažený stupeň. Bonus se počítá ze všech hráčů, kteří na daný zápas tipovali.
+                        </div>
                     </div>
 
                     <div className="rules-card">

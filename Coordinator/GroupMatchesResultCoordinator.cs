@@ -36,8 +36,9 @@
         private void UpdateBetsResult(Match match)
         {
             var bets = this.dbContextWrapper.GetBetsForMatch(match);
-            var updateBets = this.betResultMaker.UpdateBetResult(bets, match.Result);
-            this.dbContextWrapper.UpdateBets(updateBets);
+            var updatedBets = this.betResultMaker.UpdateBetResult(bets, match.Result);
+            DixitBonusCalculator.ApplyDixitBonus(updatedBets);
+            this.dbContextWrapper.UpdateBets(updatedBets);
         }
 
         private void RecalculatePoints(Match match)
@@ -48,8 +49,8 @@
                 var betForUser = this.dbContextWrapper.GetBetForMatchAndUser(match, user.Id);
                 if (betForUser != null)
                 {
-                    user.AlfaPoints += (int)betForUser.Result;
-                    user.TotalPoints += (int)betForUser.Result;
+                    user.AlfaPoints += (int)betForUser.Result + betForUser.DixitBonus;
+                    user.TotalPoints += (int)betForUser.Result + betForUser.DixitBonus;
                 }
             }
 
