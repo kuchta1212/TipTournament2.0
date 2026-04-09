@@ -45,10 +45,10 @@ export class CardBet extends React.Component<CardBetProps> {
         if (!this.props.deadlineText) return null;
 
         if (this.props.deadlinePassed) {
-            return <small className="text-danger ml-2">Sazky uzavreny</small>;
+            return <small className="text-danger ml-2">Sázky uzavřeny</small>;
         }
 
-        return <small className="text-muted ml-2">Uzavreni: {this.props.deadlineText}</small>;
+        return <small className="text-muted ml-2">Uzavření: {this.props.deadlineText}</small>;
     }
 
     private getId(): string {

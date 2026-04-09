@@ -77,15 +77,15 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
         const knockoutLocked = this.isStageDeadlinePassed(TournamentStage.FirstRound);
         return (
             <div className="accordion" id="accordionExample">
-                    <CardBet component={<Bets users={undefined} deadlines={this.state.deadlines} />} stage={TournamentStage.Group} text="Alfa + Beta - Skupinova faze" tooltip="Alfa: Jeden bod za spravne urceneho viteze (1,0,2). Beta: Dalsi 3 body za presne trefeny vysledek (tedy celkem 4 body za presne trefeny vysledek)" />
-                    <CardBet component={<GamaBets isReadOnly={tournamentStarted} />} stage={TournamentStage.Group} text="Gama - Skupiny" deadlinePassed={tournamentStarted} tooltip="OKRUH GAMA: Poradi ve skupinach - 1 bod za kazde presne trefene umisteni" deadlineText={this.getDeadlineText(TournamentStage.Group)} />
-                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} isReadOnly={knockoutLocked} />} stage={TournamentStage.FirstRound} text="Delta - Osmifinale" deadlinePassed={knockoutLocked} tooltip="Osmifinale se nehodnoti, vetsina je automaticky generovane na zaklade okruhu Gamma. Nicmene je nutne dotipovat postupujici ze 3tich mist. Pravidla pro postup ze tretich mist je popsano v pravidlech." deadlineText={this.getDeadlineText(TournamentStage.FirstRound)} />
-                    <CardBet component={<DeltaBets stage={TournamentStage.Quarterfinal} isReadOnly={knockoutLocked} />} stage={TournamentStage.Quarterfinal} text="Delta - Ctvrtfinale" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Poradi playoff - 2 body za kazdeho trefeneho ctvrtfinalistu, dalsi 2 body za kazdeho trefeneho semifinalistu, dalsi 2 body za trefene semifinalisty a dalsi 3 body za trefeneho viteze (za viteze tedy celkem 9 bodu: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Quarterfinal)} />
-                    <CardBet component={<DeltaBets stage={TournamentStage.Semifinal} isReadOnly={knockoutLocked} />} stage={TournamentStage.Semifinal} text="Delta - Semifinale" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Poradi playoff - 2 body za kazdeho trefeneho ctvrtfinalistu, dalsi 2 body za kazdeho trefeneho semifinalistu, dalsi 2 body za trefene semifinalisty a dalsi 3 body za trefeneho viteze (za viteze tedy celkem 9 bodu: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Semifinal)} />
-                    <CardBet component={<DeltaBets stage={TournamentStage.Final} isReadOnly={knockoutLocked} />} stage={TournamentStage.Final} text="Delta - Finale" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Poradi playoff - 2 body za kazdeho trefeneho ctvrtfinalistu, dalsi 2 body za kazdeho trefeneho semifinalistu, dalsi 2 body za trefene semifinalisty a dalsi 3 body za trefeneho viteze (za viteze tedy celkem 9 bodu: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Final)} />
-                    <CardBet component={<TeamPlaceBet isWinnerBet={true} isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Winner} text="Delta - Vitez" deadlinePassed={tournamentStarted} tooltip="OKRUH DELTA: Poradi playoff - 2 body za kazdeho trefeneho ctvrtfinalistu, dalsi 2 body za kazdeho trefeneho semifinalistu, dalsi 2 body za trefene semifinalisty a dalsi 3 body za trefeneho viteze (za viteze tedy celkem 9 bodu: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Winner)} />
-                    <CardBet component={<BestShooterBet isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Lambda} text="Lambda - Nejlepsi strelec" deadlinePassed={tournamentStarted} tooltip="OKRUH LAMBDA: Nejlepsi strelec turnaje za 7 bodu. Pouze prijimeni! Na spatne napsane prijimeni nebude bran zretel." deadlineText={this.getDeadlineText(TournamentStage.Lambda)} />
-                    <CardBet component={<TeamPlaceBet isWinnerBet={false} isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Omikron} text="Omikron - Sazka na tym" deadlinePassed={tournamentStarted} tooltip="OKRUH OMIKRON: Konecne umisteni jednoho z dvojice Cesko, Slovensko. Skupinove faze a osmifinale je za 3b, ctvrtfinale za 5b, semifinale za 8b, finale za 12b a vitezstvi za 15b." deadlineText={this.getDeadlineText(TournamentStage.Omikron)} />
+                    <CardBet component={<Bets users={undefined} deadlines={this.state.deadlines} />} stage={TournamentStage.Group} text="Alfa + Beta - Skupinová fáze" tooltip="Alfa: Jeden bod za správně určeného vítěze (1,0,2). Beta: Další 3 body za přesně trefený výsledek (tedy celkem 4 body za přesně trefený výsledek)" />
+                    <CardBet component={<GamaBets isReadOnly={tournamentStarted} />} stage={TournamentStage.Group} text="Gama - Skupiny" deadlinePassed={tournamentStarted} tooltip="OKRUH GAMA: Pořadí ve skupinách - 1 bod za každé přesně trefené umístění" deadlineText={this.getDeadlineText(TournamentStage.Group)} />
+                    <CardBet component={<DeltaBets stage={TournamentStage.FirstRound} isReadOnly={knockoutLocked} />} stage={TournamentStage.FirstRound} text="Delta - Osmifinále" deadlinePassed={knockoutLocked} tooltip="Osmifinále se nehodnotí, většina je automaticky generované na základě okruhu Gamma. Nicméně je nutné dotipovat postupující ze 3tích míst. Pravidla pro postup ze třetích míst je popsáno v pravidlech." deadlineText={this.getDeadlineText(TournamentStage.FirstRound)} />
+                    <CardBet component={<DeltaBets stage={TournamentStage.Quarterfinal} isReadOnly={knockoutLocked} />} stage={TournamentStage.Quarterfinal} text="Delta - Čtvrtfinále" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Quarterfinal)} />
+                    <CardBet component={<DeltaBets stage={TournamentStage.Semifinal} isReadOnly={knockoutLocked} />} stage={TournamentStage.Semifinal} text="Delta - Semifinále" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Semifinal)} />
+                    <CardBet component={<DeltaBets stage={TournamentStage.Final} isReadOnly={knockoutLocked} />} stage={TournamentStage.Final} text="Delta - Finále" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Final)} />
+                    <CardBet component={<TeamPlaceBet isWinnerBet={true} isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Winner} text="Delta - Vítěz" deadlinePassed={tournamentStarted} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného čtvrtfinalistu, další 2 body za každého trefeného semifinalistu, další 2 body za trefené semifinalisty a další 3 body za trefeného vítěze (za vítěze tedy celkem 9 bodů: 2+2+2+3=9)" deadlineText={this.getDeadlineText(TournamentStage.Winner)} />
+                    <CardBet component={<BestShooterBet isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Lambda} text="Lambda - Nejlepší střelec" deadlinePassed={tournamentStarted} tooltip="OKRUH LAMBDA: Nejlepší střelec turnaje za 7 bodů. Pouze příjmení! Na špatně napsané příjmení nebude brán zřetel." deadlineText={this.getDeadlineText(TournamentStage.Lambda)} />
+                    <CardBet component={<TeamPlaceBet isWinnerBet={false} isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Omikron} text="Omikron - Sázka na tým" deadlinePassed={tournamentStarted} tooltip="OKRUH OMIKRON: Konečné umístění jednoho z dvojice Česko, Slovensko. Skupinová fáze a osmifinále je za 3b, čtvrtfinále za 5b, semifinále za 8b, finále za 12b a vítězství za 15b." deadlineText={this.getDeadlineText(TournamentStage.Omikron)} />
             </div>
         );
     }
@@ -102,10 +102,10 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
             let nextStageName = "";
 
             const stageNames: { [key: number]: string } = {
-                [TournamentStage.FirstRound]: "osmifinale",
-                [TournamentStage.Quarterfinal]: "ctvrtfinale",
-                [TournamentStage.Semifinal]: "semifinale",
-                [TournamentStage.Final]: "finale"
+                [TournamentStage.FirstRound]: "osmifinále",
+                [TournamentStage.Quarterfinal]: "čtvrtfinále",
+                [TournamentStage.Semifinal]: "semifinále",
+                [TournamentStage.Final]: "finále"
             };
 
             for (const stageKey of [TournamentStage.FirstRound, TournamentStage.Quarterfinal, TournamentStage.Semifinal, TournamentStage.Final]) {
@@ -120,15 +120,15 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
             }
 
             if (nextDeadline) {
-                const text = `Sazky na skupiny, viteze, strelce a umisteni jsou uzavreny. Dalsi uzaverka: ${nextStageName} ${nextDeadline.getDate()}.${nextDeadline.getMonth() + 1}. v ${nextDeadline.getHours().toString().padStart(2, '0')}:${nextDeadline.getMinutes().toString().padStart(2, '0')}.`;
+                const text = `Sázky na skupiny, vítěze, střelce a umístění jsou uzavřeny. Další uzávěrka: ${nextStageName} ${nextDeadline.getDate()}.${nextDeadline.getMonth() + 1}. v ${nextDeadline.getHours().toString().padStart(2, '0')}:${nextDeadline.getMinutes().toString().padStart(2, '0')}.`;
                 return <WarningNotification text={text} type={WarningTypes.warning} />;
             }
 
-            return <WarningNotification text="Vsechny sazky jsou uzavreny." type={WarningTypes.error} />;
+            return <WarningNotification text="Všechny sázky jsou uzavřeny." type={WarningTypes.error} />;
         }
 
         const tournamentStart = new Date(this.state.deadlines.tournamentStart);
-        const text = `Sazky na skupiny, viteze, strelce a umisteni se uzavrou ${tournamentStart.getDate()}.${tournamentStart.getMonth() + 1}. v ${tournamentStart.getHours().toString().padStart(2, '0')}:${tournamentStart.getMinutes().toString().padStart(2, '0')}. Sazky na zapasy se uzaviraji se zacatkem kazdeho zapasu.`;
+        const text = `Sázky na skupiny, vítěze, střelce a umístění se uzavřou ${tournamentStart.getDate()}.${tournamentStart.getMonth() + 1}. v ${tournamentStart.getHours().toString().padStart(2, '0')}:${tournamentStart.getMinutes().toString().padStart(2, '0')}. Sázky na zápasy se uzavírají se začátkem každého zápasu.`;
         return <WarningNotification text={text} type={WarningTypes.warning} />;
     }
 }
