@@ -25,13 +25,17 @@
         [HttpGet("all")]
         public IActionResult GetAllMatches()
         {
-            return new OkObjectResult(this.context.GetMatches().OrderBy(m => m.StartTime).ToList());
+            var matches = this.context.GetMatches().OrderBy(m => m.StartTime).ToList();
+            matches.ForEach(m => m.StartTime = DateTime.SpecifyKind(m.StartTime, DateTimeKind.Utc));
+            return new OkObjectResult(matches);
         }
 
         [HttpGet("")]
         public IActionResult GetMatches([FromQuery] TournamentStage stage)
         {
-            return new OkObjectResult(this.context.GetMatches(stage).OrderBy(m => m.StartTime).ToList());
+            var matches = this.context.GetMatches(stage).OrderBy(m => m.StartTime).ToList();
+            matches.ForEach(m => m.StartTime = DateTime.SpecifyKind(m.StartTime, DateTimeKind.Utc));
+            return new OkObjectResult(matches);
         }
     }
 }

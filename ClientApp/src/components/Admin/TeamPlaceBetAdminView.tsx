@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getAdminApi, getApi } from "../api/ApiFactory"
-import { Match, Bet, Team, TournamentStage, PlaceTeamBet, BetsStageStatus } from "../../typings/index"
+import { Match, Bet, Team, TournamentStage, PlaceTeamBet } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { Loader } from '../Loader'
 import { Dictionary, IDictionary } from "../../typings/Dictionary"

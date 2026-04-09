@@ -1,10 +1,8 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, BetsStageStatus, TournamentStage } from "../../typings/index"
-import { Table } from 'reactstrap';
+import { Match, TournamentStage } from "../../typings/index"
 import { DeltaBetRow } from './DeltaBetRow';
 import { Loader } from '../Loader'
-import { Dictionary, IDictionary } from "../../typings/Dictionary"
 
 interface DeltaBetsState {
     matches: Match[],
@@ -13,7 +11,7 @@ interface DeltaBetsState {
 
 interface DeltaBetsProps {
     stage: TournamentStage,
-    status: BetsStageStatus
+    isReadOnly: boolean
 }
 
 export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
@@ -33,7 +31,7 @@ export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
     public render() {
         let contents = this.state.loading
             ? <Loader />
-            : this.props.status != BetsStageStatus.NotReady ? this.renderBetsTable() : <div />;
+            : this.renderBetsTable();
 
         return (
             <div>
@@ -52,13 +50,10 @@ export class DeltaBets extends React.Component<DeltaBetsProps, DeltaBetsState> {
             <div>
                 <div className="groupList">
                     {this.state.matches.map((match, index) => {
-                        return <DeltaBetRow key={match.id} match={match} isReadOnly={this.props.status == BetsStageStatus.Done} showResult={false} />
+                        return <DeltaBetRow key={match.id} match={match} isReadOnly={this.props.isReadOnly} showResult={false} />
                     })}
                 </div>
             </div>
         );
     }
-
-
 }
-

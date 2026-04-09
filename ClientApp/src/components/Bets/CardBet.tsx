@@ -1,56 +1,20 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import ReactTooltip from "react-tooltip";
-import { getApi } from "../api/ApiFactory"
-import { Match, Bet, User, Group, GroupBet, TournamentStage, BetsStageStatus } from "../../typings/index"
-import { Table, Tooltip } from 'reactstrap';
-import { MatchBetRow } from './MatchBetRow';
-import { Loader } from '../Loader'
-import { WarningNotification, WarningTypes } from '../WarningNotification';
-import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import authService from '../api-authorization/AuthorizeService'
-import { GroupTable } from './GroupTable';
+import { TournamentStage } from "../../typings/index"
 import './../../custom.css';
-
-interface CardBetState {
-    status: BetsStageStatus,
-    isLoading: boolean
-}
 
 interface CardBetProps {
     component: any,
-    status: BetsStageStatus,
     text: string,
     stage: TournamentStage,
-    confirm: (stage: TournamentStage) => Promise<void>,
-    modify: (stage: TournamentStage) => Promise<void>,
-    hideConfirmButton?: boolean,
-    showGenerateButton?: boolean,
     tooltip: string;
+    deadlineText?: string;
+    deadlinePassed?: boolean;
 }
 
-export class CardBet extends React.Component<CardBetProps, CardBetState> {
-
-    constructor(props: CardBetProps) {
-        super(props);
-        this.state = {
-            status: props.status,
-            isLoading: false
-        }
-    }
-
-    public async componentWillReceiveProps(nextProps: CardBetProps) {
-        this.setState({ status: nextProps.status })
-    }
+export class CardBet extends React.Component<CardBetProps> {
 
     public render() {
-        let contents = this.state.isLoading
-            ? <Loader />
-            : this.renderData();
-
-        return contents;
-    }
-
-    private renderData() {
         return (
             <div className="card opacity-card mb-3">
                 <div className="card-header" id={this.getId()}>
@@ -59,30 +23,14 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
                             <button className="btn btn-link collapsed" data-tip data-for={this.getCollapseId(false)+"_dataId"} type="button" data-toggle="collapse" data-target={this.getCollapseId(true)} aria-expanded="false" aria-controls={this.getCollapseId(false)}>
                                 {this.props.text}
                             </button>
+                            {this.renderDeadlineInfo()}
                        </h5>
-                        <div>
-                            {!!this.props.hideConfirmButton
-                                ? <div />
-                                :this.state.status == BetsStageStatus.Ready
-                                    ? <button type="button" className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
-                                    : this.state.status == BetsStageStatus.Done
-                                        ? <button type="button" className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>
-                                        : <div />
-                            }
-                            {!!this.props.showGenerateButton && this.state.status == BetsStageStatus.Ready
-                                ? <button type="button" className="btn btn-outline-secondary" onClick={() => this.generate()}> Vygenerovat na základě zápasů</button>
-                                : <div />
-
-                            }
-                        </div>
                     </div>
                 </div>
 
                 <div id={this.getCollapseId(false)} className="collapse" aria-labelledby={this.getId()} data-parent="#accordionExample">
                     <div className="card-body">
-                        {this.props.status == BetsStageStatus.NotReady
-                            ? this.renderMessage()
-                            : this.props.component}
+                        {this.props.component}
                     </div>
                 </div>
 
@@ -93,32 +41,14 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
         );
     }
 
+    private renderDeadlineInfo() {
+        if (!this.props.deadlineText) return null;
 
-
-
-
-    private modify() {
-        this.props.modify(this.props.stage);
-    }
-
-    private async confirm(): Promise<void> {
-        this.props.confirm(this.props.stage);
-    }
-
-    private async generate(): Promise<void> {
-        document.body.style.cursor = "wait";
-        getApi().generateGroupBets().then(this.generateCallback.bind(this));
-
-        this.setState({isLoading: true})
-    }
-
-    private generateCallback(success: boolean) {
-        document.body.style.cursor = "pointer";
-        if (!success) {
-            alert("Vytvoření skupinových sázek neproběhlo. Zkontroluj, zda jsou vyplěnny všechny zápasy ze skupin");
+        if (this.props.deadlinePassed) {
+            return <small className="text-danger ml-2">Sázky uzavřeny</small>;
         }
 
-        this.setState({ isLoading: false })
+        return <small className="text-muted ml-2">Uzavření: {this.props.deadlineText}</small>;
     }
 
     private getId(): string {
@@ -128,15 +58,4 @@ export class CardBet extends React.Component<CardBetProps, CardBetState> {
     private getCollapseId(withHash: boolean): string {
         return withHash ? `#collapse${this.props.stage}-${this.props.text}` : `collapse${this.props.stage}-${this.props.text}`;
     }
-
-    private renderMessage() {
-        return (
-            <div>
-                Prosím nejdříve vyplň sázky z dřívějšího kola.
-                V případě, že jsou všechny vyplněny, zkus obnovit stránku.
-                Nezapoň každou fázi Potvrdit!
-            </div>
-        )
-    }
 }
-

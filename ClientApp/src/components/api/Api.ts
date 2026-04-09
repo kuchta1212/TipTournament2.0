@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, BetsStageStatus, BetsStatus, PlaceTeamBet, TopShooterBet, GroupResult } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -7,6 +7,9 @@ import { convert } from "./ResponseConvertor"
 const API_URL = '/api';
 
 export class Api implements IApi {
+    getDeadlines(): Promise<DeadlineInfo> {
+        return convert<DeadlineInfo>(get(`${API_URL}/bets/deadlines`));
+    }
     uploadShooterBet(bet: string): Promise<TopShooterBet> {
         return convert<TopShooterBet>(post(`${API_URL}/bets/shooter?name=${bet}`));
     }
@@ -30,21 +33,6 @@ export class Api implements IApi {
         return !userId
             ? convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=true`))
             : convert<PlaceTeamBet>(get(`${API_URL}/bets/teamplace?isWinnerBet=true&userId=${userId}`))
-    }
-    generateGroupBets(): Promise<boolean> {
-        return convert<boolean>(post(`${API_URL}/bets/generate/groupbet`));
-    }
-    getBetsStatus(): Promise<BetsStatus> {
-        return convert<BetsStatus>(get(`${API_URL}/bets/status`));
-    }
-    confirmStageBets(stage: TournamentStage): Promise<BetsStatus> {
-        return convert<BetsStatus>(post(`${API_URL}/bets/status/${stage}/confirm`));
-    }
-    modifyStageBet(stage: TournamentStage): Promise<BetsStatus> {
-        return convert<BetsStatus>(post(`${API_URL}/bets/status/${stage}/modify`));
-    }
-    getBetsStageStatus(stage: TournamentStage): Promise<BetsStageStatus> {
-        return convert<BetsStageStatus>(get(`${API_URL}/bets/status/${stage}`));
     }
     async uploadDeltaBet(bet: DeltaBet, matchId: string): Promise<void> {
         await post(`${API_URL}/bets/delta?matchId=${matchId}`, bet);

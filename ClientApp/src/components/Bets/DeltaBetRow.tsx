@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, BetsStageStatus, DeltaBet, DeltaBetTeams } from "../../typings/index"
+import { Match, DeltaBet, DeltaBetTeams } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from '../Loader'

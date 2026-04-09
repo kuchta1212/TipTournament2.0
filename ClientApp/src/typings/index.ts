@@ -97,19 +97,6 @@ export interface UpdateStatus {
     errorMessage: string;
 }
 
-export interface BetsStatus {
-    id: string,
-    matchesInGroupsDone: boolean,
-    groupStagesDone: boolean,
-    firstStagesDones: boolean,
-    querterfinalStageDone: boolean,
-    semifinalStageDone: boolean,
-    finalStageDone: boolean,
-    winnerStageDone: boolean,
-    lambdaStageDone: boolean,
-    omikronStageDone: boolean
-}
-
 export enum TournamentStage {
     Group = 0,
     FirstRound = 1,
@@ -128,9 +115,8 @@ export interface DeltaBetTeams {
 }
 
 export enum BetsStageStatus {
-    NotReady = 0,
-    Ready = 1,
-    Done = 2
+    Open = 0,
+    Locked = 1
 }
 
 export interface PlaceTeamBet {
@@ -174,5 +160,10 @@ export interface GroupResult {
     secondId: string;
     thirdId: string;
     fourthId: string;
+}
+
+export interface DeadlineInfo {
+    tournamentStart: string;
+    stageDeadlines: { [key: string]: string };
 }
 

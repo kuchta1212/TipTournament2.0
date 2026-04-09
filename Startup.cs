@@ -115,7 +115,6 @@ namespace TipTournament2._0
             services.AddTransient<IBetResultMaker, BetResultMaker>();
             services.AddTransient<IResultCoordinatorFactory, ResultCoordinatorFactory>();
             services.AddTransient<ITeamGenerator, TeamGenerator>();
-            services.AddTransient<IBetGenerator, BetGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

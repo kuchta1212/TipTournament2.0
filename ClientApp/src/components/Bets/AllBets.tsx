@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { BetsStageStatus, User } from "../../typings/index"
+import { User } from "../../typings/index"
 import { Bets } from './Bets';
 import { Loader } from './../Loader'
 import { UserSelector } from './UserSelector';
@@ -31,7 +31,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
             selectorIds: ["0"],
             loading: true,
             isUserSelected: false,
-            isAllowed: new Date() > new Date("2024-06-14 21:00")
+            isAllowed: new Date() > new Date("2024-06-14T21:00:00Z")
         }
     }
 
@@ -70,7 +70,7 @@ export class AllBets extends React.Component<AllBetsProps, AllBetsState> {
             <React.Fragment>
                 {this.renderUserSelectors()}    
                 <button className="btn btn-link" onClick={() => this.addUserSelector()}><img src={process.env.PUBLIC_URL + 'icons/add.svg'} width="25" height="25" /></button>
-                <Bets key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} status={BetsStageStatus.Done} />
+                <Bets key={this.getCombineId()} users={this.state.selectedUsers?.getValues()} />
             </React.Fragment>
             );
     }

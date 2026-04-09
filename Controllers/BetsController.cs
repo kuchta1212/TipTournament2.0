@@ -1,4 +1,4 @@
-﻿
+
 namespace TipTournament2._0.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
@@ -20,13 +20,11 @@ namespace TipTournament2._0.Controllers
     {
         private readonly IDbContextWrapper context;
         private readonly ITeamGenerator teamGenerator;
-        private readonly IBetGenerator betGenerator;
 
-        public BetsController(IDbContextWrapper context, ITeamGenerator teamGenerator, IBetGenerator betGenerator)
+        public BetsController(IDbContextWrapper context, ITeamGenerator teamGenerator)
         {
             this.context = context;
             this.teamGenerator = teamGenerator;
-            this.betGenerator = betGenerator;
         }
         [HttpGet("")]
         public IActionResult GetBets()
@@ -41,32 +39,40 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
-        [HttpGet("status")]
-        public IActionResult GetStatus()
+        [HttpGet("deadlines")]
+        public IActionResult GetDeadlines()
         {
-            var userId = this.GetUserId();
-            return new OkObjectResult(this.context.GetBetsStatus(userId));
-        }
+            var stageDeadlines = new Dictionary<string, DateTime>();
+            var tournamentStart = this.context.GetTournamentStartTime();
 
-        [HttpGet("status/{stage}")]
-        public IActionResult GetStageStatus([FromRoute] TournamentStage stage)
-        {
-            var userId = this.GetUserId();
-            return new OkObjectResult(this.betGenerator.GetBetsStatus(stage, userId));
-        }
+            stageDeadlines[nameof(TournamentStage.Group)] = tournamentStart;
+            stageDeadlines[nameof(TournamentStage.Winner)] = tournamentStart;
+            stageDeadlines[nameof(TournamentStage.Lambda)] = tournamentStart;
+            stageDeadlines[nameof(TournamentStage.Omikron)] = tournamentStart;
 
-        [HttpPost("status/{stage}/confirm")]
-        public IActionResult ConfirmBetsStatus([FromRoute] TournamentStage stage)
-        {
-            var userId = this.GetUserId();
-            return new OkObjectResult(this.betGenerator.ConfirmBetsStatus(stage, userId));
-        }
+            // All knockout stages share the same deadline: first match of FirstRound
+            DateTime knockoutDeadline;
+            try
+            {
+                knockoutDeadline = this.context.GetStageStartTime(TournamentStage.FirstRound);
+            }
+            catch
+            {
+                knockoutDeadline = DateTime.MaxValue;
+            }
 
-        [HttpPost("status/{stage}/modify")]
-        public IActionResult ModifyBetsStatus([FromRoute] TournamentStage stage)
-        {
-            var userId = this.GetUserId();
-            return new OkObjectResult(this.betGenerator.ModifyBetsStatus(stage, userId));
+            stageDeadlines[nameof(TournamentStage.FirstRound)] = knockoutDeadline;
+            stageDeadlines[nameof(TournamentStage.Quarterfinal)] = knockoutDeadline;
+            stageDeadlines[nameof(TournamentStage.Semifinal)] = knockoutDeadline;
+            stageDeadlines[nameof(TournamentStage.Final)] = knockoutDeadline;
+
+            var deadlineInfo = new DeadlineInfo
+            {
+                TournamentStart = tournamentStart,
+                StageDeadlines = stageDeadlines
+            };
+
+            return new OkObjectResult(deadlineInfo);
         }
 
         [HttpGet("groups")]
@@ -91,7 +97,7 @@ namespace TipTournament2._0.Controllers
         public IActionResult GetTeamPlaceBetTeams([FromQuery] bool isWinnerBet)
         {
             var teams = isWinnerBet
-                ? this.teamGenerator.GetFinalists(this.GetUserId())
+                ? this.context.GetAllTeams().ToArray()
                 : this.teamGenerator.GenerateSpecificBetTeams();
 
             return new OkObjectResult(teams);
@@ -118,19 +124,31 @@ namespace TipTournament2._0.Controllers
         [HttpGet("delta/teams")]
         public IActionResult GetDeltaTeams([FromQuery] string matchId, [FromQuery] TournamentStage stage, [FromQuery] string userId = null)
         {
-            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.FirstRound, userId ?? this.GetUserId()));
-        }
+            var effectiveUserId = userId ?? this.GetUserId();
 
-        [HttpPost("generate/groupbet")]
-        public IActionResult GenerateGroupBets()
-        {
-            var userId = this.GetUserId();
-            return new OkObjectResult(this.betGenerator.CheckGroupMatchesAndGenerateTableResults(userId));
+            // Auto-fill FirstRound delta bets when fetching teams for the first time
+            if (stage == TournamentStage.FirstRound)
+            {
+                this.GenerateFirstRound(effectiveUserId);
+            }
+
+            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.FirstRound, effectiveUserId));
         }
 
         [HttpPost("tip")]
         public IActionResult UploadTip([FromBody] UploadTipRequest request)
         {
+            var match = this.context.GetMatchById(request.MatchId);
+            if (match == null)
+            {
+                return BadRequest("Zápas nebyl nalezen.");
+            }
+
+            if (DateTime.UtcNow >= match.StartTime)
+            {
+                return BadRequest("Sázky na tento zápas jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UploadTip(request.Tip, request.MatchId, userId);
             return new OkResult();
@@ -139,6 +157,11 @@ namespace TipTournament2._0.Controllers
         [HttpPost("group")]
         public IActionResult UploadGroupBet([FromBody] GroupBet groupBet, [FromQuery] string groupId)
         {
+            if (!this.IsTournamentOpen())
+            {
+                return BadRequest("Sázky na skupiny jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UploadGroupBet(groupBet, groupId, userId);
             return new OkResult();
@@ -147,6 +170,17 @@ namespace TipTournament2._0.Controllers
         [HttpPost("delta")]
         public IActionResult UploadDeltaBet([FromBody] DeltaBet deltaBet, [FromQuery] string matchId)
         {
+            var match = this.context.GetMatchById(matchId);
+            if (match == null)
+            {
+                return BadRequest("Zápas nebyl nalezen.");
+            }
+
+            if (!this.IsStageOpen(match.Stage))
+            {
+                return BadRequest("Sázky pro tuto fázi jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UpsertDeltaBet(deltaBet, matchId, userId);
             return new OkResult();
@@ -156,6 +190,11 @@ namespace TipTournament2._0.Controllers
         [HttpPost("teamplace")]
         public IActionResult UploadTeamPlaceBet([FromQuery] string teamId, [FromQuery] bool isWinnerBet, [FromQuery] TournamentStage stage)
         {
+            if (!this.IsTournamentOpen())
+            {
+                return BadRequest("Sázky na umístění týmů jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UpsertTeamPlaceBet(teamId, userId, isWinnerBet, stage);
             return new OkObjectResult(this.context.GetTeamPlaceBet(userId, isWinnerBet));
@@ -165,6 +204,11 @@ namespace TipTournament2._0.Controllers
         [HttpPost("shooter")]
         public IActionResult UploadShooterBet([FromQuery] string name)
         {
+            if (!this.IsTournamentOpen())
+            {
+                return BadRequest("Sázky na nejlepšího střelce jsou již uzavřeny.");
+            }
+
             var userId = this.GetUserId();
             this.context.UpsertShooterBet(name, userId);
             return new OkObjectResult(this.context.GetShooterBet(userId));
@@ -188,8 +232,65 @@ namespace TipTournament2._0.Controllers
             return this.User.Identity.IsAuthenticated ? this.User.FindFirstValue(ClaimTypes.NameIdentifier) : string.Empty;
         }
 
+        private bool IsTournamentOpen()
+        {
+            try
+            {
+                var tournamentStart = this.context.GetTournamentStartTime();
+                return DateTime.UtcNow < tournamentStart;
+            }
+            catch
+            {
+                return true;
+            }
+        }
 
+        private bool IsStageOpen(TournamentStage stage)
+        {
+            try
+            {
+                switch (stage)
+                {
+                    case TournamentStage.Group:
+                    case TournamentStage.Winner:
+                    case TournamentStage.Lambda:
+                    case TournamentStage.Omikron:
+                        return this.IsTournamentOpen();
+                    case TournamentStage.FirstRound:
+                    case TournamentStage.Quarterfinal:
+                    case TournamentStage.Semifinal:
+                    case TournamentStage.Final:
+                        var knockoutStart = this.context.GetStageStartTime(TournamentStage.FirstRound);
+                        return DateTime.UtcNow < knockoutStart;
+                    default:
+                        return true;
+                }
+            }
+            catch
+            {
+                return true;
+            }
+        }
 
+        private void GenerateFirstRound(string userId)
+        {
+            var matches = this.context.GetMatches(TournamentStage.FirstRound);
+            foreach (var match in matches)
+            {
+                var existingBet = this.context.GetDeltaBetByMatchId(userId, match.Id);
+                if (existingBet != null)
+                {
+                    continue;
+                }
 
+                var teams = this.teamGenerator.GenerateTeams(match.Id, true, userId);
+                var deltaBet = new DeltaBet()
+                {
+                    HomeTeamBet = teams.PossibleHomeTeams.Count == 1 ? teams.PossibleHomeTeams.First() : null,
+                    AwayTeamBet = teams.PossibleAwayTeams.Count == 1 ? teams.PossibleAwayTeams.First() : null,
+                };
+                this.context.UpsertDeltaBet(deltaBet, match.Id, userId);
+            }
+        }
     }
 }

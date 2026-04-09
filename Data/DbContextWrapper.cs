@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using TipTournament2._0.Models;
-    using TipTournament2._0.Utils;
 
     public class DbContextWrapper : IDbContextWrapper
     {
@@ -398,32 +397,6 @@
             return query.ToList();
         }
 
-        public BetsStatus GetBetsStatus(string userId)
-        {
-            return this.dbContext.BetsStatuses.Where(bs => bs.UserId == userId).FirstOrDefault();
-        }
-
-        public void ConfirmBetsStatus(TournamentStage stage, string userId)
-        {
-            var betsStatus = this.GetBetsStatus(userId);
-            if(betsStatus == null)
-            {
-                betsStatus = new BetsStatus()
-                {
-                    UserId = userId,
-                };
-                betsStatus.ConfirmStage(stage);
-
-                this.dbContext.Add(betsStatus);
-            } 
-            else
-            {
-                betsStatus.ConfirmStage(stage);
-            }
-
-            this.dbContext.SaveChanges();
-        }
-
         public List<GroupBet> GetGroupBetsForUser(string userId)
         {
             return this.dbContext.GroupBets
@@ -497,18 +470,6 @@
         public TopShooterBet GetShooterBet(string userId)
         {
             return this.dbContext.TopShooterBets.Where(b => b.UserId == userId).FirstOrDefault();
-        }
-
-        public void ModifyBetsStatus(TournamentStage stage, string userId)
-        {
-            var betsStatus = this.GetBetsStatus(userId);
-            if(betsStatus == null)
-            {
-                return;
-            }
-
-            betsStatus.ModifyStage(stage);
-            this.dbContext.SaveChanges();
         }
 
         public Group GetGroupById(string groupId)
@@ -615,6 +576,27 @@
             }
 
             return this.dbContext.DeltaBets.Where(db => db.MatchId == matchId).Include(db => db.Result).Include(db => db.Result.AdditionalResult).ToList();
+        }
+
+        public DateTime GetTournamentStartTime()
+        {
+            var startTime = this.dbContext.Matches
+                .Where(m => m.Stage == TournamentStage.Group)
+                .Min(m => m.StartTime);
+            return DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
+        }
+
+        public DateTime GetStageStartTime(TournamentStage stage)
+        {
+            var startTime = this.dbContext.Matches
+                .Where(m => m.Stage == stage)
+                .Min(m => m.StartTime);
+            return DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
+        }
+
+        public List<Team> GetAllTeams()
+        {
+            return this.dbContext.Teams.ToList();
         }
     }
 }

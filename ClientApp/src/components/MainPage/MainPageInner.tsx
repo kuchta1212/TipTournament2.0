@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { BetsStageStatus, TournamentStage, User } from "../../typings/index";
+import { TournamentStage, User } from "../../typings/index";
 import { MatchCard } from "./MatchCard";
 import { AlfaMatches } from "./AlfaMatches";
 import { GammaView } from './GammaView';
@@ -26,9 +26,9 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
         { text: "Delta - Čtvrtfinále", component: <DeltaView stage={TournamentStage.Quarterfinal} />, stage: TournamentStage.Quarterfinal },
         { text: "Delta - Semifinále", component: <DeltaView stage={TournamentStage.Semifinal} />, stage: TournamentStage.Semifinal },
         { text: "Delta - Finále", component: <DeltaView stage={TournamentStage.Final} />, stage: TournamentStage.Final },
-        { text: "Delta - Vítěz", component: <TeamPlaceBet isWinnerBet={true} status={BetsStageStatus.Done} showResult={true} />, stage: TournamentStage.Winner },
+        { text: "Delta - Vítěz", component: <TeamPlaceBet isWinnerBet={true} isReadOnly={true} showResult={true} />, stage: TournamentStage.Winner },
         { text: "Lambda - Nejlepší střelec", component: <BestShooterBet isReadOnly={true} showResult={true} />, stage: TournamentStage.Winner },
-        { text: "Omikron - Sázka na tým", component: <TeamPlaceBet isWinnerBet={false} status={BetsStageStatus.Done} showResult={true} />, stage: TournamentStage.Omikron },
+        { text: "Omikron - Sázka na tým", component: <TeamPlaceBet isWinnerBet={false} isReadOnly={true} showResult={true} />, stage: TournamentStage.Omikron },
     ];
 
     constructor(props: MainPageInnerProps) {

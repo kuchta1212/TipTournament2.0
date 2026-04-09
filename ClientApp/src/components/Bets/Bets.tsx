@@ -1,12 +1,10 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
-import { Match, Bet, User, TournamentStage, BetsStageStatus } from "../../typings/index"
+import { Match, Bet, User, TournamentStage, DeadlineInfo } from "../../typings/index"
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from './../Loader'
-import { WarningNotification, WarningTypes } from '../WarningNotification';
 import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import authService from './../api-authorization/AuthorizeService'
 
 interface BetsState {
     matches: Match[],
@@ -16,7 +14,7 @@ interface BetsState {
 
 interface BetsProps {
     users: User[] | undefined,
-    status: BetsStageStatus
+    deadlines?: DeadlineInfo | null
 }
 
 export class Bets extends React.Component<BetsProps, BetsState> {
@@ -63,6 +61,11 @@ export class Bets extends React.Component<BetsProps, BetsState> {
         let bets = await getApi().getBetsForUsers(users);
 
         return Dictionary.convert<Bet[]>(bets);
+    }
+
+    private isMatchLocked(match: Match): boolean {
+        if (!match.startTime) return false;
+        return new Date() > new Date(match.startTime);
     }
 
     private renderBetsTable(matches: Match[], userBets: IDictionary<Bet[]>) {
@@ -115,7 +118,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                 <tbody>
                     {matches.map((match, index) => (
                         <tr key={match.id}>
-                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={this.props.status == BetsStageStatus.Done} />
+                            <MatchBetRow match={match} bets={this.getBetsRow(userBets, match)} isReadOnly={this.isMatchLocked(match)} />
                         </tr>)
                     )}
                 </tbody>
@@ -123,4 +126,3 @@ export class Bets extends React.Component<BetsProps, BetsState> {
         );
     }
 }
-
