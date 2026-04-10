@@ -125,6 +125,117 @@ namespace TipTournament2._0.Tests.Coordinator
             Assert.Equal(3, user.AlfaPoints);  // 1 (WINNER) + 2 (DixitBonus)
             Assert.Equal(3, user.TotalPoints);
         }
+
+        [Fact]
+        public void UploadNewResult_WrongBet_DixitBonusIsZero_NoPointsAdded()
+        {
+            var result = new Result { HomeTeam = 2, AwayTeam = 1 };
+            var savedResult = new Result { Id = "r1", HomeTeam = 2, AwayTeam = 1 };
+            var match = new Match { Id = "m1" };
+            var user = new ApplicationUser { Id = "u1", AlfaPoints = 0, TotalPoints = 0 };
+            var bet = new MatchBet { Result = BetResult.NOTHING, DixitBonus = 0 };
+
+            this.mockDb.Setup(d => d.SaveResult(result)).Returns(savedResult);
+            this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
+            this.mockDb.Setup(d => d.GetBetsForMatch(It.IsAny<Match>())).Returns(new List<MatchBet>());
+            this.mockBetMaker.Setup(b => b.UpdateBetResult(It.IsAny<List<MatchBet>>(), It.IsAny<Result>())).Returns(new List<MatchBet>());
+            this.mockDb.Setup(d => d.GetAllUsers()).Returns(new List<ApplicationUser> { user });
+            this.mockDb.Setup(d => d.GetBetForMatchAndUser(match, "u1")).Returns(bet);
+
+            var sut = new GroupMatchesResultCoordinator(this.mockMatchClient.Object, this.mockDb.Object, this.mockBetMaker.Object);
+            sut.UploadNewResult("m1", result);
+
+            Assert.Equal(0, user.AlfaPoints);
+            Assert.Equal(0, user.TotalPoints);
+        }
+
+        [Fact]
+        public void UploadNewResult_EndToEnd_DixitBonusComputedAndAppliedToPoints()
+        {
+            // Simulates the full pipeline: UpdateBetResult sets Results on bets,
+            // then DixitBonusCalculator runs on those same bet objects,
+            // then RecalculatePoints re-fetches bets (with DixitBonus now set) and adds to user points.
+            var result = new Result { HomeTeam = 2, AwayTeam = 1 };
+            var savedResult = new Result { Id = "r1", HomeTeam = 2, AwayTeam = 1 };
+            var match = new Match { Id = "m1" };
+
+            var userA = new ApplicationUser { Id = "uA", AlfaPoints = 10, TotalPoints = 20 };
+            var userB = new ApplicationUser { Id = "uB", AlfaPoints = 5, TotalPoints = 15 };
+
+            // These are the bets that UpdateBetsResult will work with.
+            // BetResultMaker sets the Result field; DixitBonusCalculator then sets DixitBonus.
+            var betA = new MatchBet { Result = BetResult.NOTHING }; // will remain NOTHING
+            var betB = new MatchBet { Result = BetResult.NOTHING }; // will remain NOTHING
+            var allBets = new List<MatchBet> { betA, betB };
+
+            // BetResultMaker mock: simulates setting results. Only betB is correct.
+            this.mockBetMaker.Setup(b => b.UpdateBetResult(allBets, savedResult))
+                .Callback<List<MatchBet>, Result>((bets, r) =>
+                {
+                    bets[0].Result = BetResult.NOTHING;  // userA wrong
+                    bets[1].Result = BetResult.WINNER;    // userB correct (only 1 correct of 2 → +3)
+                })
+                .Returns(allBets);
+
+            this.mockDb.Setup(d => d.SaveResult(result)).Returns(savedResult);
+            this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
+            this.mockDb.Setup(d => d.GetBetsForMatch(It.IsAny<Match>())).Returns(allBets);
+            this.mockDb.Setup(d => d.GetAllUsers()).Returns(new List<ApplicationUser> { userA, userB });
+
+            // RecalculatePoints re-fetches bets from DB. We return the SAME objects
+            // (simulating that DixitBonus was persisted by UpdateBets and then read back).
+            this.mockDb.Setup(d => d.GetBetForMatchAndUser(match, "uA")).Returns(betA);
+            this.mockDb.Setup(d => d.GetBetForMatchAndUser(match, "uB")).Returns(betB);
+
+            var sut = new GroupMatchesResultCoordinator(this.mockMatchClient.Object, this.mockDb.Object, this.mockBetMaker.Object);
+            sut.UploadNewResult("m1", result);
+
+            // After UpdateBetsResult: betB.Result = WINNER, betB.DixitBonus = 3 (only 1 correct of 2)
+            Assert.Equal(BetResult.NOTHING, betA.Result);
+            Assert.Equal(0, betA.DixitBonus);
+            Assert.Equal(BetResult.WINNER, betB.Result);
+            Assert.Equal(3, betB.DixitBonus);
+
+            // userA: no points added (wrong bet)
+            Assert.Equal(10, userA.AlfaPoints);
+            Assert.Equal(20, userA.TotalPoints);
+
+            // userB: 1 (WINNER) + 3 (DixitBonus) = 4 added
+            Assert.Equal(9, userB.AlfaPoints);   // 5 + 4
+            Assert.Equal(19, userB.TotalPoints);  // 15 + 4
+        }
+
+        [Fact]
+        public void UploadNewResult_EndToEnd_MultipleCorrect_NoDixitBonus()
+        {
+            // 8 out of 10 correct → 80% → no Dixit bonus
+            var result = new Result { HomeTeam = 1, AwayTeam = 0 };
+            var savedResult = new Result { Id = "r1", HomeTeam = 1, AwayTeam = 0 };
+            var match = new Match { Id = "m1" };
+
+            var allBets = new List<MatchBet>();
+            for (int i = 0; i < 10; i++)
+                allBets.Add(new MatchBet { Result = BetResult.NOTHING });
+
+            this.mockBetMaker.Setup(b => b.UpdateBetResult(allBets, savedResult))
+                .Callback<List<MatchBet>, Result>((bets, r) =>
+                {
+                    for (int i = 0; i < 8; i++) bets[i].Result = BetResult.WINNER;
+                    // bets[8] and bets[9] stay NOTHING
+                })
+                .Returns(allBets);
+
+            this.mockDb.Setup(d => d.SaveResult(result)).Returns(savedResult);
+            this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
+            this.mockDb.Setup(d => d.GetBetsForMatch(It.IsAny<Match>())).Returns(allBets);
+            this.mockDb.Setup(d => d.GetAllUsers()).Returns(new List<ApplicationUser>());
+
+            var sut = new GroupMatchesResultCoordinator(this.mockMatchClient.Object, this.mockDb.Object, this.mockBetMaker.Object);
+            sut.UploadNewResult("m1", result);
+
+            // All bets should have 0 DixitBonus (80% correct)
+            Assert.All(allBets, b => Assert.Equal(0, b.DixitBonus));
+        }
     }
 }
 

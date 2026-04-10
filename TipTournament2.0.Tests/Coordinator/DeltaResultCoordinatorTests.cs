@@ -125,5 +125,26 @@ namespace TipTournament2._0.Tests.Coordinator
 
             this.mockBetMaker.Verify(b => b.UpdateAdditionalDeltaBetsResult(It.IsAny<List<DeltaBet>>(), It.IsAny<Match>()), Times.Never);
         }
+
+        [Fact]
+        public void RecalculatePoints_IncludesDixitBonus()
+        {
+            var match = new Match { Id = "m1", Stage = TournamentStage.Quarterfinal };
+            var tuple = new Tuple<string, string>("teamA", "teamB");
+            var user = new ApplicationUser { Id = "u1", DeltaPoints = 0, TotalPoints = 0 };
+            var deltaBet = new DeltaBet { Result = new DeltaBetResult { Points = 2 }, DixitBonus = 3 };
+
+            this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
+            this.mockDb.Setup(d => d.GetDeltaBetsByMatchId("m1")).Returns(new List<DeltaBet>());
+            this.mockBetMaker.Setup(b => b.UpdateDeltaBetsResult(It.IsAny<List<DeltaBet>>(), It.IsAny<Match>())).Returns(new List<DeltaBet>());
+            this.mockDb.Setup(d => d.GetAllUsers()).Returns(new List<ApplicationUser> { user });
+            this.mockDb.Setup(d => d.GetDeltaBetByMatchId("u1", "m1")).Returns(deltaBet);
+
+            var sut = this.CreateSut();
+            sut.UploadNewResult("m1", tuple);
+
+            Assert.Equal(5, user.DeltaPoints);  // 2 (Points) + 3 (DixitBonus)
+            Assert.Equal(5, user.TotalPoints);
+        }
     }
 }
