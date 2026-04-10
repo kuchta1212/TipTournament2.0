@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
 import { Match, DeltaBet, DeltaBetTeams } from "../../typings/index"
+import './../../custom.css';
 import { Table } from 'reactstrap';
 import { MatchBetRow } from './MatchBetRow';
 import { Loader } from '../Loader'
@@ -120,7 +121,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         <tr>
                             <td />
                             {this.props.showResult
-                                ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.getTotalPoints()}</td></tr>
+                                ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.getTotalPointsWithBonus()}{this.state.bet.dixitBonus > 0 && <span className="dixit-bonus"> (dixit +{this.state.bet.dixitBonus})</span>}</td></tr>
                                 : this.props.isReadOnly
                                     ? <div />
                                     : this.state.isEditable
@@ -135,6 +136,10 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
     private getTotalPoints(): number {
         return (this.state.bet.result?.points ?? 0) + (this.state.bet.result?.additionalResult?.points ?? 0);
+    }
+
+    private getTotalPointsWithBonus(): number {
+        return this.getTotalPoints() + (this.state.bet.dixitBonus ?? 0);
     }
 
     private getBackgroundClass(): string {
