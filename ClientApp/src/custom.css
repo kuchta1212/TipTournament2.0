@@ -200,6 +200,22 @@ code {
     margin-left: 0.25rem;
 }
 
+/* ===== Joker Bet ===== */
+
+.joker-bet {
+    background-color: rgba(255, 215, 0, 0.15) !important;
+}
+
+.joker-badge {
+    display: inline-block;
+    background: #ffc107;
+    color: #7b5e00;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+}
+
 /* ===== Rules Page ===== */
 
 .rules-page {

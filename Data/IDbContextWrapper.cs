@@ -102,5 +102,9 @@
         DateTime GetStageStartTime(TournamentStage stage);
 
         List<Team> GetAllTeams();
+
+        List<MatchBet> GetBetsForUserAndRound(string userId, int round);
+
+        MatchBet GetBetByMatchAndUser(string matchId, string userId);
     }
 }

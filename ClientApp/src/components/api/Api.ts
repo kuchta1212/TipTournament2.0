@@ -84,6 +84,10 @@ export class Api implements IApi {
         return convert<any>(post(`${API_URL}/bets/users?userIds`, users.map((user) => { if (!!user) { return user.id } })))
     }
 
+    async setJoker(matchId: string): Promise<void> {
+        await post(`${API_URL}/bets/joker?matchId=${matchId}`);
+    }
+
     async uploadTip(tip: Result, matchId: string): Promise<void> {
         await post(`${API_URL}/bets/tip/`, { tip: tip, matchId: matchId });
     }

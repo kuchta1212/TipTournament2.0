@@ -32,5 +32,7 @@
         public string Link { get; set; }
 
         public TournamentStage Stage { get; set; }
+
+        public int Round { get; set; }
     }
 }

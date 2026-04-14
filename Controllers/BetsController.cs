@@ -214,6 +214,54 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.context.GetShooterBet(userId));
         }
 
+        [HttpPost("joker")]
+        public IActionResult SetJoker([FromQuery] string matchId)
+        {
+            var match = this.context.GetMatchById(matchId);
+            if (match == null)
+            {
+                return BadRequest("Zápas nebyl nalezen.");
+            }
+
+            if (match.Stage != TournamentStage.Group)
+            {
+                return BadRequest("Joker lze nastavit pouze na skupinové zápasy.");
+            }
+
+            if (DateTime.UtcNow >= match.StartTime)
+            {
+                return BadRequest("Zápas již začal, Joker nelze změnit.");
+            }
+
+            var userId = this.GetUserId();
+
+            // Get all bets for this round — the target bet must be among them
+            var roundBets = this.context.GetBetsForUserAndRound(userId, match.Round);
+            var targetBet = roundBets.FirstOrDefault(b => b.Match != null && b.Match.Id == matchId);
+            if (targetBet == null)
+            {
+                return BadRequest("Nejprve musíš zadat tip na tento zápas.");
+            }
+
+            // If existing joker in this round is on a match that already started, round is locked
+            var existingJoker = roundBets.FirstOrDefault(b => b.IsJoker);
+            if (existingJoker != null && existingJoker.Match != null && DateTime.UtcNow >= existingJoker.Match.StartTime)
+            {
+                return BadRequest("Joker v tomto kole je již uzamčen — zápas s Jokerem již začal.");
+            }
+
+            // Clear existing Joker in the same round, then set on target
+            foreach (var roundBet in roundBets)
+            {
+                roundBet.IsJoker = false;
+            }
+
+            targetBet.IsJoker = true;
+            this.context.UpdateBets(roundBets);
+
+            return new OkResult();
+        }
+
         [HttpPost("users")]
         public IActionResult GetBets([FromBody] string[] userIds)
         {
