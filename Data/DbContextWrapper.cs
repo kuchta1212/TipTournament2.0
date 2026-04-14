@@ -598,5 +598,26 @@
         {
             return this.dbContext.Teams.ToList();
         }
+
+        public List<MatchBet> GetBetsForUserAndRound(string userId, int round)
+        {
+            return this.dbContext.Bets
+                .Include(b => b.Match)
+                .Include(b => b.User)
+                .Where(b => b.User.Id == userId)
+                .Where(b => b.Match.Stage == TournamentStage.Group)
+                .Where(b => b.Match.Round == round)
+                .ToList();
+        }
+
+        public MatchBet GetBetByMatchAndUser(string matchId, string userId)
+        {
+            return this.dbContext.Bets
+                .Include(b => b.Match)
+                .Include(b => b.User)
+                .Where(b => b.Match.Id == matchId)
+                .Where(b => b.User.Id == userId)
+                .FirstOrDefault();
+        }
     }
 }

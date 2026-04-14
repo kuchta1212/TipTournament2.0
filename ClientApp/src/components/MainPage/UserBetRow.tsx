@@ -23,9 +23,12 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
 
         return (
             <>
-                <td className={classNames.textClass}>{bet.tip.homeTeam} : {bet.tip.awayTeam}</td>
+                <td className={classNames.textClass}>
+                    {bet.isJoker && <span className="joker-badge">{'\u2605'}</span>}{' '}
+                    {bet.tip.homeTeam} : {bet.tip.awayTeam}
+                </td>
                 <td className={classNames.bgClass}>
-                    {bet.result}
+                    {bet.isJoker && bet.result !== BetResult.nothing ? bet.result * 2 : bet.result}
                     {bet.dixitBonus > 0 && <span className="dixit-bonus">+{bet.dixitBonus}</span>}
                 </td>
             </>
@@ -41,7 +44,10 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
     private renderBetSetted() {
         return (
             <>
-                <td>{this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}</td>
+                <td>
+                    {this.props.bet.isJoker && <span className="joker-badge">{'\u2605'}</span>}{' '}
+                    {this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}
+                </td>
                 <td />
             </>
         );

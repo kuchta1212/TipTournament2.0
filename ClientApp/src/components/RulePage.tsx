@@ -150,6 +150,26 @@ export class RulePage extends React.Component<RulePageProps> {
                         <div className="rules-note">
                             Bonusy se nesčítají — platí vždy nejvyšší dosažený stupeň. Bonus se počítá ze všech hráčů, kteří na daný zápas tipovali.
                         </div>
+                        <div className="rules-note">
+                            <strong>Joker:</strong> V každém kole skupinové fáze (3 kola) můžeš označit jeden tip jako Joker. Pokud je tip správný, základní body se zdvojnásobí:
+                        </div>
+                        <div className="rules-scoring">
+                            <div className="rules-score-row">
+                                <span className="rules-points rules-points-2">1 &rarr; 2 b.</span>
+                                <span>Správný vítěz s Jokerem</span>
+                            </div>
+                            <div className="rules-score-row">
+                                <span className="rules-points rules-points-4">2 &rarr; 4 b.</span>
+                                <span>Správný rozdíl s Jokerem</span>
+                            </div>
+                            <div className="rules-score-row">
+                                <span className="rules-points rules-points-4">4 &rarr; 8 b.</span>
+                                <span>Přesný výsledek s Jokerem</span>
+                            </div>
+                        </div>
+                        <div className="rules-note">
+                            Dixit bonus se Jokerem neovlivňuje — přičítá se zvlášť k již zdvojnásobeným bodům. Joker lze měnit až do začátku zápasu.
+                        </div>
                     </div>
 
                     <div className="rules-card">

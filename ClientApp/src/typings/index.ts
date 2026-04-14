@@ -14,6 +14,7 @@ export interface Match {
     ended: boolean;
     link: string;
     stage: TournamentStage;
+    round: number;
 }
 
 export interface Team {
@@ -41,6 +42,7 @@ export interface Bet {
     tip: Result;
     result: BetResult;
     dixitBonus: number;
+    isJoker: boolean;
     user: User;
 }
 

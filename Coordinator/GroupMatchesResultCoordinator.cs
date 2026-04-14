@@ -49,8 +49,11 @@
                 var betForUser = this.dbContextWrapper.GetBetForMatchAndUser(match, user.Id);
                 if (betForUser != null)
                 {
-                    user.AlfaPoints += (int)betForUser.Result + betForUser.DixitBonus;
-                    user.TotalPoints += (int)betForUser.Result + betForUser.DixitBonus;
+                    var basePoints = (int)betForUser.Result;
+                    var jokerMultiplier = betForUser.IsJoker && betForUser.Result != BetResult.NOTHING ? 2 : 1;
+                    var totalPoints = (basePoints * jokerMultiplier) + betForUser.DixitBonus;
+                    user.AlfaPoints += totalPoints;
+                    user.TotalPoints += totalPoints;
                 }
             }
 

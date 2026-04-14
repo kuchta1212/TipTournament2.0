@@ -25,5 +25,7 @@
         public BetResult Result { get; set; }
 
         public int DixitBonus { get; set; }
+
+        public bool IsJoker { get; set; }
     }
 }

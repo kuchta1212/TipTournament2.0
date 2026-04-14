@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
 import { Bet, Match, Result } from "../../typings/index"
 import { TeamCell } from './../TeamCell'
@@ -11,7 +11,11 @@ interface MatchBetRowState {
 interface MatchBetRowProps {
     match: Match,
     bets: Bet[] | undefined,
-    isReadOnly: boolean
+    isReadOnly: boolean,
+    isJoker?: boolean,
+    canSetJoker?: boolean,
+    onJokerToggle?: () => void,
+    onBetSaved?: () => void
 }
 
 export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowState> {
@@ -42,6 +46,29 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
         return `${date.getDate()}.${date.getMonth() + 1}. ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     }
 
+    private renderJokerButton() {
+        if (this.props.canSetJoker && this.props.onJokerToggle) {
+            return (
+                <td>
+                    <button
+                        className={`btn btn-sm ${this.props.isJoker ? 'btn-warning' : 'btn-outline-warning'}`}
+                        onClick={this.props.onJokerToggle}
+                        title={this.props.isJoker ? 'Joker nastaven' : 'Nastavit Joker'}
+                    >
+                        {this.props.isJoker ? '\u2605 Joker' : '\u2606'}
+                    </button>
+                </td>
+            );
+        }
+        if (this.props.isJoker) {
+            return <td><span className="joker-badge">{'\u2605'} 2x</span></td>;
+        }
+        if (this.props.canSetJoker !== undefined) {
+            return <td></td>;
+        }
+        return null;
+    }
+
     private renderSettedBet() {
         return (
             <React.Fragment>
@@ -51,7 +78,8 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
                 {this.state.tips.map((tip) => {
                     return (<td key={tip.id}>{tip.homeTeam} : {tip.awayTeam}</td>)
                 })}
-                {!this.isMatchLocked() ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : null} 
+                {!this.isMatchLocked() ? <td><button className="btn btn-link" onClick={() => this.modify()}>Upravit</button></td> : null}
+                {this.renderJokerButton()}
             </React.Fragment>
         );
     }
@@ -71,6 +99,7 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
                 ) : (
                     <td>-</td>
                 )}
+                {this.renderJokerButton()}
             </React.Fragment>
         );
     }
@@ -89,8 +118,11 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
 
     private async uploadTip() {
         if (this.isMatchLocked()) return;
-        this.setState({ setted: true })
-        getApi().uploadTip(this.state.tips[0], this.props.match.id);
+        this.setState({ setted: true });
+        await getApi().uploadTip(this.state.tips[0], this.props.match.id);
+        if (this.props.onBetSaved) {
+            this.props.onBetSaved();
+        }
     }
 
     private modify() {
@@ -98,4 +130,3 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
         this.setState({ setted: false });
     }
 }
-
