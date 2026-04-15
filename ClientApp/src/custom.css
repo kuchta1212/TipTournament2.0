@@ -898,11 +898,19 @@ code {
 }
 
 .ranking-current-user {
-    background: var(--primary-bg) !important;
+    background: rgba(66, 153, 225, 0.12) !important;
+    box-shadow: inset 4px 0 0 var(--primary);
 }
 
 .ranking-current-user td {
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--primary) !important;
+}
+
+.ranking-current-user td a,
+.ranking-current-user td .nav-link {
+    color: var(--primary) !important;
+    font-weight: 700;
 }
 
 /* ===== Notification (Phase 6) ===== */
