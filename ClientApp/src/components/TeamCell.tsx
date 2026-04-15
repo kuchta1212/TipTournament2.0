@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { Team } from '../typings';
 import './../custom.css';
 
@@ -16,6 +16,21 @@ export class TeamCell extends React.Component<MatchRowProps> {
             <td className="team-cell">
                 {this.props.team.name} <img src={process.env.PUBLIC_URL + this.props.team.iconPath} width="25" height="25" alt={this.props.team.name} />
             </td>
+        );
+    }
+}
+
+export class TeamDisplay extends React.Component<MatchRowProps> {
+    constructor(props: MatchRowProps) {
+        super(props);
+    }
+
+    public render() {
+        return (
+            <div className="match-card-team">
+                <img src={process.env.PUBLIC_URL + this.props.team.iconPath} width="25" height="25" alt={this.props.team.name} />
+                {this.props.team.name}
+            </div>
         );
     }
 }

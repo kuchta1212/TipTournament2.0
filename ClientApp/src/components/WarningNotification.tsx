@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 
 export enum WarningTypes {
     error,
@@ -19,10 +19,10 @@ export class WarningNotification extends React.Component<WarningProps> {
     public render() {
 
         return this.props.type == WarningTypes.error
-            ? ( <div className="alert alert-danger" role="alert">
+            ? ( <div className="app-notification app-notification-error" role="alert">
                 {this.props.text}
                 </div>)
-            : (<div className="alert alert-warning" role="alert">
+            : (<div className="app-notification app-notification-warning" role="alert">
                 {this.props.text}
             </div>)
     }

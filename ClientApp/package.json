@@ -13,7 +13,6 @@
     "bootstrap": "^4.6.0",
     "jquery": "^3.6.0",
     "merge": "^2.1.1",
-    "oidc-client": "^1.11.5",
     "react": "^16.14.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^16.14.0",
@@ -44,6 +43,7 @@
     "extends": "react-app"
   },
   "scripts": {
+    "prestart": "node aspnetcore-https && node aspnetcore-react",
     "start": "rimraf ./build && react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom",

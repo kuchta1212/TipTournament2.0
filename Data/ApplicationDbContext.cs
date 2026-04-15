@@ -1,16 +1,10 @@
-﻿namespace TipTournament2._0.Data
+namespace TipTournament2._0.Data
 {
-    using IdentityServer4.EntityFramework.Options;
-    using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Options;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using TipTournament2._0.Models;
 
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Match> Matches { get; set; }
 
@@ -44,9 +38,7 @@
 
         public DbSet<DeltaBetResult> DeltaBetResults { get; set; }
 
-        public ApplicationDbContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
     }

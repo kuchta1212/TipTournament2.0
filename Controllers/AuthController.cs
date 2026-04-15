@@ -1,0 +1,94 @@
+namespace TipTournament2._0.Controllers
+{
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
+    using TipTournament2._0.Models;
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        {
+            _signInManager = signInManager;
+            _userManager = userManager;
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var result = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, isPersistent: true, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(request.UserName);
+                return Ok(new { userName = user.UserName, didPayed = user.Payed });
+            }
+
+            return BadRequest(new { message = "Neplatné přihlašovací údaje." });
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok();
+        }
+
+        [HttpGet("user")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUser()
+        {
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return Ok(new { isAuthenticated = false });
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Ok(new { isAuthenticated = false });
+            }
+
+            return Ok(new
+            {
+                isAuthenticated = true,
+                userName = user.UserName,
+                didPayed = user.Payed
+            });
+        }
+
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            var user = new ApplicationUser { UserName = request.Email, Email = request.Email };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: true);
+                return Ok(new { userName = user.UserName, didPayed = user.Payed });
+            }
+
+            return BadRequest(new { errors = result.Errors });
+        }
+    }
+
+    public class LoginRequest
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class RegisterRequest
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}

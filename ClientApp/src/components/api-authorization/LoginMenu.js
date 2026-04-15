@@ -56,7 +56,7 @@ export class LoginMenu extends Component {
                 <NavLink className={didPayedClassName}>{didPayedLabel}</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-light" to={logoutPath}>Odhlásit se</NavLink>
+                <NavLink tag={Link} to={logoutPath}>Odhlásit se</NavLink>
             </NavItem>
         </Fragment>);
 
@@ -65,10 +65,10 @@ export class LoginMenu extends Component {
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
             <NavItem>
-                <NavLink tag={Link} className="text-light" to={registerPath}>Registrovat se</NavLink>
+                <NavLink tag={Link} to={registerPath}>Registrovat se</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-light" to={loginPath}>Přihlásit se</NavLink>
+                <NavLink tag={Link} to={loginPath}>Přihlásit se</NavLink>
             </NavItem>
         </Fragment>);
     }

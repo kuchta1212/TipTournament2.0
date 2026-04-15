@@ -1,6 +1,5 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { Match, Bet, TournamentStage } from "../../typings/index";
-import { Table } from 'reactstrap';
 import { MainRow } from './MainRow';
 import { Loader } from '../Loader';
 import { getApi } from '../api/ApiFactory';
@@ -51,17 +50,11 @@ export class AlfaMatches extends React.Component<AlfaMatchesProps, AlfaMatchesSt
 
     private renderMatchTable() {
         return (
-            <Table className="table table-striped table-bordered">
-                <thead>
-                </thead>
-                <tbody>
-                    {this.state.matches.map((match) => (
-                        <tr key={match.id}>
-                            <MainRow match={match} bet={this.getBet(match)} />
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+            <div className="main-match-card-list">
+                {this.state.matches.map((match) => (
+                    <MainRow key={match.id} match={match} bet={this.getBet(match)} />
+                ))}
+            </div>
         );
     }
 

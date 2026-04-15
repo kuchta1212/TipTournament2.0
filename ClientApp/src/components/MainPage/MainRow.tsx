@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { Match, Bet } from "../../typings/index";
 import { MatchRow } from "./MatchRow";
 import { UserBetRow } from "./UserBetRow";
@@ -15,10 +15,10 @@ export class MainRow extends React.Component<MainRowProps> {
 
     public render() {
         return (
-            <>
+            <div className="main-match-card">
                 <MatchRow match={this.props.match} />
                 {!!this.props.bet && <UserBetRow bet={this.props.bet} />}
-            </>
+            </div>
         );
     }
 }

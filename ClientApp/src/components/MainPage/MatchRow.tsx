@@ -1,6 +1,5 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { Match } from "../../typings/index";
-import { TeamCell } from "./../TeamCell";
 
 interface MatchRowProps {
     match: Match;
@@ -19,21 +18,33 @@ export class MatchRow extends React.Component<MatchRowProps> {
 
     private renderPlayedMatch() {
         return (
-            <>
-                <TeamCell team={this.props.match.home} />
-                <TeamCell team={this.props.match.away} />
-                <td>{this.props.match.result.homeTeam} : {this.props.match.result.awayTeam}</td>
-            </>
+            <div className="main-match-teams">
+                <div className="main-match-team">
+                    <img src={process.env.PUBLIC_URL + this.props.match.home.iconPath} width="20" height="20" alt={this.props.match.home.name} />
+                    {this.props.match.home.name}
+                </div>
+                <div className="main-match-result">{this.props.match.result.homeTeam} : {this.props.match.result.awayTeam}</div>
+                <div className="main-match-team">
+                    <img src={process.env.PUBLIC_URL + this.props.match.away.iconPath} width="20" height="20" alt={this.props.match.away.name} />
+                    {this.props.match.away.name}
+                </div>
+            </div>
         );
     }
 
     private renderNotPlayedMatch() {
         return (
-            <>
-                <TeamCell team={this.props.match.home} />
-                <TeamCell team={this.props.match.away} />
-                <td>{new Date(this.props.match.startTime).toLocaleDateString('cs-CS')}</td>
-            </>
+            <div className="main-match-teams">
+                <div className="main-match-team">
+                    <img src={process.env.PUBLIC_URL + this.props.match.home.iconPath} width="20" height="20" alt={this.props.match.home.name} />
+                    {this.props.match.home.name}
+                </div>
+                <div className="main-match-date">{new Date(this.props.match.startTime).toLocaleDateString('cs-CS')}</div>
+                <div className="main-match-team">
+                    <img src={process.env.PUBLIC_URL + this.props.match.away.iconPath} width="20" height="20" alt={this.props.match.away.name} />
+                    {this.props.match.away.name}
+                </div>
+            </div>
         );
     }
 }

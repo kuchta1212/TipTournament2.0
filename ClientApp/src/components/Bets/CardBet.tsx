@@ -18,7 +18,7 @@ export class CardBet extends React.Component<CardBetProps> {
         return (
             <div className="card opacity-card mb-3">
                 <div className="card-header" id={this.getId()}>
-                    <div className="row" style={{ justifyContent: 'space-between' }}>
+                    <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                         <h5 className="mb-0">
                             <button className="btn btn-link collapsed" data-tip data-for={this.getCollapseId(false)+"_dataId"} type="button" data-toggle="collapse" data-target={this.getCollapseId(true)} aria-expanded="false" aria-controls={this.getCollapseId(false)}>
                                 {this.props.text}
@@ -45,10 +45,10 @@ export class CardBet extends React.Component<CardBetProps> {
         if (!this.props.deadlineText) return null;
 
         if (this.props.deadlinePassed) {
-            return <small className="text-danger ml-2">Sázky uzavřeny</small>;
+            return <span className="deadline-badge deadline-badge-closed">Sázky uzavřeny</span>;
         }
 
-        return <small className="text-muted ml-2">Uzavření: {this.props.deadlineText}</small>;
+        return <span className="deadline-badge">Uzavření: {this.props.deadlineText}</span>;
     }
 
     private getId(): string {
