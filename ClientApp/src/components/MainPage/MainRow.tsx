@@ -11,12 +11,12 @@ export class MainRow extends React.Component<MainRowProps> {
         const { match, bet } = this.props;
         const isPlayed = match.ended;
         const hasBet = !!bet;
-        const cardClass = isPlayed && hasBet
-            ? `main-match-card ${this.getCardBorderClass(bet!)}`
-            : 'main-match-card';
+        const classes = ['main-match-card'];
+        if (isPlayed && hasBet) classes.push(this.getCardBorderClass(bet!));
+        if (hasBet && bet!.isJoker) classes.push('main-match-card-joker');
 
         return (
-            <div className={cardClass}>
+            <div className={classes.join(' ')}>
                 {/* Points badge - prominent, right side */}
                 {isPlayed && hasBet && this.renderPointsBadge(bet!)}
 
@@ -47,7 +47,6 @@ export class MainRow extends React.Component<MainRowProps> {
                 <span className="score-display">{match.result.homeTeam} : {match.result.awayTeam}</span>
                 {bet && (
                     <span className="main-match-tip">
-                        {bet.isJoker && <span className="joker-badge-sm">{'\u2605'}</span>}
                         tip {bet.tip.homeTeam}:{bet.tip.awayTeam}
                     </span>
                 )}
@@ -63,7 +62,6 @@ export class MainRow extends React.Component<MainRowProps> {
                 <span className="main-match-date-center">{dateStr}</span>
                 {bet?.tip && (
                     <span className="main-match-tip">
-                        {bet.isJoker && <span className="joker-badge-sm">{'\u2605'}</span>}
                         tip {bet.tip.homeTeam}:{bet.tip.awayTeam}
                     </span>
                 )}
@@ -73,11 +71,16 @@ export class MainRow extends React.Component<MainRowProps> {
 
     private renderPointsBadge(bet: Bet) {
         const points = bet.isJoker && bet.result !== BetResult.nothing ? bet.result * 2 : bet.result;
-        const totalPoints = points + (bet.dixitBonus ?? 0);
+        const dixitBonus = bet.dixitBonus ?? 0;
+        const totalPoints = points + dixitBonus;
         return (
-            <div className={`main-match-points ${this.getPointsClass(bet.result)}`}>
-                <span className="main-match-points-value">{totalPoints}</span>
-                <span className="main-match-points-label">b</span>
+            <div className="main-match-points-area">
+                <div className={`main-match-points ${this.getPointsClass(bet.result)}`}>
+                    <span className="main-match-points-value">{totalPoints}</span>
+                    <span className="main-match-points-label">b</span>
+                </div>
+                {bet.isJoker && <span className="main-match-joker-tag">{'\u2605'} 2x</span>}
+                {dixitBonus > 0 && <span className="main-match-dixit-tag">dixit +{dixitBonus}</span>}
             </div>
         );
     }
