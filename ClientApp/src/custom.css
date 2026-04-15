@@ -251,27 +251,7 @@ code {
     color: var(--danger);
 }
 
-/* ===== Loader ===== */
-.svgLoader {
-    animation: spin 0.5s linear infinite;
-    margin: auto;
-}
-
-.divLoader {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Skeleton loader */
+/* ===== Loader (Skeleton Shimmer) ===== */
 .skeleton-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -468,12 +448,29 @@ code {
     box-shadow: none;
 }
 
-.app-navbar .text-success {
-    font-weight: 600;
+/* ===== Payment Badge ===== */
+.payment-badge {
+    display: inline-block;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-pill);
+    vertical-align: middle;
+    margin: 0.5rem 0.85rem;
+    cursor: default;
+    letter-spacing: 0.03em;
 }
 
-.app-navbar .text-danger {
-    font-weight: 600;
+.payment-badge-paid {
+    background: var(--success-bg);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+.payment-badge-unpaid {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid var(--danger);
 }
 
 /* ===== Mobile Drawer ===== */
@@ -696,22 +693,44 @@ code {
     display: inline-block;
 }
 
-/* ===== Main Page Match Cards (Phase 4) ===== */
+/* ===== Main Page Match Cards ===== */
 .main-match-card {
     background: var(--surface);
     border: 1px solid var(--border);
+    border-left: 4px solid var(--border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     padding: var(--space-md) var(--space-lg);
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row-reverse;
     align-items: center;
-    gap: var(--space-sm) var(--space-lg);
+    gap: var(--space-md);
     transition: box-shadow var(--transition-normal);
 }
 
 .main-match-card:hover {
     box-shadow: var(--shadow-md);
+}
+
+/* Card border colors by result */
+.main-match-card-score {
+    border-left-color: #276749;
+    background: linear-gradient(to right, #f0fff4, var(--surface) 40%);
+}
+
+.main-match-card-difference {
+    border-left-color: #975a16;
+    background: linear-gradient(to right, #fffff0, var(--surface) 40%);
+}
+
+.main-match-card-winner {
+    border-left-color: #2b6cb0;
+    background: linear-gradient(to right, #ebf8ff, var(--surface) 40%);
+}
+
+.main-match-card-nothing {
+    border-left-color: #c53030;
+    background: linear-gradient(to right, #fff5f5, var(--surface) 40%);
 }
 
 .main-match-card-list {
@@ -720,83 +739,81 @@ code {
     gap: var(--space-sm);
 }
 
-.main-match-teams {
+/* Points badge - big and prominent */
+.main-match-points {
     display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    flex: 1;
-    min-width: 200px;
-}
-
-.main-match-team {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-weight: 500;
-    font-size: var(--font-sm);
-}
-
-.main-match-vs {
-    color: var(--text-muted);
-    font-size: var(--font-xs);
-    padding: 0 var(--space-xs);
-}
-
-.main-match-result {
-    font-weight: 700;
-    font-size: var(--font-base);
-    color: var(--text);
-    min-width: 50px;
-    text-align: center;
-}
-
-.main-match-date {
-    font-size: var(--font-xs);
-    color: var(--text-secondary);
-    min-width: 70px;
-}
-
-.main-match-bet {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-}
-
-.bet-result-badge {
-    display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
-    padding: 0.2rem 0.6rem;
-    border-radius: var(--radius-pill);
-    font-size: var(--font-xs);
-    font-weight: 700;
-    min-width: 28px;
+    min-width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+    padding: 0 var(--space-sm);
 }
 
-.bet-result-score {
+.main-match-points-value {
+    font-size: var(--font-xl);
+    font-weight: 800;
+    line-height: 48px;
+}
+
+.main-match-points-label {
+    font-size: var(--font-xs);
+    font-weight: 600;
+    margin-left: 1px;
+    opacity: 0.7;
+}
+
+.main-match-points-score {
     background: #c6f6d5;
     color: #276749;
 }
 
-.bet-result-difference {
+.main-match-points-difference {
     background: #fefcbf;
     color: #975a16;
 }
 
-.bet-result-winner {
+.main-match-points-winner {
     background: #bee3f8;
     color: #2b6cb0;
 }
 
-.bet-result-nothing {
+.main-match-points-nothing {
     background: #fed7d7;
     color: #c53030;
 }
 
-.bet-tip {
-    font-weight: 600;
+/* Center area with actual score + tip */
+.main-match-center {
+    text-align: center;
+    min-width: 80px;
+}
+
+.main-match-scores {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.main-match-tip {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.main-match-date-center {
     font-size: var(--font-sm);
-    color: var(--text);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.joker-badge-sm {
+    color: #d69e2e;
+    font-size: 0.7rem;
+    margin-right: 2px;
 }
 
 /* ===== Ranking Table (Phase 4) ===== */
@@ -1159,6 +1176,294 @@ code {
         min-width: 70px;
         padding: 0.75rem 0.5rem;
     }
+}
+
+/* ===== Delta Bet Cards ===== */
+.delta-bet-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-md) var(--space-lg);
+}
+
+.delta-bet-empty {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: var(--space-md);
+}
+
+.delta-bet-teams {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.delta-bet-team-slot {
+    flex: 1;
+    min-width: 140px;
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+}
+
+.delta-bet-vs {
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+}
+
+.delta-bet-additional {
+    margin-top: var(--space-sm);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.delta-additional-badge {
+    font-size: var(--font-xs);
+    color: var(--success);
+    background: var(--success-bg);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-pill);
+}
+
+.delta-bet-footer {
+    margin-top: var(--space-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.delta-points-partial {
+    background: var(--warning-bg);
+    color: var(--warning);
+}
+
+/* Delta compact (bracket mode) */
+.delta-bet-compact {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.5rem;
+    font-size: var(--font-xs);
+    position: relative;
+}
+
+.delta-compact-team {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.15rem 0;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.delta-compact-tbd {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.delta-compact-points {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.3rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-pill);
+}
+
+.delta-compact-success {
+    border-color: var(--success);
+    background: var(--success-bg);
+}
+
+.delta-compact-partial {
+    border-color: var(--warning);
+    background: var(--warning-bg);
+}
+
+.delta-compact-fail {
+    border-color: var(--danger);
+    background: var(--danger-bg);
+}
+
+/* ===== Tournament Bracket ===== */
+.bracket-container {
+    overflow-x: auto;
+    padding: var(--space-sm) 0;
+}
+
+.bracket {
+    display: flex;
+    align-items: stretch;
+    min-height: 500px;
+    min-width: 800px;
+}
+
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.bracket-round-title {
+    font-size: var(--font-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: center;
+    padding-bottom: var(--space-xs);
+    margin-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--primary-light);
+    letter-spacing: 0.05em;
+}
+
+.bracket-round-matches {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+    gap: 2px;
+}
+
+.bracket-match-slot {
+    padding: 2px 0;
+}
+
+/* Bracket connectors */
+.bracket-connector-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 24px;
+    flex-shrink: 0;
+}
+
+.bracket-connector-pair {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.bracket-connector-top {
+    flex: 1;
+    border-bottom: 2px solid var(--border);
+    border-right: 2px solid var(--border);
+    margin-right: 0;
+}
+
+.bracket-connector-bottom {
+    flex: 1;
+    border-top: 2px solid var(--border);
+    border-right: 2px solid var(--border);
+    margin-right: 0;
+}
+
+/* Desktop only */
+@media (min-width: 768px) {
+    .bracket-mobile {
+        display: none;
+    }
+}
+
+/* Mobile only */
+@media (max-width: 767.98px) {
+    .bracket-container {
+        display: none;
+    }
+
+    .bracket-mobile-round {
+        margin-bottom: var(--space-lg);
+    }
+
+    .bracket-mobile-title {
+        font-size: var(--font-sm);
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-sm);
+        padding-bottom: var(--space-xs);
+        border-bottom: 2px solid var(--primary-light);
+        letter-spacing: 0.05em;
+    }
+}
+
+/* ===== Special Bet Cards (Lambda/Omikron) ===== */
+.special-bet-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-lg);
+}
+
+.special-bet-content {
+    margin-bottom: var(--space-md);
+}
+
+.special-bet-fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.special-bet-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.special-bet-label {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.special-bet-confirmed {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.special-bet-value {
+    font-weight: 600;
+    font-size: var(--font-md);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+}
+
+.special-bet-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.special-bet-result {
+    display: inline-block;
+    font-weight: 700;
+    font-size: var(--font-sm);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-pill);
+}
+
+.special-bet-result-success {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.special-bet-result-fail {
+    background: var(--danger-bg);
+    color: var(--danger);
 }
 
 /* ===== Mobile Optimizations (Phase 7) ===== */

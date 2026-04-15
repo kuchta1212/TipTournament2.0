@@ -3,9 +3,9 @@ import { TournamentStage, User } from "../../typings/index";
 import { MatchCard } from "./MatchCard";
 import { AlfaMatches } from "./AlfaMatches";
 import { GammaView } from './GammaView';
-import { DeltaView } from './DeltaView';
 import { TeamPlaceBet } from '../Bets/TeamPlaceBet';
 import { BestShooterBet } from '../Bets/BestShooterBet';
+import { TournamentBracket } from '../Bets/TournamentBracket';
 import authService from './../api-authorization/AuthorizeService';
 import './../../custom.css';
 
@@ -22,10 +22,7 @@ export class MainInnerPage extends React.Component<MainPageInnerProps, MainPageI
     private data = [
         { text: "Alfa + Beta - Skupinová fáze", component: <AlfaMatches />, stage: TournamentStage.Group },
         { text: "Gamma - Skupiny", component: <GammaView />, stage: TournamentStage.Group },
-        { text: "Delta - Osmifinále", component: <DeltaView stage={TournamentStage.FirstRound} />, stage: TournamentStage.FirstRound },
-        { text: "Delta - Čtvrtfinále", component: <DeltaView stage={TournamentStage.Quarterfinal} />, stage: TournamentStage.Quarterfinal },
-        { text: "Delta - Semifinále", component: <DeltaView stage={TournamentStage.Semifinal} />, stage: TournamentStage.Semifinal },
-        { text: "Delta - Finále", component: <DeltaView stage={TournamentStage.Final} />, stage: TournamentStage.Final },
+        { text: "Delta - Pavouk", component: <TournamentBracket isReadOnly={true} showResult={true} />, stage: TournamentStage.FirstRound },
         { text: "Delta - Vítěz", component: <TeamPlaceBet isWinnerBet={true} isReadOnly={true} showResult={true} />, stage: TournamentStage.Winner },
         { text: "Lambda - Nejlepší střelec", component: <BestShooterBet isReadOnly={true} showResult={true} />, stage: TournamentStage.Winner },
         { text: "Omikron - Sázka na tým", component: <TeamPlaceBet isWinnerBet={false} isReadOnly={true} showResult={true} />, stage: TournamentStage.Omikron },

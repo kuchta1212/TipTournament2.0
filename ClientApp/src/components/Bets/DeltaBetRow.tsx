@@ -1,14 +1,9 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
 import { Match, DeltaBet, DeltaBetTeams } from "../../typings/index"
 import './../../custom.css';
-import { Table } from 'reactstrap';
-import { MatchBetRow } from './MatchBetRow';
 import { Loader } from '../Loader'
-import { WarningNotification, WarningTypes } from '../WarningNotification';
-import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import authService from '../api-authorization/AuthorizeService'
-import { TeamCell } from '../TeamCell';
+import { TeamDisplay } from '../TeamCell';
 
 interface BetSelection {
     homeId: string;
@@ -27,6 +22,7 @@ interface DeltaBetProps {
     match: Match;
     isReadOnly: boolean;
     showResult: boolean;
+    compact?: boolean;
 }
 
 export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
@@ -50,7 +46,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         let contents = this.state.loading
             ? <Loader />
             : this.props.isReadOnly && !this.state.bet.homeTeamBet
-                ? <div> Ještě sis nevsadil! </div>
+                ? <div className="delta-bet-card delta-bet-empty">Ještě sis nevsadil!</div>
                 : this.renderDeltaBet();
 
         return (
@@ -72,64 +68,99 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     }
 
     private renderDeltaBet() {
+        if (this.props.compact) {
+            return this.renderCompact();
+        }
+        return this.renderFull();
+    }
+
+    private renderCompact() {
+        const hasBet = !!this.state.bet.homeTeamBet && !!this.state.bet.awayTeamBet;
         return (
-            <div className="groupItem">
-                <Table className="table table-striped opacity-table">
-                    <tbody>
-                        <tr>
-                            <td className={this.getClass(1)}>
-                                {this.state.isEditable
-                                    ? <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <label className="input-group-text" htmlFor="inputGroupSelect01">Tým</label>
-                                        </div>
-                                        <select className="custom-select" id="inputFirstTeamSelect" defaultValue={this.state.selection.homeId ?? "default"} onChange={(event) => this.onSelect(event.target)}>
-                                            <option key="default-id" value="default" >Vyber tým</option>
-                                            {this.state.teams.possibleHomeTeams.map((team, index) => {
-                                                return <option key={team.id} value={team.id}>{team.name}</option>
-                                            })}
-                                        </select>
-                                    </div>
-                                    : (this.state.bet.homeTeamBet && <TeamCell team={this.state.bet.homeTeamBet} />)
-                                }
-                            </td>
-                            <td className={this.getClass(2)}>
-                                {this.state.isEditable
-                                ?   <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <label className="input-group-text" htmlFor="inputSecondTeamSelect">Tým</label>
-                                        </div>
-                                        <select className="custom-select" id="inputSecondTeamSelect" defaultValue={this.state.selection.awayId ?? "default"} onChange={(event) => this.onSelect(event.target)}>
-                                            <option key="default-id" value="default" >Vyber tým</option>
-                                            {this.state.teams.possibleAwayTeams.map((team, index) => {
-                                                return <option key={team.id} value={team.id}>{team.name}</option>
-                                            })}
-                                        </select>
-                                    </div>
-                                    : (this.state.bet.awayTeamBet && <TeamCell team={this.state.bet.awayTeamBet} />)
-                                }
-                            </td>
-                        </tr>
-                        {(this.state.bet.result?.additionalResult && <tr>
-                            <td className={this.getAdditionalClass(this.state.bet.result?.additionalResult?.isHomeTeamCorrect)}>
-                                {(this.state.bet.result?.additionalResult?.isHomeTeamCorrect && <p style={{ fontSize: 'small'}}>Dodatečné body za postup týmu, přes jinou část pavkouka</p>)}
-                            </td>
-                            <td className={this.getAdditionalClass(this.state.bet.result?.additionalResult?.isAwayTeamCorrect)}>
-                                {(this.state.bet.result?.additionalResult?.isAwayTeamCorrect && <p style={{ fontSize: 'small'}}>Dodatečné body za postup týmu, přes jinou část pavkouka</p>)}
-                            </td>
-                        </tr>)}
-                        <tr>
-                            <td />
-                            {this.props.showResult
-                                ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.getTotalPointsWithBonus()}{this.state.bet.dixitBonus > 0 && <span className="dixit-bonus"> (dixit +{this.state.bet.dixitBonus})</span>}</td></tr>
-                                : this.props.isReadOnly
-                                    ? <div />
-                                    : this.state.isEditable
-                                        ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
-                                        : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
-                        </tr>
-                    </tbody>
-                </Table>
+            <div className={`delta-bet-compact ${this.getCompactResultClass()}`}>
+                {hasBet ? (
+                    <>
+                        <div className={`delta-compact-team ${this.getTeamClass(1)}`}>
+                            <img src={process.env.PUBLIC_URL + this.state.bet.homeTeamBet.iconPath} width="18" height="18" alt={this.state.bet.homeTeamBet.name} />
+                            <span>{this.state.bet.homeTeamBet.name}</span>
+                        </div>
+                        <div className={`delta-compact-team ${this.getTeamClass(2)}`}>
+                            <img src={process.env.PUBLIC_URL + this.state.bet.awayTeamBet.iconPath} width="18" height="18" alt={this.state.bet.awayTeamBet.name} />
+                            <span>{this.state.bet.awayTeamBet.name}</span>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="delta-compact-team delta-compact-tbd">TBD</div>
+                        <div className="delta-compact-team delta-compact-tbd">TBD</div>
+                    </>
+                )}
+                {this.props.showResult && hasBet && (
+                    <div className={`delta-compact-points ${this.getPointsBadgeClass()}`}>
+                        {this.getTotalPointsWithBonus()}b
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    private renderFull() {
+        return (
+            <div className="delta-bet-card">
+                <div className="delta-bet-teams">
+                    <div className={`delta-bet-team-slot ${this.getTeamClass(1)}`}>
+                        {this.state.isEditable
+                            ? <div className="special-bet-input-group">
+                                <label className="special-bet-label">Tým 1</label>
+                                <select className="custom-select" id="inputFirstTeamSelect" defaultValue={this.state.selection.homeId ?? "default"} onChange={(event) => this.onSelect(event.target)}>
+                                    <option key="default-id" value="default">Vyber tým</option>
+                                    {this.state.teams.possibleHomeTeams.map((team, index) => {
+                                        return <option key={team.id} value={team.id}>{team.name}</option>
+                                    })}
+                                </select>
+                              </div>
+                            : (this.state.bet.homeTeamBet && <TeamDisplay team={this.state.bet.homeTeamBet} />)
+                        }
+                    </div>
+                    <span className="delta-bet-vs">vs</span>
+                    <div className={`delta-bet-team-slot ${this.getTeamClass(2)}`}>
+                        {this.state.isEditable
+                            ? <div className="special-bet-input-group">
+                                <label className="special-bet-label">Tým 2</label>
+                                <select className="custom-select" id="inputSecondTeamSelect" defaultValue={this.state.selection.awayId ?? "default"} onChange={(event) => this.onSelect(event.target)}>
+                                    <option key="default-id" value="default">Vyber tým</option>
+                                    {this.state.teams.possibleAwayTeams.map((team, index) => {
+                                        return <option key={team.id} value={team.id}>{team.name}</option>
+                                    })}
+                                </select>
+                              </div>
+                            : (this.state.bet.awayTeamBet && <TeamDisplay team={this.state.bet.awayTeamBet} />)
+                        }
+                    </div>
+                </div>
+                {(this.state.bet.result?.additionalResult && (
+                    <div className="delta-bet-additional">
+                        {this.state.bet.result?.additionalResult?.isHomeTeamCorrect && (
+                            <span className="delta-additional-badge">Dodatečné body za postup přes jinou část pavouka</span>
+                        )}
+                        {this.state.bet.result?.additionalResult?.isAwayTeamCorrect && (
+                            <span className="delta-additional-badge">Dodatečné body za postup přes jinou část pavouka</span>
+                        )}
+                    </div>
+                ))}
+                <div className="delta-bet-footer">
+                    {this.props.showResult
+                        ? <span className={`special-bet-result ${this.getResultBadgeClass()}`}>
+                            Body: {this.getTotalPointsWithBonus()}
+                            {this.state.bet.dixitBonus > 0 && <span className="dixit-bonus"> (dixit +{this.state.bet.dixitBonus})</span>}
+                          </span>
+                        : this.props.isReadOnly
+                            ? null
+                            : this.state.isEditable
+                                ? <button className="btn btn-primary" onClick={() => this.confirm()}>Potvrdit</button>
+                                : <button className="btn btn-secondary" onClick={() => this.modify()}>Upravit</button>
+                    }
+                </div>
             </div>
         );
     }
@@ -142,44 +173,39 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         return this.getTotalPoints() + (this.state.bet.dixitBonus ?? 0);
     }
 
-    private getBackgroundClass(): string {
-        if (!this.props.showResult || !this.state.bet.result) {
-            return "";
-        }
-
+    private getCompactResultClass(): string {
+        if (!this.props.showResult || !this.state.bet.result) return "";
         const points = this.getTotalPoints();
-
-        switch (points) {
-            case 0:
-                return "bg-danger";
-            case 1:
-            case 2:
-            case 3:
-                return "bg-warning";
-            case 4:
-                return "bg-success";
-            default:
-                return "";
-        }
+        if (points >= 4) return "delta-compact-success";
+        if (points > 0) return "delta-compact-partial";
+        return "delta-compact-fail";
     }
-     
-    private getClass(order: number): string {
-        if (!this.props.showResult || !this.state.bet.result) {
-            return "";
-        }
 
+    private getPointsBadgeClass(): string {
+        if (!this.props.showResult || !this.state.bet.result) return "";
+        const points = this.getTotalPoints();
+        if (points >= 4) return "special-bet-result-success";
+        if (points > 0) return "delta-points-partial";
+        return "special-bet-result-fail";
+    }
+
+    private getResultBadgeClass(): string {
+        if (!this.props.showResult || !this.state.bet.result) return "";
+        const points = this.getTotalPoints();
+        if (points >= 4) return "special-bet-result-success";
+        if (points > 0) return "delta-points-partial";
+        return "special-bet-result-fail";
+    }
+
+    private getTeamClass(order: number): string {
+        if (!this.props.showResult || !this.state.bet.result) return "";
         switch (order) {
             case 1:
                 return this.state.bet.result.isHomeTeamCorrect ? "border-success" : "border-fail";
             case 2:
                 return this.state.bet.result.isAwayTeamCorrect ? "border-success" : "border-fail";
         }
-
         return "";
-    }
-
-    private getAdditionalClass(isTeamCorrect: boolean): string {
-        return isTeamCorrect ? "border-success" : "";
     }
 
     private onSelect(event: any) {
@@ -243,4 +269,3 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         return db;
     }
 }
-

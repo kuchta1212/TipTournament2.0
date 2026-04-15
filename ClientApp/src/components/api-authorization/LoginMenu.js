@@ -1,4 +1,4 @@
-﻿import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
@@ -49,11 +49,11 @@ export class LoginMenu extends Component {
     }
 
     authenticatedView(userName, didPayed, profilePath, logoutPath) {
-        const didPayedLabel = didPayed ? "Zaplaceno" : "NEZAPLACENO";
-        const didPayedClassName = didPayed ? "text-success" : "text-danger";
+        const badgeClass = didPayed ? "payment-badge payment-badge-paid" : "payment-badge payment-badge-unpaid";
+        const badgeLabel = didPayed ? "Zaplaceno" : "NEZAPLACENO";
         return (<Fragment>
             <NavItem>
-                <NavLink className={didPayedClassName}>{didPayedLabel}</NavLink>
+                <span className={badgeClass}>{badgeLabel}</span>
             </NavItem>
             <NavItem>
                 <NavLink tag={Link} to={logoutPath}>Odhlásit se</NavLink>
