@@ -898,19 +898,23 @@ code {
 }
 
 .ranking-current-user {
-    background: rgba(66, 153, 225, 0.12) !important;
-    box-shadow: inset 4px 0 0 var(--primary);
+    background: #2b6cb0 !important;
 }
 
 .ranking-current-user td {
     font-weight: 700;
-    color: var(--primary) !important;
+    color: #fff !important;
+    border-bottom-color: rgba(255,255,255,0.15) !important;
 }
 
 .ranking-current-user td a,
 .ranking-current-user td .nav-link {
-    color: var(--primary) !important;
+    color: #fff !important;
     font-weight: 700;
+}
+
+.ranking-current-user:hover {
+    background: #2c5282 !important;
 }
 
 /* ===== Notification (Phase 6) ===== */
