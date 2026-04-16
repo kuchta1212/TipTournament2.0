@@ -19,7 +19,7 @@ export class AuthorizeService {
             if (response.ok) {
                 const data = await response.json();
                 if (data.isAuthenticated) {
-                    this._user = { name: data.userName, didPayed: data.didPayed };
+                    this._user = { sub: data.userId, name: data.userName, didPayed: data.didPayed };
                     this._isAuthenticated = true;
                     return this._user;
                 }

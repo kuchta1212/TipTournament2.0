@@ -59,6 +59,7 @@ namespace TipTournament2._0.Controllers
             return Ok(new
             {
                 isAuthenticated = true,
+                userId = user.Id,
                 userName = user.UserName,
                 didPayed = user.Payed
             });
