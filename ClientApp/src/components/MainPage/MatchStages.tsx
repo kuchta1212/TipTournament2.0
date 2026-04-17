@@ -1,6 +1,5 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { Match, Bet, UpdateStatus, TournamentStage } from "../../typings/index"
-import { Table } from 'reactstrap';
 import { MainRow } from './MainRow';
 import { getApi } from "../api/ApiFactory"
 import { Loader } from '../Loader'
@@ -54,24 +53,18 @@ export class MatchStages extends React.Component<MatchStagesProps, MatchStagesSt
 
     private renderMatchTable() {
         return (
-                <Table className="table table-striped opacity-table">
-                <thead>
-                </thead>
-                <tbody>
-                    {this.state.matches.map((match, index) => (
-                        <tr key={match.id}>
-                            <MainRow match={match} bet={this.getBet(match)} />
-                        </tr>)
-                    )}
-                </tbody>
-                </Table>
+            <div className="main-match-card-list">
+                {this.state.matches.map((match) => (
+                    <MainRow key={match.id} match={match} bet={this.getBet(match)} />
+                ))}
+            </div>
         );
     }
 
     private renderMesage() {
         return (
             <div>
-                Zatím zde nejsou žádné zápasy. 
+                Zatím zde nejsou žádné zápasy.
             </div>
         );
     }
@@ -80,4 +73,3 @@ export class MatchStages extends React.Component<MatchStagesProps, MatchStagesSt
        return this.state.bets.find(b => b.match.id == match.id);
     }
 }
-

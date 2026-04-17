@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { User } from "../../typings/index"
 import { NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
@@ -17,18 +17,17 @@ export class UserRow extends React.Component<UserRowProps> {
 
     public render() {
         let className = this.getTextClassName();
-        className += this.props.currentUser === this.props.user.id ? " bg-secondary text-white" : "";
         let beforeLimit = new Date() <= new Date("2024-06-14T21:00:00Z");
         return (
             <React.Fragment>
                 <td className={className}>
                     {beforeLimit ? <div className={this.getTextClassName()}>{this.getContent()}</div> : <NavLink tag={Link} className={this.getTextClassName()} to={this.getLink()}>{this.getContent()}</NavLink>}
                 </td>
-                <td>{this.props.user.alfaPoints}</td>
-                <td>{this.props.user.gamaPoints}</td>
-                <td>{this.props.user.deltaPoints}</td>
-                <td>{this.props.user.lambdaPoints}</td>
-                <td>{this.props.user.omikronPoints}</td>
+                <td className="detail-col">{this.props.user.alfaPoints}</td>
+                <td className="detail-col">{this.props.user.gamaPoints}</td>
+                <td className="detail-col">{this.props.user.deltaPoints}</td>
+                <td className="detail-col">{this.props.user.lambdaPoints}</td>
+                <td className="detail-col">{this.props.user.omikronPoints}</td>
                 <td className="font-weight-bold">{this.props.user.totalPoints}</td>
             </React.Fragment>
         );

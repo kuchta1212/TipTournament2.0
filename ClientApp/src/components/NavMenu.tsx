@@ -1,11 +1,11 @@
-﻿import * as React from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import * as React from 'react';
+import { Container, Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 
 interface INavMenuState {
-    collapsed: boolean
+    drawerOpen: boolean
 }
 
 interface INavMenuProps {
@@ -18,45 +18,73 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
     constructor(props: INavMenuProps) {
     super(props);
 
-    this.toggleNavbar = this.toggleNavbar.bind(this);
+    this.toggleDrawer = this.toggleDrawer.bind(this);
+    this.closeDrawer = this.closeDrawer.bind(this);
     this.state = {
-      collapsed: true
+      drawerOpen: false
     };
   }
 
-  toggleNavbar () {
+  toggleDrawer () {
     this.setState({
-      collapsed: !this.state.collapsed
+      drawerOpen: !this.state.drawerOpen
     });
+  }
+
+  closeDrawer () {
+    this.setState({ drawerOpen: false });
   }
 
   render () {
     return (
       <header>
-            <Navbar className="navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3" light>
+        <Navbar className="app-navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3">
           <Container>
             <NavbarBrand tag={Link} to="/">Tipovačka EURO 2024</NavbarBrand>
-            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
+
+            {/* Mobile hamburger */}
+            <button className="hamburger-btn d-sm-none" onClick={this.toggleDrawer} aria-label="Menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+
+            {/* Desktop nav */}
+            <div className="d-none d-sm-flex flex-sm-row-reverse flex-grow-1">
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-light" to="/tips">Sázky</NavLink>
+                  <NavLink tag={Link} to="/tips">Sázky</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-light" to="/bets/all">Všechny sázky</NavLink>
+                  <NavLink tag={Link} to="/bets/all">Všechny sázky</NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink tag={Link} className="text-light" to="/rules">Pravidla</NavLink>
+                    <NavLink tag={Link} to="/rules">Pravidla</NavLink>
                 </NavItem>
-                {/*<NavItem>*/}
-                {/*    <NavLink tag={Link} className="text-dark" to="/admin">Admin</NavLink>*/}
-                {/*</NavItem>*/}
                 <LoginMenu>
                 </LoginMenu>
               </ul>
-            </Collapse>
+            </div>
           </Container>
         </Navbar>
+
+        {/* Mobile drawer overlay */}
+        <div className={`drawer-overlay ${this.state.drawerOpen ? 'open' : ''}`} onClick={this.closeDrawer}></div>
+
+        {/* Mobile drawer */}
+        <nav className={`drawer ${this.state.drawerOpen ? 'open' : ''}`}>
+          <Link to="/" className="drawer-brand" onClick={this.closeDrawer}>Tipovačka EURO 2024</Link>
+          <ul className="drawer-nav">
+            <li><Link to="/tips" onClick={this.closeDrawer}>Sázky</Link></li>
+            <li><Link to="/bets/all" onClick={this.closeDrawer}>Všechny sázky</Link></li>
+            <li><Link to="/rules" onClick={this.closeDrawer}>Pravidla</Link></li>
+          </ul>
+          <hr className="drawer-divider" />
+          <ul className="drawer-nav">
+            <LoginMenu>
+            </LoginMenu>
+          </ul>
+        </nav>
       </header>
     );
   }

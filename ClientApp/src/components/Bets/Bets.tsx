@@ -140,7 +140,7 @@ export class Bets extends React.Component<BetsProps, BetsState> {
 
     private renderBetsTableForMultipleUsers(matches: Match[], userBets: IDictionary<Bet[]>) {
         return (
-            <Table className="table table-striped opacity-table">
+            <Table className="table table-striped comparison-table">
                 <thead>
                     <tr>
                         <th></th>
@@ -187,31 +187,27 @@ export class Bets extends React.Component<BetsProps, BetsState> {
                     const isRoundJokerLocked = jokerMatch ? this.isMatchLocked(jokerMatch) : false;
                     return (
                         <div key={round} className="mb-3">
-                            {round > 0 && <h5>Kolo {round}</h5>}
-                            <Table className="table table-striped table-bordered">
-                                <thead>
-                                </thead>
-                                <tbody>
-                                    {roundMatches.map((match) => {
-                                        const bets = this.getBetsRow(userBets, match);
-                                        const isLocked = this.isMatchLocked(match);
-                                        const isJoker = jokerMatchId === match.id;
-                                        return (
-                                            <tr key={match.id} className={isJoker ? 'joker-bet' : ''}>
-                                                <MatchBetRow
-                                                    match={match}
-                                                    bets={bets}
-                                                    isReadOnly={isLocked}
-                                                    isJoker={isJoker}
-                                                    canSetJoker={!isLocked && !isRoundJokerLocked}
-                                                    onJokerToggle={() => this.handleJokerToggle(match.id, round)}
-                                                    onBetSaved={() => this.handleBetSaved(match.id)}
-                                                />
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </Table>
+                            {round > 0 && <h5 className="round-header">Kolo {round}</h5>}
+                            <div className="match-card-list">
+                                {roundMatches.map((match) => {
+                                    const bets = this.getBetsRow(userBets, match);
+                                    const isLocked = this.isMatchLocked(match);
+                                    const isJoker = jokerMatchId === match.id;
+                                    return (
+                                        <MatchBetRow
+                                            key={match.id}
+                                            match={match}
+                                            bets={bets}
+                                            isReadOnly={isLocked}
+                                            isJoker={isJoker}
+                                            canSetJoker={!isLocked && !isRoundJokerLocked}
+                                            onJokerToggle={() => this.handleJokerToggle(match.id, round)}
+                                            onBetSaved={() => this.handleBetSaved(match.id)}
+                                            useCardLayout={true}
+                                        />
+                                    );
+                                })}
+                            </div>
                         </div>
                     );
                 })}

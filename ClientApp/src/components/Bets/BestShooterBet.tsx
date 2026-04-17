@@ -1,13 +1,7 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { getApi } from "../api/ApiFactory"
 import { TopShooterBet } from "../../typings/index"
-import { Table } from 'reactstrap';
-import { MatchBetRow } from './MatchBetRow';
 import { Loader } from '../Loader'
-import { WarningNotification, WarningTypes } from '../WarningNotification';
-import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import authService from '../api-authorization/AuthorizeService'
-import { TeamCell } from '../TeamCell';
 
 interface BetSelection {
     name: string
@@ -46,7 +40,7 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
             ? <Loader />
             : this.props.isReadOnly && !this.state.bet.id
                 ? <div>Ještě sis nevsadil!</div>
-                : this.renderDeltaBet();
+                : this.renderBet();
 
         return (
             <div>
@@ -65,57 +59,49 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
         }
     }
 
-    private renderDeltaBet() {
+    private renderBet() {
         return (
-            <div className="groupItem">
-                <Table className="table table-striped opacity-table">
-                    <tbody>
-                        <tr>
-                            <td>
-                                {this.state.isEditable
-                                    ?
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon3">Přijímení hráče</span>
-                                        </div>
-                                        <input type="text" className="form-control" id="shootername" aria-describedby="basic-addon3" placeholder="Lewandowski/Mbappe/Messi...." onChange={(event) => this.onChange(event.target)}/>
-                                    </div>
-                                    : <td className={this.getClass()}>{this.state.bet.shoterName}</td>}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {
-                                    this.props.showResult
-                                        ? <tr className={this.getBackgroundClass()}><td>Body:</td><td>{this.state.bet.isCorrect ? this.state.bet.points : 0}</td></tr>
-                                        : this.props.isReadOnly
-                                            ? <div />
-                                            : this.state.isEditable
-                                                ? <button className="btn btn-primary" onClick={() => this.confirm()}> Potvrdit</button>
-                                                : <button className="btn btn-secondary" onClick={() => this.modify()}> Upravit</button>}
-                            </td>
-                        </tr>
-                    </tbody>
-                </Table>
+            <div className="special-bet-card">
+                <div className="special-bet-content">
+                    {this.state.isEditable
+                        ? <div className="special-bet-input-group">
+                            <label className="special-bet-label" htmlFor="shootername">Příjmení hráče</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="shootername"
+                                placeholder="Lewandowski / Mbappe / Messi..."
+                                onChange={(event) => this.onChange(event.target)}
+                            />
+                          </div>
+                        : <div className={`special-bet-value ${this.getClass()}`}>
+                            {this.state.bet.shoterName}
+                          </div>
+                    }
+                </div>
+                <div className="special-bet-footer">
+                    {this.props.showResult
+                        ? <span className={`special-bet-result ${this.getResultClass()}`}>
+                            Body: {this.state.bet.isCorrect ? this.state.bet.points : 0}
+                          </span>
+                        : this.props.isReadOnly
+                            ? null
+                            : this.state.isEditable
+                                ? <button className="btn btn-primary" onClick={() => this.confirm()}>Potvrdit</button>
+                                : <button className="btn btn-secondary" onClick={() => this.modify()}>Upravit</button>
+                    }
+                </div>
             </div>
         );
     }
 
-    private getBackgroundClass(): string {
-        if (!this.props.showResult) {
-            return "";
-        }
-
-        return this.state.bet.isCorrect
-            ? "bg-success"
-            : "bg-danger";
+    private getResultClass(): string {
+        if (!this.props.showResult) return "";
+        return this.state.bet.isCorrect ? "special-bet-result-success" : "special-bet-result-fail";
     }
 
     private getClass(): string {
-        if (!this.props.showResult) {
-            return "";
-        }
-
+        if (!this.props.showResult) return "";
         return this.state.bet.isCorrect ? "border-success" : "border-fail";
     }
 
@@ -138,4 +124,3 @@ export class BestShooterBet extends React.Component<BestShooterBetProps, BestSho
         this.setState({ bet: bet, isEditable: false})
     }
 }
-

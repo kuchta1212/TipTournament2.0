@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { Bet, BetResult } from "../../typings/index";
 import './../../custom.css';
 
@@ -19,19 +19,20 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
 
     private renderPlayedMatchBet() {
         const { bet } = this.props;
-        const classNames = this.getClassNames(bet.result);
+        const badgeClass = this.getBadgeClass(bet.result);
+        const points = bet.isJoker && bet.result !== BetResult.nothing ? bet.result * 2 : bet.result;
 
         return (
-            <>
-                <td className={classNames.textClass}>
+            <div className="main-match-bet">
+                <span className="bet-tip">
                     {bet.isJoker && <span className="joker-badge">{'\u2605'}</span>}{' '}
                     {bet.tip.homeTeam} : {bet.tip.awayTeam}
-                </td>
-                <td className={classNames.bgClass}>
-                    {bet.isJoker && bet.result !== BetResult.nothing ? bet.result * 2 : bet.result}
+                </span>
+                <span className={`bet-result-badge ${badgeClass}`}>
+                    {points}
                     {bet.dixitBonus > 0 && <span className="dixit-bonus">+{bet.dixitBonus}</span>}
-                </td>
-            </>
+                </span>
+            </div>
         );
     }
 
@@ -43,37 +44,31 @@ export class UserBetRow extends React.Component<UserBetRowProps> {
 
     private renderBetSetted() {
         return (
-            <>
-                <td>
+            <div className="main-match-bet">
+                <span className="bet-tip">
                     {this.props.bet.isJoker && <span className="joker-badge">{'\u2605'}</span>}{' '}
                     {this.props.bet.tip.homeTeam} : {this.props.bet.tip.awayTeam}
-                </td>
-                <td />
-            </>
+                </span>
+            </div>
         );
     }
 
     private renderNoBet() {
-        return (
-            <>
-                <td />
-                <td />
-            </>
-        );
+        return <div className="main-match-bet"></div>;
     }
 
-    private getClassNames(result: BetResult) {
+    private getBadgeClass(result: BetResult): string {
         switch (result) {
             case BetResult.nothing:
-                return { textClass: "text-danger", bgClass: "bg-danger" };
+                return "bet-result-nothing";
             case BetResult.winner:
-                return { textClass: "text-info", bgClass: "bg-info" };
+                return "bet-result-winner";
             case BetResult.difference:
-                return { textClass: "text-warning", bgClass: "bg-warning" };
+                return "bet-result-difference";
             case BetResult.score:
-                return { textClass: "text-success", bgClass: "bg-success" };
+                return "bet-result-score";
             default:
-                return { textClass: "text-info", bgClass: "bg-info" };
+                return "bet-result-winner";
         }
     }
 }

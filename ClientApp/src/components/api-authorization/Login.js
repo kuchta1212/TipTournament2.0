@@ -1,142 +1,197 @@
-﻿import React from 'react'
+import React from 'react'
 import { Component } from 'react';
 import authService from './AuthorizeService';
-import { AuthenticationResultStatus } from './AuthorizeService';
 import { LoginActions, QueryParameterNames, ApplicationPaths } from './ApiAuthorizationConstants';
 import { Loader } from './../Loader'
 
-// The main responsibility of this component is to handle the user's login process.
-// This is the starting point for the login process. Any component that needs to authenticate
-// a user can simply perform a redirect to this component with a returnUrl query parameter and
-// let the component perform the login and return back to the return url.
 export class Login extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            message: undefined
+            message: undefined,
+            email: '',
+            password: '',
+            isLoading: false,
+            action: props.action
         };
     }
 
     componentDidMount() {
         const action = this.props.action;
-        switch (action) {
-            case LoginActions.Login:
-                this.login(this.getReturnUrl());
-                break;
-            case LoginActions.LoginCallback:
-                this.processLoginCallback();
-                break;
-            case LoginActions.LoginFailed:
-                const params = new URLSearchParams(window.location.search);
-                const error = params.get(QueryParameterNames.Message);
-                this.setState({ message: error });
-                break;
-            case LoginActions.Profile:
-                this.redirectToProfile();
-                break;
-            case LoginActions.Register:
-                this.redirectToRegister();
-                break;
-            default:
-                throw new Error(`Invalid action '${action}'`);
+        if (action === LoginActions.Login) {
+            // Show login form
+        } else if (action === LoginActions.Register) {
+            this.setState({ action: LoginActions.Register });
+        } else if (action === LoginActions.LoginFailed) {
+            const params = new URLSearchParams(window.location.search);
+            const error = params.get(QueryParameterNames.Message);
+            this.setState({ message: error });
         }
     }
 
     render() {
-        const action = this.props.action;
-        const { message } = this.state;
+        const { message, action } = this.state;
 
         if (!!message) {
             return <div>{message}</div>
-        } else {
-            switch (action) {
-                case LoginActions.Login:
-                    return this.processingLogin();
-                case LoginActions.LoginCallback:
-                    return this.processingLogin();
-                case LoginActions.Profile:
-                case LoginActions.Register:
-                    return (<div></div>);
-                default:
-                    throw new Error(`Invalid action '${action}'`);
-            }
         }
+
+        if (action === LoginActions.Register) {
+            return this.renderRegisterForm();
+        }
+
+        return this.renderLoginForm();
     }
 
-    processingLogin() {
-        return (
+    renderLoginForm() {
+        const { email, password, isLoading } = this.state;
+
+        if (isLoading) {
+            return (
                 <div className="justify-content-center">
-                <p className="display-4 text-light">Chvilku, přihlašuju!</p>
+                    <p className="display-4">Chvilku, přihlašuju!</p>
                     <Loader />
-                </div>)
+                </div>
+            );
+        }
+
+        return (
+            <div className="container" style={{ maxWidth: '400px', marginTop: '50px' }}>
+                <h2 className="text-light mb-4">Přihlášení</h2>
+                <form onSubmit={(e) => this.handleLogin(e)}>
+                    <div className="form-group mb-3">
+                        <label htmlFor="username">Uživatelské jméno</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="username"
+                            value={email}
+                            onChange={(e) => this.setState({ email: e.target.value })}
+                            required
+                        />
+                    </div>
+                    <div className="form-group mb-3">
+                        <label htmlFor="password">Heslo</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="password"
+                            value={password}
+                            onChange={(e) => this.setState({ password: e.target.value })}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary w-100">Přihlásit se</button>
+                </form>
+            </div>
+        );
     }
 
-    async login(returnUrl) {
-        const state = { returnUrl };
-        const result = await authService.signIn(state);
-        switch (result.status) {
-            case AuthenticationResultStatus.Redirect:
-                break;
-            case AuthenticationResultStatus.Success:
-                await this.navigateToReturnUrl(returnUrl);
-                break;
-            case AuthenticationResultStatus.Fail:
-                this.setState({ message: result.message });
-                break;
-            default:
-                throw new Error(`Invalid status result ${result.status}.`);
+    renderRegisterForm() {
+        const { email, password, isLoading } = this.state;
+
+        if (isLoading) {
+            return (
+                <div className="justify-content-center">
+                    <p className="display-4">Registruji...</p>
+                    <Loader />
+                </div>
+            );
+        }
+
+        return (
+            <div className="container" style={{ maxWidth: '400px', marginTop: '50px' }}>
+                <h2 className="text-light mb-4">Registrace</h2>
+                <form onSubmit={(e) => this.handleRegister(e)}>
+                    <div className="form-group mb-3">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="email"
+                            value={email}
+                            onChange={(e) => this.setState({ email: e.target.value })}
+                            required
+                        />
+                    </div>
+                    <div className="form-group mb-3">
+                        <label htmlFor="password">Heslo</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="password"
+                            value={password}
+                            onChange={(e) => this.setState({ password: e.target.value })}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary w-100">Registrovat se</button>
+                </form>
+            </div>
+        );
+    }
+
+    async handleLogin(e) {
+        e.preventDefault();
+        this.setState({ isLoading: true, message: undefined });
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ userName: this.state.email, password: this.state.password })
+            });
+
+            if (response.ok) {
+                authService._user = null;
+                authService.notifySubscribers();
+                const returnUrl = this.getReturnUrl();
+                window.location.replace(returnUrl);
+            } else {
+                const data = await response.json();
+                this.setState({ message: data.message || 'Přihlášení se nezdařilo.', isLoading: false });
+            }
+        } catch (error) {
+            this.setState({ message: 'Chyba při přihlašování.', isLoading: false });
         }
     }
 
-    async processLoginCallback() {
-        const url = window.location.href;
-        const result = await authService.completeSignIn(url);
-        switch (result.status) {
-            case AuthenticationResultStatus.Redirect:
-                // There should not be any redirects as the only time completeSignIn finishes
-                // is when we are doing a redirect sign in flow.
-                throw new Error('Should not redirect.');
-            case AuthenticationResultStatus.Success:
-                await this.navigateToReturnUrl(this.getReturnUrl(result.state));
-                break;
-            case AuthenticationResultStatus.Fail:
-                this.setState({ message: result.message });
-                break;
-            default:
-                throw new Error(`Invalid authentication result status '${result.status}'.`);
+    async handleRegister(e) {
+        e.preventDefault();
+        this.setState({ isLoading: true, message: undefined });
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ email: this.state.email, password: this.state.password })
+            });
+
+            if (response.ok) {
+                authService._user = null;
+                authService.notifySubscribers();
+                window.location.replace('/');
+            } else {
+                const data = await response.json();
+                const errorMsg = data.errors
+                    ? data.errors.map(e => e.description).join(' ')
+                    : 'Registrace se nezdařila.';
+                this.setState({ message: errorMsg, isLoading: false });
+            }
+        } catch (error) {
+            this.setState({ message: 'Chyba při registraci.', isLoading: false });
         }
     }
 
-    getReturnUrl(state) {
+    getReturnUrl() {
         const params = new URLSearchParams(window.location.search);
         const fromQuery = params.get(QueryParameterNames.ReturnUrl);
         if (fromQuery && !fromQuery.startsWith(`${window.location.origin}/`)) {
-            // This is an extra check to prevent open redirects.
             throw new Error("Invalid return url. The return url needs to have the same origin as the current page.")
         }
-        return (state && state.returnUrl) || fromQuery || `${window.location.origin}/`;
-    }
-
-    redirectToRegister() {
-        this.redirectToApiAuthorizationPath(`${ApplicationPaths.IdentityRegisterPath}?${QueryParameterNames.ReturnUrl}=${encodeURI(ApplicationPaths.Login)}`);
-    }
-
-    redirectToProfile() {
-        this.redirectToApiAuthorizationPath(ApplicationPaths.IdentityManagePath);
-    }
-
-    redirectToApiAuthorizationPath(apiAuthorizationPath) {
-        const redirectUrl = `${window.location.origin}${apiAuthorizationPath}`;
-        // It's important that we do a replace here so that when the user hits the back arrow on the
-        // browser he gets sent back to where it was on the app instead of to an endpoint on this
-        // component.
-        window.location.replace(redirectUrl);
-    }
-
-    navigateToReturnUrl(returnUrl) {
-        // It's important that we do a replace here so that we remove the callback uri with the
-        // fragment containing the tokens from the browser history.
-        window.location.replace(returnUrl);
+        return fromQuery || `${window.location.origin}/`;
     }
 }

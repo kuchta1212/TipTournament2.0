@@ -1,33 +1,28 @@
-﻿import authService from './../api-authorization/AuthorizeService'
-
 const requestInitDefaults = {
     credentials: 'same-origin'
 } as RequestInit;
 
-async function getGetRequestInitRequired() {
+function getGetRequestInit(): RequestInit {
     return {
-        method: 'GET',
-        headers: await getHeaders()
-    } as RequestInit;
+        method: 'GET'
+    };
 }
 
-async function getPostRequestInitRequired() {
-    let headers = await getHeaders();
-    headers.delete('Content-Type');
-    headers.append('Content-Type', 'application/json');
+function getPostRequestInit(): RequestInit {
     return {
         method: 'POST',
-        headers: headers
-    } as RequestInit;
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
 }
 
 export async function get(
     url: string,
 ): Promise<Response> {
-    const getGetRequestInit = await getGetRequestInitRequired()
     return fetch(url, {
         ...requestInitDefaults,
-        ...getGetRequestInit
+        ...getGetRequestInit()
     });
 }
 
@@ -35,17 +30,9 @@ export async function post(
     url: string,
     body?: object,
 ): Promise<Response> {
-    const getPostRequestInit = await getPostRequestInitRequired()
     return fetch(url, {
         ...requestInitDefaults,
-        ...getPostRequestInit,
+        ...getPostRequestInit(),
         body: JSON.stringify(body)
     });
-}
-
-async function getHeaders() {
-    const headers = new Headers();
-    const token = await authService.getAccessToken();
-    headers.append('Authorization', `Bearer ${token}`);
-    return headers;
 }
