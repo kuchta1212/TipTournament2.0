@@ -44,7 +44,7 @@ export class Ranking extends React.Component<RankingProps, RankingState> {
             : this.renderRanking();
 
         return (
-            <div className="col-12 col-md-8 offset-md-2" style={{ paddingLeft: "0px" }} >
+            <div>
                 <h1 id="tabelLabel" className="header">Pořadí</h1>
                 {contents}
             </div>

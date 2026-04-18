@@ -4,19 +4,21 @@ import { Match, Bet, BetResult } from "../../typings/index";
 interface MainRowProps {
     match: Match;
     bet: Bet | undefined;
+    onClick?: () => void;
 }
 
 export class MainRow extends React.Component<MainRowProps> {
     public render() {
-        const { match, bet } = this.props;
+        const { match, bet, onClick } = this.props;
         const isPlayed = match.ended;
         const hasBet = !!bet;
         const classes = ['main-match-card'];
         if (isPlayed && hasBet) classes.push(this.getCardBorderClass(bet!));
         if (hasBet && bet!.isJoker) classes.push('main-match-card-joker');
+        if (onClick) classes.push('main-match-card-clickable');
 
         return (
-            <div className={classes.join(' ')}>
+            <div className={classes.join(' ')} onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>
                 {/* Points badge - prominent, right side */}
                 {isPlayed && hasBet && this.renderPointsBadge(bet!)}
 

@@ -28,9 +28,9 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
 
     public render() {
         return (
-            <div className="container body-content">
+            <div className="container-fluid body-content" style={{ maxWidth: '1400px' }}>
                 <div className="row">
-                    <div className="col">
+                    <div className="col-lg-9">
                         <MainInnerPage activeStage={this.state.activeStage} user={undefined} />
                     </div>
                     <div className="col-lg-3">

@@ -88,6 +88,10 @@ export class Api implements IApi {
         await post(`${API_URL}/bets/joker?matchId=${matchId}`);
     }
 
+    getBetsForMatch(matchId: string): Promise<Bet[]> {
+        return convert<Bet[]>(get(`${API_URL}/bets/match/${matchId}`));
+    }
+
     async uploadTip(tip: Result, matchId: string): Promise<void> {
         await post(`${API_URL}/bets/tip/`, { tip: tip, matchId: matchId });
     }
