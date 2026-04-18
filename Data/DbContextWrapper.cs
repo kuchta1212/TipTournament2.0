@@ -136,6 +136,7 @@
             return this.dbContext.Bets
                 .Include(b => b.Match)
                 .Include(b => b.Tip)
+                .Include(b => b.User)
                 .Where(b => b.Match.Id == match.Id)
                 .ToList();
         }

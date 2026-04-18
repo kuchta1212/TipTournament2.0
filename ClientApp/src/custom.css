@@ -231,6 +231,7 @@ code {
 
 .card-body {
     padding: 1.25rem;
+    overflow: hidden;
 }
 
 /* ===== Deadline Badge ===== */
@@ -1349,15 +1350,15 @@ code {
     display: flex;
     align-items: stretch;
     min-height: 500px;
-    min-width: 800px;
+    min-width: 650px;
 }
 
 .bracket-round {
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-width: 150px;
-    max-width: 200px;
+    min-width: 130px;
+    max-width: 180px;
 }
 
 .bracket-round-title {
@@ -1510,6 +1511,159 @@ code {
 .special-bet-result-fail {
     background: var(--danger-bg);
     color: var(--danger);
+}
+
+/* ===== Match Bets Modal ===== */
+.modal-bet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1060;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+}
+
+.modal-bet-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 420px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-bet-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    z-index: 1;
+}
+
+.modal-bet-close:hover {
+    color: var(--text);
+}
+
+.modal-bet-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-lg) var(--space-lg) var(--space-md);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-bet-team {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: 600;
+    font-size: var(--font-sm);
+}
+
+.modal-bet-score {
+    font-weight: 800;
+    font-size: var(--font-lg);
+    color: var(--text);
+}
+
+.modal-bet-list {
+    overflow-y: auto;
+    padding: var(--space-sm) 0;
+}
+
+.modal-bet-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0.5rem var(--space-lg);
+    transition: background var(--transition-fast);
+}
+
+.modal-bet-row:hover {
+    background: var(--bg);
+}
+
+.modal-bet-row-current {
+    background: #2b6cb0 !important;
+}
+
+.modal-bet-row-current .modal-bet-player,
+.modal-bet-row-current .modal-bet-tip {
+    color: #fff !important;
+    font-weight: 700;
+}
+
+.modal-bet-row-current:hover {
+    background: #2c5282 !important;
+}
+
+.modal-bet-player {
+    flex: 1;
+    font-weight: 500;
+    font-size: var(--font-sm);
+    color: var(--text);
+}
+
+.modal-bet-tip {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    font-weight: 600;
+    min-width: 36px;
+    text-align: center;
+}
+
+.modal-bet-points {
+    font-size: var(--font-xs);
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-pill);
+    min-width: 32px;
+    text-align: center;
+}
+
+.modal-bet-points-score {
+    background: #c6f6d5;
+    color: #276749;
+}
+
+.modal-bet-points-difference {
+    background: #fefcbf;
+    color: #975a16;
+}
+
+.modal-bet-points-winner {
+    background: #bee3f8;
+    color: #2b6cb0;
+}
+
+.modal-bet-points-nothing {
+    background: #fed7d7;
+    color: #c53030;
+}
+
+.modal-bet-loading {
+    text-align: center;
+    padding: var(--space-lg);
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+}
+
+/* Clickable match card indicator */
+.main-match-card-clickable:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-light);
 }
 
 /* ===== Mobile Optimizations (Phase 7) ===== */

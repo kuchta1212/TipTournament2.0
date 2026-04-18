@@ -262,6 +262,24 @@ namespace TipTournament2._0.Controllers
             return new OkResult();
         }
 
+        [HttpGet("match/{matchId}")]
+        public IActionResult GetBetsForMatch([FromRoute] string matchId)
+        {
+            var match = this.context.GetMatchById(matchId);
+            if (match == null)
+            {
+                return NotFound("Zápas nebyl nalezen.");
+            }
+
+            if (DateTime.UtcNow < match.StartTime)
+            {
+                return BadRequest("Sázky na tento zápas ještě nelze zobrazit.");
+            }
+
+            var bets = this.context.GetBetsForMatch(match);
+            return new OkObjectResult(bets);
+        }
+
         [HttpPost("users")]
         public IActionResult GetBets([FromBody] string[] userIds)
         {

@@ -26,4 +26,5 @@ export interface IApi {
     getGroups(): Promise<Group[]>
     uploadGroupBet(bet: GroupBet, groupId: string): Promise<void>;
     setJoker(matchId: string): Promise<void>;
+    getBetsForMatch(matchId: string): Promise<Bet[]>;
 }

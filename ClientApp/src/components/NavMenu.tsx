@@ -56,9 +56,6 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
                   <NavLink tag={Link} to="/tips">Sázky</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} to="/bets/all">Všechny sázky</NavLink>
-                </NavItem>
-                <NavItem>
                     <NavLink tag={Link} to="/rules">Pravidla</NavLink>
                 </NavItem>
                 <LoginMenu>
@@ -76,7 +73,6 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
           <Link to="/" className="drawer-brand" onClick={this.closeDrawer}>Tipovačka EURO 2024</Link>
           <ul className="drawer-nav">
             <li><Link to="/tips" onClick={this.closeDrawer}>Sázky</Link></li>
-            <li><Link to="/bets/all" onClick={this.closeDrawer}>Všechny sázky</Link></li>
             <li><Link to="/rules" onClick={this.closeDrawer}>Pravidla</Link></li>
           </ul>
           <hr className="drawer-divider" />
