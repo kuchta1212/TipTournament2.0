@@ -106,5 +106,9 @@
         List<MatchBet> GetBetsForUserAndRound(string userId, int round);
 
         MatchBet GetBetByMatchAndUser(string matchId, string userId);
+
+        List<MatchBet> GetAllBetsWithIncludes();
+
+        List<DeltaBet> GetAllDeltaBetsWithIncludes();
     }
 }

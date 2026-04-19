@@ -620,5 +620,32 @@
                 .Where(b => b.User.Id == userId)
                 .FirstOrDefault();
         }
+
+        public List<MatchBet> GetAllBetsWithIncludes()
+        {
+            return this.dbContext.Bets
+                .Include(b => b.User)
+                .Include(b => b.Match)
+                    .ThenInclude(m => m.Home)
+                .Include(b => b.Match)
+                    .ThenInclude(m => m.Away)
+                .Include(b => b.Match)
+                    .ThenInclude(m => m.Result)
+                .Include(b => b.Tip)
+                .ToList();
+        }
+
+        public List<DeltaBet> GetAllDeltaBetsWithIncludes()
+        {
+            return this.dbContext.DeltaBets
+                .Include(b => b.User)
+                .Include(b => b.Match)
+                    .ThenInclude(m => m.Home)
+                .Include(b => b.Match)
+                    .ThenInclude(m => m.Away)
+                .Include(b => b.Result)
+                    .ThenInclude(r => r.AdditionalResult)
+                .ToList();
+        }
     }
 }

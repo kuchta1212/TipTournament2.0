@@ -1,4 +1,4 @@
-import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo } from "../../typings";
+import { MainData, Match, Bet, Result, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo, StatsResponse } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
@@ -27,4 +27,5 @@ export interface IApi {
     uploadGroupBet(bet: GroupBet, groupId: string): Promise<void>;
     setJoker(matchId: string): Promise<void>;
     getBetsForMatch(matchId: string): Promise<Bet[]>;
+    getStats(): Promise<StatsResponse>;
 }

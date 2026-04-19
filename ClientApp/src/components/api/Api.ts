@@ -1,4 +1,4 @@
-﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo } from "../../typings";
+﻿import { MainData, Match, Result, AllBets, Bet, User, UpdateStatus, TournamentStage, GroupBet, Team, Group, DeltaBet, DeltaBetTeams, PlaceTeamBet, TopShooterBet, GroupResult, DeadlineInfo, StatsResponse } from "../../typings";
 import { IDictionary } from "../../typings/Dictionary";
 import { IApi } from "./IApi";
 import { get, post } from "./HttpClient";
@@ -106,5 +106,9 @@ export class Api implements IApi {
 
     getUpdateStatus(): Promise<UpdateStatus> {
         return convert<UpdateStatus>(get(`${API_URL}/status/`))
+    }
+
+    getStats(): Promise<StatsResponse> {
+        return convert<StatsResponse>(get(`${API_URL}/stats`));
     }
 }

@@ -7,6 +7,7 @@ import { AllBets } from './components/Bets/AllBets'
 import { UserBetPage } from './components/Bets/UserBetPage'
 import { AdminPage } from './components/Admin/AdminPage'
 import { RulePage } from './components/RulePage'
+import { StatsPage } from './components/Stats/StatsPage'
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 //import AdminAuthorizeRoute from './components/api-authorization/AdminAuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -28,6 +29,7 @@ export default class App extends Component {
         <AuthorizeRoute exact path="/user/:userId" component={UserBetPage} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         <Route exact path="/rules" component={RulePage} />
+        <AuthorizeRoute exact path="/stats" component={StatsPage} />
       </Layout>
     );
   }
