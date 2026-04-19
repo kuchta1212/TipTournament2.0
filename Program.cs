@@ -80,11 +80,13 @@ app.UseStaticFiles();
 
 // In production, serve the React build output from ClientApp/build
 var spaPath = Path.Combine(app.Environment.ContentRootPath, "ClientApp", "build");
+IFileProvider spaFileProvider = null;
 if (Directory.Exists(spaPath))
 {
+    spaFileProvider = new PhysicalFileProvider(spaPath);
     app.UseStaticFiles(new StaticFileOptions
     {
-        FileProvider = new PhysicalFileProvider(spaPath)
+        FileProvider = spaFileProvider
     });
 }
 
@@ -96,6 +98,16 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 app.MapRazorPages();
-app.MapFallbackToFile("index.html");
+if (spaFileProvider != null)
+{
+    app.MapFallbackToFile("index.html", new StaticFileOptions
+    {
+        FileProvider = spaFileProvider
+    });
+}
+else
+{
+    app.MapFallbackToFile("index.html");
+}
 
 app.Run();
