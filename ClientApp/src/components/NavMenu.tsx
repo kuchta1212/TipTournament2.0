@@ -58,6 +58,9 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
                 <NavItem>
                     <NavLink tag={Link} to="/rules">Pravidla</NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink tag={Link} to="/stats">Statistiky</NavLink>
+                </NavItem>
                 <LoginMenu>
                 </LoginMenu>
               </ul>
@@ -74,6 +77,7 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
           <ul className="drawer-nav">
             <li><Link to="/tips" onClick={this.closeDrawer}>Sázky</Link></li>
             <li><Link to="/rules" onClick={this.closeDrawer}>Pravidla</Link></li>
+            <li><Link to="/stats" onClick={this.closeDrawer}>Statistiky</Link></li>
           </ul>
           <hr className="drawer-divider" />
           <ul className="drawer-nav">

@@ -171,3 +171,67 @@ export interface DeadlineInfo {
     stageDeadlines: { [key: string]: string };
 }
 
+// Stats types
+export interface StatsResponse {
+    rankingOverTime: RankingOverTimeEntry[];
+    matchNoOneGuessed: MatchStatEntry[];
+    exactScoreHeroes: PlayerCountStat[];
+    dixitLegends: PlayerCountStat[];
+    biggestUpsets: MatchPercentageStat[];
+    mostPredictableMatches: MatchPercentageStat[];
+    jokerEfficiency: JokerEfficiencyStat[];
+    averagePointsPerMatch: PlayerAverageStat[];
+}
+
+export interface RankingOverTimeEntry {
+    matchLabel: string;
+    matchStartTime: string;
+    playerPoints: PlayerPointSnapshot[];
+}
+
+export interface PlayerPointSnapshot {
+    userName: string;
+    cumulativePoints: number;
+}
+
+export interface MatchStatEntry {
+    matchId: string;
+    home: string;
+    away: string;
+    homeIcon: string;
+    awayIcon: string;
+    result: string;
+    startTime: string;
+}
+
+export interface PlayerCountStat {
+    userName: string;
+    count: number;
+}
+
+export interface MatchPercentageStat {
+    matchId: string;
+    home: string;
+    away: string;
+    homeIcon: string;
+    awayIcon: string;
+    result: string;
+    correctPercentage: number;
+    totalBets: number;
+}
+
+export interface JokerEfficiencyStat {
+    userName: string;
+    jokersUsed: number;
+    jokersCorrect: number;
+    successRate: number;
+    totalExtraPoints: number;
+}
+
+export interface PlayerAverageStat {
+    userName: string;
+    totalAlfaPoints: number;
+    matchesBetOn: number;
+    average: number;
+}
+
