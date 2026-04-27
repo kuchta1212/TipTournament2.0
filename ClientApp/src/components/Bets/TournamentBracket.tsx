@@ -7,10 +7,11 @@ import './../../custom.css';
 
 // Bracket match ordering (derived from appsettings DeltaStage.Next config)
 // Top-to-bottom order ensures connected matches are adjacent
-const R16_ORDER = ['match_39', 'match_37', 'match_41', 'match_42', 'match_43', 'match_44', 'match_40', 'match_38'];
-const QF_ORDER = ['match_45', 'match_46', 'match_47', 'match_48'];
-const SF_ORDER = ['match_49', 'match_50'];
-const FINAL_ORDER = ['match_51'];
+const R32_ORDER = ['match_77', 'match_78', 'match_76', 'match_73', 'match_74', 'match_75', 'match_79', 'match_80', 'match_88', 'match_86', 'match_82', 'match_81', 'match_83', 'match_84', 'match_85', 'match_87'];
+const R16_ORDER = ['match_89', 'match_90', 'match_91', 'match_92', 'match_93', 'match_94', 'match_95', 'match_96'];
+const QF_ORDER = ['match_97', 'match_98', 'match_99', 'match_100'];
+const SF_ORDER = ['match_101', 'match_102'];
+const FINAL_ORDER = ['match_104'];
 
 interface TournamentBracketProps {
     isReadOnly: boolean;
@@ -19,10 +20,12 @@ interface TournamentBracketProps {
 
 interface TournamentBracketState {
     loading: boolean;
+    r32Matches: Match[];
     r16Matches: Match[];
     qfMatches: Match[];
     sfMatches: Match[];
     finalMatches: Match[];
+    refreshKey: number;
 }
 
 export class TournamentBracket extends React.Component<TournamentBracketProps, TournamentBracketState> {
@@ -30,10 +33,12 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
         super(props);
         this.state = {
             loading: true,
+            r32Matches: [],
             r16Matches: [],
             qfMatches: [],
             sfMatches: [],
-            finalMatches: []
+            finalMatches: [],
+            refreshKey: 0
         };
     }
 
@@ -42,7 +47,8 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
     }
 
     private async getData() {
-        const [r16, qf, sf, final_] = await Promise.all([
+        const [r32, r16, qf, sf, final_] = await Promise.all([
+            getApi().getMatches(TournamentStage.RoundOf32),
             getApi().getMatches(TournamentStage.FirstRound),
             getApi().getMatches(TournamentStage.Quarterfinal),
             getApi().getMatches(TournamentStage.Semifinal),
@@ -51,6 +57,7 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
 
         this.setState({
             loading: false,
+            r32Matches: this.sortMatches(r32, R32_ORDER),
             r16Matches: this.sortMatches(r16, R16_ORDER),
             qfMatches: this.sortMatches(qf, QF_ORDER),
             sfMatches: this.sortMatches(sf, SF_ORDER),
@@ -74,7 +81,16 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
                 {/* Desktop bracket */}
                 <div className="bracket-container">
                     <div className="bracket">
-                        {this.renderRound('Osmifinále', this.state.r16Matches, 'r16')}
+                        {this.renderRound('1. kolo playoff', this.state.r32Matches, 'r32')}
+                        <div className="bracket-connector-col bracket-connector-r32">
+                            {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
+                                <div key={i} className="bracket-connector-pair">
+                                    <div className="bracket-connector-top"></div>
+                                    <div className="bracket-connector-bottom"></div>
+                                </div>
+                            ))}
+                        </div>
+                        {this.renderRound('Osmifinále', this.state.r16Matches, 'r16', this.state.refreshKey)}
                         <div className="bracket-connector-col bracket-connector-r16">
                             {[0, 1, 2, 3].map(i => (
                                 <div key={i} className="bracket-connector-pair">
@@ -83,7 +99,7 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
                                 </div>
                             ))}
                         </div>
-                        {this.renderRound('Čtvrtfinále', this.state.qfMatches, 'qf')}
+                        {this.renderRound('Čtvrtfinále', this.state.qfMatches, 'qf', this.state.refreshKey)}
                         <div className="bracket-connector-col bracket-connector-qf">
                             {[0, 1].map(i => (
                                 <div key={i} className="bracket-connector-pair">
@@ -92,40 +108,46 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
                                 </div>
                             ))}
                         </div>
-                        {this.renderRound('Semifinále', this.state.sfMatches, 'sf')}
+                        {this.renderRound('Semifinále', this.state.sfMatches, 'sf', this.state.refreshKey)}
                         <div className="bracket-connector-col bracket-connector-sf">
                             <div className="bracket-connector-pair">
                                 <div className="bracket-connector-top"></div>
                                 <div className="bracket-connector-bottom"></div>
                             </div>
                         </div>
-                        {this.renderRound('Finále', this.state.finalMatches, 'final')}
+                        {this.renderRound('Finále', this.state.finalMatches, 'final', this.state.refreshKey)}
                     </div>
                 </div>
 
                 {/* Mobile stacked view */}
                 <div className="bracket-mobile">
-                    {this.renderMobileRound('Osmifinále', this.state.r16Matches)}
-                    {this.renderMobileRound('Čtvrtfinále', this.state.qfMatches)}
-                    {this.renderMobileRound('Semifinále', this.state.sfMatches)}
-                    {this.renderMobileRound('Finále', this.state.finalMatches)}
+                    {this.renderMobileRound('1. kolo playoff', this.state.r32Matches)}
+                    {this.renderMobileRound('Osmifinále', this.state.r16Matches, this.state.refreshKey)}
+                    {this.renderMobileRound('Čtvrtfinále', this.state.qfMatches, this.state.refreshKey)}
+                    {this.renderMobileRound('Semifinále', this.state.sfMatches, this.state.refreshKey)}
+                    {this.renderMobileRound('Finále', this.state.finalMatches, this.state.refreshKey)}
                 </div>
             </div>
         );
     }
 
-    private renderRound(title: string, matches: Match[], roundClass: string) {
+    private onBetConfirmed = () => {
+        this.setState(prev => ({ refreshKey: prev.refreshKey + 1 }));
+    }
+
+    private renderRound(title: string, matches: Match[], roundClass: string, refreshKey?: number) {
         return (
             <div className={`bracket-round bracket-round-${roundClass}`}>
                 <div className="bracket-round-title">{title}</div>
                 <div className="bracket-round-matches">
                     {matches.map(match => (
-                        <div key={match.id} className="bracket-match-slot">
+                        <div key={refreshKey != null ? `${match.id}-${refreshKey}` : match.id} className="bracket-match-slot">
                             <DeltaBetRow
                                 match={match}
                                 isReadOnly={this.props.isReadOnly}
                                 showResult={this.props.showResult}
                                 compact={true}
+                                onBetConfirmed={this.onBetConfirmed}
                             />
                         </div>
                     ))}
@@ -134,17 +156,18 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
         );
     }
 
-    private renderMobileRound(title: string, matches: Match[]) {
+    private renderMobileRound(title: string, matches: Match[], refreshKey?: number) {
         return (
             <div className="bracket-mobile-round">
                 <h6 className="bracket-mobile-title">{title}</h6>
                 <div className="groupList">
                     {matches.map(match => (
                         <DeltaBetRow
-                            key={match.id}
+                            key={refreshKey != null ? `${match.id}-${refreshKey}` : match.id}
                             match={match}
                             isReadOnly={this.props.isReadOnly}
                             showResult={this.props.showResult}
+                            onBetConfirmed={this.onBetConfirmed}
                         />
                     ))}
                 </div>

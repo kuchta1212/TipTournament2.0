@@ -23,6 +23,7 @@ interface DeltaBetProps {
     isReadOnly: boolean;
     showResult: boolean;
     compact?: boolean;
+    onBetConfirmed?: () => void;
 }
 
 export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
@@ -58,10 +59,13 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
     private async getData() {
         let userId = window.location.pathname.startsWith('/user/') ? window.location.pathname.substring(6) : undefined;
-        const bet = await getApi().getDeltaBet(this.props.match.id, userId);
+        // Call getTeamsForDeltaBet first — it triggers backend autofill for R32
         const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage, userId);
+        // Re-fetch bet AFTER autofill may have created/updated it
+        const bet = await getApi().getDeltaBet(this.props.match.id, userId);
+        const hasTeams = teams.possibleHomeTeams?.some((t: any) => !!t.id) && teams.possibleAwayTeams?.some((t: any) => !!t.id);
         if (!bet.id || (!bet.homeTeamBet || !bet.awayTeamBet)) {
-            this.setState({ loading: false, teams: teams });
+            this.setState({ loading: false, teams: teams, isEditable: !this.props.isReadOnly && hasTeams });
         } else {
             this.setState({ bet: bet, loading: false, isEditable: false, teams: teams});
         }
@@ -76,8 +80,14 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
     private renderCompact() {
         const hasBet = !!this.state.bet.homeTeamBet && !!this.state.bet.awayTeamBet;
+        if (!hasBet && this.state.isEditable) {
+            return this.renderCompactEditable();
+        }
         return (
-            <div className={`delta-bet-compact ${this.getCompactResultClass()}`}>
+            <div className={`delta-bet-compact ${this.getCompactResultClass()}`}
+                onClick={hasBet && this.state.isEditable === false && !this.props.showResult && !this.props.isReadOnly ? () => this.modify() : undefined}
+                style={hasBet && !this.state.isEditable && !this.props.showResult && !this.props.isReadOnly ? { cursor: 'pointer' } : undefined}
+            >
                 {hasBet ? (
                     <>
                         <div className={`delta-compact-team ${this.getTeamClass(1)}`}>
@@ -99,6 +109,46 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                     <div className={`delta-compact-points ${this.getPointsBadgeClass()}`}>
                         {this.getTotalPointsWithBonus()}b
                     </div>
+                )}
+            </div>
+        );
+    }
+
+    private renderCompactEditable() {
+        const hasTeams = this.state.teams.possibleHomeTeams?.some((t: any) => !!t.id);
+        return (
+            <div className="delta-bet-compact delta-compact-editable">
+                {hasTeams ? (
+                    <>
+                        <select
+                            className="delta-compact-select"
+                            defaultValue="default"
+                            onChange={(e) => this.onSelect(e.target as any)}
+                            id="inputFirstTeamSelect"
+                        >
+                            <option value="default">Tým 1</option>
+                            {this.state.teams.possibleHomeTeams.map(team => (
+                                <option key={team.id} value={team.id}>{team.name}</option>
+                            ))}
+                        </select>
+                        <select
+                            className="delta-compact-select"
+                            defaultValue="default"
+                            onChange={(e) => this.onSelect(e.target as any)}
+                            id="inputSecondTeamSelect"
+                        >
+                            <option value="default">Tým 2</option>
+                            {this.state.teams.possibleAwayTeams.map(team => (
+                                <option key={team.id} value={team.id}>{team.name}</option>
+                            ))}
+                        </select>
+                        <button className="btn btn-primary btn-sm delta-compact-confirm" onClick={() => this.confirm()}>OK</button>
+                    </>
+                ) : (
+                    <>
+                        <div className="delta-compact-team delta-compact-tbd">TBD</div>
+                        <div className="delta-compact-team delta-compact-tbd">TBD</div>
+                    </>
                 )}
             </div>
         );
@@ -249,7 +299,8 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
             await getApi().uploadDeltaBet(bet, this.props.match.id);
 
-            this.setState({ isEditable: false, bet: bet })
+            this.setState({ isEditable: false, bet: bet });
+            this.props.onBetConfirmed?.();
         }
     }
 
