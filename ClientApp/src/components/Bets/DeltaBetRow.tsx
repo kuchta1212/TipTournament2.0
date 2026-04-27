@@ -208,7 +208,9 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                             ? null
                             : this.state.isEditable
                                 ? <button className="btn btn-primary" onClick={() => this.confirm()}>Potvrdit</button>
-                                : <button className="btn btn-secondary" onClick={() => this.modify()}>Upravit</button>
+                                : this.state.bet.homeTeamBet
+                                    ? <button className="btn btn-secondary" onClick={() => this.modify()}>Upravit</button>
+                                    : null
                     }
                 </div>
             </div>
