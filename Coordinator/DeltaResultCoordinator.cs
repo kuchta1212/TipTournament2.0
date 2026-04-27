@@ -34,7 +34,7 @@
             match.AwayId = (result as Tuple<string, string>).Item2;
             match.Ended = true;
             this.dbContextWrapper.UpdateMatch(match);
-            if (match.Stage != TournamentStage.FirstRound)
+            if (match.Stage != TournamentStage.RoundOf32)
             {
                 this.UpdateDeltaBetsResults(match);
                 this.RecalculatePoints(match.Id);

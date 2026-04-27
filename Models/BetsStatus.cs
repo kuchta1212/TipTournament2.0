@@ -22,6 +22,8 @@
 
         public bool GroupStagesDone { get; set; }
 
+        public bool RoundOf32StageDone { get; set; }
+
         public bool FirstStagesDones { get; set; }
 
         public bool QuerterfinalStageDone { get; set; }

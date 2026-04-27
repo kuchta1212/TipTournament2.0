@@ -25,7 +25,7 @@
         {
             switch(stage)
             {
-                case TournamentStage.FirstRound:
+                case TournamentStage.RoundOf32:
                     return this.GenerateTeamsFirstRound(matchId);
                 case TournamentStage.Winner:
                     return this.GenerateTeamsWinner(matchId);
@@ -62,6 +62,18 @@
 
             var homeTeamBetOptions = this.dbContextWrapper.GetDeltaBetByMatchId(userId, matchOption.Matches[0]);
             var awayTeamBetOptions = this.dbContextWrapper.GetDeltaBetByMatchId(userId, matchOption.Matches[1]);
+
+            // If no user bet exists for a feeder match (e.g. R32), use actual match teams
+            if (homeTeamBetOptions == null)
+            {
+                homeTeamBetOptions = this.CreateBetFromMatchData(matchOption.Matches[0]);
+            }
+
+            if (awayTeamBetOptions == null)
+            {
+                awayTeamBetOptions = this.CreateBetFromMatchData(matchOption.Matches[1]);
+            }
+
             if (homeTeamBetOptions == null || awayTeamBetOptions == null)
             {
                 return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
@@ -74,6 +86,21 @@
             };
 
             return result;
+        }
+
+        private DeltaBet CreateBetFromMatchData(string matchId)
+        {
+            var match = this.dbContextWrapper.GetMatchById(matchId);
+            if (match.HomeId != null && match.AwayId != null)
+            {
+                return new DeltaBet
+                {
+                    HomeTeamBet = this.dbContextWrapper.GetTeam(match.HomeId),
+                    AwayTeamBet = this.dbContextWrapper.GetTeam(match.AwayId)
+                };
+            }
+
+            return null;
         }
 
         private DeltaBetTeams GenerateTeamsFirstRound(string matchId)
@@ -151,7 +178,7 @@
 
         public Team[] GetFinalists(string userId)
         {
-            var deltaBet = this.dbContextWrapper.GetDeltaBetByMatchId(userId, "match_51");
+            var deltaBet = this.dbContextWrapper.GetDeltaBetByMatchId(userId, "match_104");
             return deltaBet == null
                 ? new Team[0]
                 : new List<Team>() { deltaBet.HomeTeamBet, deltaBet.AwayTeamBet }.ToArray();

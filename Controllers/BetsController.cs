@@ -50,17 +50,18 @@ namespace TipTournament2._0.Controllers
             stageDeadlines[nameof(TournamentStage.Lambda)] = tournamentStart;
             stageDeadlines[nameof(TournamentStage.Omikron)] = tournamentStart;
 
-            // All knockout stages share the same deadline: first match of FirstRound
+            // All knockout stages share the same deadline: first match of RoundOf32
             DateTime knockoutDeadline;
             try
             {
-                knockoutDeadline = this.context.GetStageStartTime(TournamentStage.FirstRound);
+                knockoutDeadline = this.context.GetStageStartTime(TournamentStage.RoundOf32);
             }
             catch
             {
                 knockoutDeadline = DateTime.MaxValue;
             }
 
+            stageDeadlines[nameof(TournamentStage.RoundOf32)] = knockoutDeadline;
             stageDeadlines[nameof(TournamentStage.FirstRound)] = knockoutDeadline;
             stageDeadlines[nameof(TournamentStage.Quarterfinal)] = knockoutDeadline;
             stageDeadlines[nameof(TournamentStage.Semifinal)] = knockoutDeadline;
@@ -126,13 +127,7 @@ namespace TipTournament2._0.Controllers
         {
             var effectiveUserId = userId ?? this.GetUserId();
 
-            // Auto-fill FirstRound delta bets when fetching teams for the first time
-            if (stage == TournamentStage.FirstRound)
-            {
-                this.GenerateFirstRound(effectiveUserId);
-            }
-
-            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.FirstRound, effectiveUserId));
+            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage == TournamentStage.RoundOf32, effectiveUserId));
         }
 
         [HttpPost("tip")]
@@ -322,11 +317,12 @@ namespace TipTournament2._0.Controllers
                     case TournamentStage.Lambda:
                     case TournamentStage.Omikron:
                         return this.IsTournamentOpen();
+                    case TournamentStage.RoundOf32:
                     case TournamentStage.FirstRound:
                     case TournamentStage.Quarterfinal:
                     case TournamentStage.Semifinal:
                     case TournamentStage.Final:
-                        var knockoutStart = this.context.GetStageStartTime(TournamentStage.FirstRound);
+                        var knockoutStart = this.context.GetStageStartTime(TournamentStage.RoundOf32);
                         return DateTime.UtcNow < knockoutStart;
                     default:
                         return true;
@@ -338,25 +334,5 @@ namespace TipTournament2._0.Controllers
             }
         }
 
-        private void GenerateFirstRound(string userId)
-        {
-            var matches = this.context.GetMatches(TournamentStage.FirstRound);
-            foreach (var match in matches)
-            {
-                var existingBet = this.context.GetDeltaBetByMatchId(userId, match.Id);
-                if (existingBet != null)
-                {
-                    continue;
-                }
-
-                var teams = this.teamGenerator.GenerateTeams(match.Id, true, userId);
-                var deltaBet = new DeltaBet()
-                {
-                    HomeTeamBet = teams.PossibleHomeTeams.Count == 1 ? teams.PossibleHomeTeams.First() : null,
-                    AwayTeamBet = teams.PossibleAwayTeams.Count == 1 ? teams.PossibleAwayTeams.First() : null,
-                };
-                this.context.UpsertDeltaBet(deltaBet, match.Id, userId);
-            }
-        }
     }
 }

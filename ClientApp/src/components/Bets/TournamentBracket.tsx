@@ -81,7 +81,7 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
                 {/* Desktop bracket */}
                 <div className="bracket-container">
                     <div className="bracket">
-                        {this.renderRound('1. kolo playoff', this.state.r32Matches, 'r32')}
+                        {this.renderRound('1. kolo playoff', this.state.r32Matches, 'r32', undefined, true)}
                         <div className="bracket-connector-col bracket-connector-r32">
                             {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
                                 <div key={i} className="bracket-connector-pair">
@@ -121,7 +121,7 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
 
                 {/* Mobile stacked view */}
                 <div className="bracket-mobile">
-                    {this.renderMobileRound('1. kolo playoff', this.state.r32Matches)}
+                    {this.renderMobileRound('1. kolo playoff', this.state.r32Matches, undefined, true)}
                     {this.renderMobileRound('Osmifinále', this.state.r16Matches, this.state.refreshKey)}
                     {this.renderMobileRound('Čtvrtfinále', this.state.qfMatches, this.state.refreshKey)}
                     {this.renderMobileRound('Semifinále', this.state.sfMatches, this.state.refreshKey)}
@@ -135,7 +135,7 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
         this.setState(prev => ({ refreshKey: prev.refreshKey + 1 }));
     }
 
-    private renderRound(title: string, matches: Match[], roundClass: string, refreshKey?: number) {
+    private renderRound(title: string, matches: Match[], roundClass: string, refreshKey?: number, displayOnly?: boolean) {
         return (
             <div className={`bracket-round bracket-round-${roundClass}`}>
                 <div className="bracket-round-title">{title}</div>
@@ -144,10 +144,11 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
                         <div key={refreshKey != null ? `${match.id}-${refreshKey}` : match.id} className="bracket-match-slot">
                             <DeltaBetRow
                                 match={match}
-                                isReadOnly={this.props.isReadOnly}
-                                showResult={this.props.showResult}
+                                isReadOnly={displayOnly ? true : this.props.isReadOnly}
+                                showResult={displayOnly ? false : this.props.showResult}
                                 compact={true}
-                                onBetConfirmed={this.onBetConfirmed}
+                                displayOnly={displayOnly}
+                                onBetConfirmed={displayOnly ? undefined : this.onBetConfirmed}
                             />
                         </div>
                     ))}
@@ -156,7 +157,7 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
         );
     }
 
-    private renderMobileRound(title: string, matches: Match[], refreshKey?: number) {
+    private renderMobileRound(title: string, matches: Match[], refreshKey?: number, displayOnly?: boolean) {
         return (
             <div className="bracket-mobile-round">
                 <h6 className="bracket-mobile-title">{title}</h6>
@@ -165,9 +166,10 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
                         <DeltaBetRow
                             key={refreshKey != null ? `${match.id}-${refreshKey}` : match.id}
                             match={match}
-                            isReadOnly={this.props.isReadOnly}
-                            showResult={this.props.showResult}
-                            onBetConfirmed={this.onBetConfirmed}
+                            isReadOnly={displayOnly ? true : this.props.isReadOnly}
+                            showResult={displayOnly ? false : this.props.showResult}
+                            displayOnly={displayOnly}
+                            onBetConfirmed={displayOnly ? undefined : this.onBetConfirmed}
                         />
                     ))}
                 </div>

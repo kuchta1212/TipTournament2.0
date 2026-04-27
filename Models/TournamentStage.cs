@@ -1,4 +1,4 @@
-﻿namespace TipTournament2._0.Models
+namespace TipTournament2._0.Models
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +8,8 @@
     public enum TournamentStage
     {
         Group,
+
+        RoundOf32,
 
         FirstRound,
 

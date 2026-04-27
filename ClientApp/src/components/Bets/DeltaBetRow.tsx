@@ -23,6 +23,7 @@ interface DeltaBetProps {
     isReadOnly: boolean;
     showResult: boolean;
     compact?: boolean;
+    displayOnly?: boolean;
     onBetConfirmed?: () => void;
 }
 
@@ -44,6 +45,10 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     }
 
     public render() {
+        if (this.props.displayOnly) {
+            return <div>{this.renderDisplayOnly()}</div>;
+        }
+
         let contents = this.state.loading
             ? <Loader />
             : this.props.isReadOnly && !this.state.bet.homeTeamBet
@@ -53,6 +58,50 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
         return (
             <div>
                 {contents}
+            </div>
+        );
+    }
+
+    private renderDisplayOnly() {
+        const home = this.props.match.home;
+        const away = this.props.match.away;
+        const hasTeams = !!home && !!away;
+
+        if (this.props.compact) {
+            return (
+                <div className="delta-bet-compact">
+                    {hasTeams ? (
+                        <>
+                            <div className="delta-compact-team">
+                                <img src={process.env.PUBLIC_URL + home.iconPath} width="18" height="18" alt={home.name} />
+                                <span>{home.name}</span>
+                            </div>
+                            <div className="delta-compact-team">
+                                <img src={process.env.PUBLIC_URL + away.iconPath} width="18" height="18" alt={away.name} />
+                                <span>{away.name}</span>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="delta-compact-team delta-compact-tbd">TBD</div>
+                            <div className="delta-compact-team delta-compact-tbd">TBD</div>
+                        </>
+                    )}
+                </div>
+            );
+        }
+
+        return (
+            <div className="delta-bet-card">
+                <div className="delta-bet-teams">
+                    <div className="delta-bet-team-slot">
+                        {home ? <TeamDisplay team={home} /> : <span>TBD</span>}
+                    </div>
+                    <span className="delta-bet-vs">vs</span>
+                    <div className="delta-bet-team-slot">
+                        {away ? <TeamDisplay team={away} /> : <span>TBD</span>}
+                    </div>
+                </div>
             </div>
         );
     }
