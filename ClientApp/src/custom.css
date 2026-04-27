@@ -1340,6 +1340,29 @@ code {
     background: var(--danger-bg);
 }
 
+.delta-compact-editable {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.3rem;
+}
+
+.delta-compact-select {
+    width: 100%;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.delta-compact-confirm {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+    align-self: flex-end;
+}
+
 /* ===== Tournament Bracket ===== */
 .bracket-container {
     overflow-x: auto;

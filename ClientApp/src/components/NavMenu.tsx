@@ -40,7 +40,7 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
       <header>
         <Navbar className="app-navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3">
           <Container>
-            <NavbarBrand tag={Link} to="/">Tipovačka EURO 2024</NavbarBrand>
+            <NavbarBrand tag={Link} to="/">Tipovačka MS 2026</NavbarBrand>
 
             {/* Mobile hamburger */}
             <button className="hamburger-btn d-sm-none" onClick={this.toggleDrawer} aria-label="Menu">
@@ -73,7 +73,7 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
 
         {/* Mobile drawer */}
         <nav className={`drawer ${this.state.drawerOpen ? 'open' : ''}`}>
-          <Link to="/" className="drawer-brand" onClick={this.closeDrawer}>Tipovačka EURO 2024</Link>
+          <Link to="/" className="drawer-brand" onClick={this.closeDrawer}>Tipovačka MS 2026</Link>
           <ul className="drawer-nav">
             <li><Link to="/tips" onClick={this.closeDrawer}>Sázky</Link></li>
             <li><Link to="/rules" onClick={this.closeDrawer}>Pravidla</Link></li>

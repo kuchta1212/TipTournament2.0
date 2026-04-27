@@ -103,14 +103,14 @@ export interface UpdateStatus {
 
 export enum TournamentStage {
     Group = 0,
-    FirstRound = 1,
-    Quarterfinal = 2,
-    Semifinal = 3,
-    Final = 4,
-    Winner = 5,
-    Lambda = 6,
-    Omikron = 7,
-
+    RoundOf32 = 1,
+    FirstRound = 2,
+    Quarterfinal = 3,
+    Semifinal = 4,
+    Final = 5,
+    Winner = 6,
+    Lambda = 7,
+    Omikron = 8,
 }
 
 export interface DeltaBetTeams {

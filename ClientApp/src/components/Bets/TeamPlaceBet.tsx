@@ -62,7 +62,10 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
 
         const teams = await getApi().getTeamsForTeamPlaceBet(this.props.isWinnerBet);
         if (!bet.id) {
-            this.setState({ loading: false, isEditable: true, possible: teams })
+            const autoSelection = teams.length === 1
+                ? { teamId: teams[0].id, stage: undefined as any as TournamentStage }
+                : {} as BetSelection;
+            this.setState({ loading: false, isEditable: true, possible: teams, selection: autoSelection })
         } else {
             this.setState({ loading: false, isEditable: false, bet: bet, possible: teams });
         }
@@ -94,23 +97,31 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
     }
 
     private renderEditForm() {
+        const singleTeam = this.state.possible.length === 1;
         return (
             <div className="special-bet-fields">
-                <div className="special-bet-input-group">
-                    <label className="special-bet-label" htmlFor="inputFirstTeamSelect">Tým</label>
-                    <select className="custom-select" id="inputFirstTeamSelect" defaultValue={this.state.selection.teamId ?? "default"} onChange={(event) => this.onTeamSelect(event.target)}>
-                        <option key="default-id" value="default">Vyber tým</option>
-                        {this.state.possible.map((team, index) => {
-                            return <option key={team.id} value={team.id}>{team.name}</option>
-                        })}
-                    </select>
-                </div>
+                {singleTeam ? (
+                    <div className="special-bet-input-group">
+                        <TeamCell team={this.state.possible[0]} />
+                    </div>
+                ) : (
+                    <div className="special-bet-input-group">
+                        <label className="special-bet-label" htmlFor="inputFirstTeamSelect">Tým</label>
+                        <select className="custom-select" id="inputFirstTeamSelect" defaultValue={this.state.selection.teamId ?? "default"} onChange={(event) => this.onTeamSelect(event.target)}>
+                            <option key="default-id" value="default">Vyber tým</option>
+                            {this.state.possible.map((team, index) => {
+                                return <option key={team.id} value={team.id}>{team.name}</option>
+                            })}
+                        </select>
+                    </div>
+                )}
                 {!this.props.isWinnerBet && (
                     <div className="special-bet-input-group">
                         <label className="special-bet-label" htmlFor="inputStageSelect">Fáze</label>
                         <select className="custom-select" id="inputStageSelect" defaultValue={!!this.state.selection.stage ? this.state.selection.stage.toString() : "default"} onChange={(event) => this.onStageChange(event.target)}>
                             <option key="default-id" value="default">Vyber fázi turnaje</option>
                             <option key={TournamentStage.Group.toString()} value={TournamentStage.Group.toString()}>{this.stageToString(TournamentStage.Group)}</option>
+                            <option key={TournamentStage.RoundOf32.toString()} value={TournamentStage.RoundOf32.toString()}>{this.stageToString(TournamentStage.RoundOf32)}</option>
                             <option key={TournamentStage.FirstRound.toString()} value={TournamentStage.FirstRound.toString()}>{this.stageToString(TournamentStage.FirstRound)}</option>
                             <option key={TournamentStage.Quarterfinal.toString()} value={TournamentStage.Quarterfinal.toString()}>{this.stageToString(TournamentStage.Quarterfinal)}</option>
                             <option key={TournamentStage.Semifinal.toString()} value={TournamentStage.Semifinal.toString()}>{this.stageToString(TournamentStage.Semifinal)}</option>
@@ -151,6 +162,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
     private stageToString(stage: TournamentStage) {
         switch (stage) {
             case TournamentStage.Group: return "Skupina";
+            case TournamentStage.RoundOf32: return "1. kolo playoff";
             case TournamentStage.FirstRound: return "Osmifinále";
             case TournamentStage.Quarterfinal: return "Čtvrtfinále";
             case TournamentStage.Semifinal: return "Semifinále";
@@ -173,7 +185,11 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
     }
 
     private modify() {
-        this.setState({ isEditable: true })
+        let selection = this.state.selection;
+        if (this.state.possible.length === 1) {
+            selection.teamId = this.state.possible[0].id;
+        }
+        this.setState({ isEditable: true, selection: selection })
     }
 
     private async confirm(): Promise<void> {

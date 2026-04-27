@@ -102,6 +102,30 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                     </div>
                 </div>
                 <div className="card opacity-card">
+                    <div className="card-header" id="heading-r32-card">
+                        <div className="row" style={{ justifyContent: 'space-between' }}>
+                            <h5 className="mb-0">
+                                <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-r32-card" aria-expanded="false" aria-controls="collapse-r32-card">
+                                    1. kolo playoff
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                    <div id="collapse-r32-card" className="collapse" aria-labelledby="r32-card" data-parent="#accordionExample">
+                        <div className="card-body">
+                            <div className="groupList">
+                                <Table className="table table-striped opacity-table">
+                                    {
+                                        this.state.matches.filter(m => m.stage == TournamentStage.RoundOf32).map(m => {
+                                            return <DeltaBetAdminViewRow match={m} />
+                                        })
+                                    }
+                                </Table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="card opacity-card">
                     <div className="card-header" id="heading-first-card">
                         <div className="row" style={{ justifyContent: 'space-between' }}>
                             <h5 className="mb-0">

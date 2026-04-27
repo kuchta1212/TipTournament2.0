@@ -84,9 +84,9 @@ export class RulePage extends React.Component<RulePageProps> {
                                 <td>Tip na celkového vítěze se zamkne s prvním zápasem turnaje.</td>
                             </tr>
                             <tr>
-                                <td><strong>Delta – Playoff</strong> (osmifinále až finále)</td>
+                                <td><strong>Delta – Playoff</strong> (1. kolo playoff až finále)</td>
                                 <td>Deadline příslušného kola</td>
-                                <td>Každé kolo playoff (osmifinále, čtvrtfinále, semifinále, finále) má vlastní uzávěrku. Tipy na dané kolo se zamknou před začátkem prvního zápasu kola.</td>
+                                <td>Každé kolo playoff (1. kolo playoff, osmifinále, čtvrtfinále, semifinále, finále) má vlastní uzávěrku. Tipy na dané kolo se zamknou před začátkem prvního zápasu kola.</td>
                             </tr>
                             <tr>
                                 <td><strong>Lambda</strong> (nejlepší střelec)</td>
@@ -197,11 +197,11 @@ export class RulePage extends React.Component<RulePageProps> {
                             </div>
                         </div>
                         <div className="rules-note">
-                            <strong>Osmifinále</strong> se neboduje. Je třeba doplnit postupující ze 3. míst dle{' '}
-                            <a href="https://cs.wikipedia.org/wiki/Mistrovstv%C3%AD_Evropy_ve_fotbale_2024#Vy%C5%99azovac%C3%AD_f%C3%A1ze" target="_blank" rel="noopener noreferrer">pravidel UEFA</a>.
+                            <strong>1. kolo playoff (R32)</strong> se neboduje. Je třeba doplnit postupující ze 3. míst dle{' '}
+                            <a href="https://cs.wikipedia.org/wiki/Mistrovstv%C3%AD_sv%C4%9Bta_ve_fotbale_2026" target="_blank" rel="noopener noreferrer">pravidel FIFA</a>.
                         </div>
                         <div className="rules-note">
-                            <strong>Příklad:</strong> Za správně tipnutého vítěze turnaje můžeš získat celkem <strong>9 bodů</strong> (2 za čtvrtfinále + 2 za semifinále + 2 za finále + 3 za vítěze).
+                            <strong>Příklad:</strong> Za správně tipnutého vítěze turnaje můžeš získat celkem <strong>11 bodů</strong> (2 za osmifinále + 2 za čtvrtfinále + 2 za semifinále + 2 za finále + 3 za vítěze).
                         </div>
                         <div className="rules-note">
                             <strong>Dixit bonus:</strong> Pokud správně tipneš účastníka kola a většina hráčů se mýlí, získáváš bonusové body:
@@ -241,11 +241,11 @@ export class RulePage extends React.Component<RulePageProps> {
 
                     <div className="rules-card rules-card-full">
                         <h2>Omikron <span className="rules-badge">Sázka na tým</span></h2>
-                        <p>Tipuješ, jak daleko se dostane Česko nebo Slovensko. Body se udělují za správné finální umístění.</p>
+                        <p>Tipuješ, jak daleko se dostane Česko. Body se udělují za správné finální umístění.</p>
                         <div className="rules-scoring rules-scoring-horizontal">
                             <div className="rules-score-block">
                                 <span className="rules-points-big">3</span>
-                                <span>Skupina / Osmifinále</span>
+                                <span>Skupina / 1. kolo playoff</span>
                             </div>
                             <div className="rules-score-block">
                                 <span className="rules-points-big">5</span>

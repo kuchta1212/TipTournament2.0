@@ -40,7 +40,7 @@ namespace TipTournament2._0.Tests.Controllers
         {
             var tournamentStart = new DateTime(2024, 6, 14, 21, 0, 0);
             this.mockDb.Setup(d => d.GetTournamentStartTime()).Returns(tournamentStart);
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Returns(new DateTime(2024, 6, 29, 21, 0, 0));
+            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.RoundOf32)).Returns(new DateTime(2024, 6, 29, 21, 0, 0));
 
             var sut = this.CreateSut();
             var result = sut.GetDeadlines() as OkObjectResult;
@@ -59,12 +59,13 @@ namespace TipTournament2._0.Tests.Controllers
             var tournamentStart = new DateTime(2024, 6, 14, 21, 0, 0);
             var firstRoundStart = new DateTime(2024, 6, 29, 21, 0, 0);
             this.mockDb.Setup(d => d.GetTournamentStartTime()).Returns(tournamentStart);
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Returns(firstRoundStart);
+            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.RoundOf32)).Returns(firstRoundStart);
 
             var sut = this.CreateSut();
             var result = sut.GetDeadlines() as OkObjectResult;
             var deadlines = result.Value as DeadlineInfo;
 
+            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.RoundOf32)]);
             Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.FirstRound)]);
             Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Quarterfinal)]);
             Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Semifinal)]);
@@ -75,13 +76,13 @@ namespace TipTournament2._0.Tests.Controllers
         public void GetDeadlines_NoFirstRoundMatches_ReturnsMaxValueForKnockout()
         {
             this.mockDb.Setup(d => d.GetTournamentStartTime()).Returns(new DateTime(2024, 6, 14, 21, 0, 0));
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Throws(new InvalidOperationException());
+            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.RoundOf32)).Throws(new InvalidOperationException());
 
             var sut = this.CreateSut();
             var result = sut.GetDeadlines() as OkObjectResult;
             var deadlines = result.Value as DeadlineInfo;
 
-            Assert.Equal(DateTime.MaxValue, deadlines.StageDeadlines[nameof(TournamentStage.FirstRound)]);
+            Assert.Equal(DateTime.MaxValue, deadlines.StageDeadlines[nameof(TournamentStage.RoundOf32)]);
             Assert.Equal(DateTime.MaxValue, deadlines.StageDeadlines[nameof(TournamentStage.Quarterfinal)]);
         }
 
@@ -174,7 +175,7 @@ namespace TipTournament2._0.Tests.Controllers
         {
             var match = new Match { Id = "m1", Stage = TournamentStage.Quarterfinal };
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Returns(DateTime.UtcNow.AddHours(-1));
+            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.RoundOf32)).Returns(DateTime.UtcNow.AddHours(-1));
 
             var sut = this.CreateSut();
             var result = sut.UploadDeltaBet(new DeltaBet(), "m1");
@@ -188,7 +189,7 @@ namespace TipTournament2._0.Tests.Controllers
         {
             var match = new Match { Id = "m1", Stage = TournamentStage.Quarterfinal };
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Returns(DateTime.UtcNow.AddHours(1));
+            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.RoundOf32)).Returns(DateTime.UtcNow.AddHours(1));
 
             var sut = this.CreateSut();
             var result = sut.UploadDeltaBet(new DeltaBet(), "m1");
@@ -198,6 +199,7 @@ namespace TipTournament2._0.Tests.Controllers
         }
 
         [Theory]
+        [InlineData(TournamentStage.RoundOf32)]
         [InlineData(TournamentStage.FirstRound)]
         [InlineData(TournamentStage.Quarterfinal)]
         [InlineData(TournamentStage.Semifinal)]
@@ -206,7 +208,7 @@ namespace TipTournament2._0.Tests.Controllers
         {
             var match = new Match { Id = "m1", Stage = stage };
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
-            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.FirstRound)).Returns(DateTime.UtcNow.AddHours(-1));
+            this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.RoundOf32)).Returns(DateTime.UtcNow.AddHours(-1));
 
             var sut = this.CreateSut();
             var result = sut.UploadDeltaBet(new DeltaBet(), "m1");

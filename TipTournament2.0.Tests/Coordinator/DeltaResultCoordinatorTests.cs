@@ -46,9 +46,9 @@ namespace TipTournament2._0.Tests.Coordinator
         }
 
         [Fact]
-        public void UploadNewResult_FirstRound_DoesNotEvaluateBets()
+        public void UploadNewResult_RoundOf32_DoesNotEvaluateBets()
         {
-            var match = new Match { Id = "m1", Stage = TournamentStage.FirstRound };
+            var match = new Match { Id = "m1", Stage = TournamentStage.RoundOf32 };
             var tuple = new Tuple<string, string>("teamA", "teamB");
 
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
@@ -57,6 +57,23 @@ namespace TipTournament2._0.Tests.Coordinator
             sut.UploadNewResult("m1", tuple);
 
             this.mockBetMaker.Verify(b => b.UpdateDeltaBetsResult(It.IsAny<List<DeltaBet>>(), It.IsAny<Match>()), Times.Never);
+        }
+
+        [Fact]
+        public void UploadNewResult_FirstRound_EvaluatesDeltaBets()
+        {
+            var match = new Match { Id = "m1", Stage = TournamentStage.FirstRound };
+            var tuple = new Tuple<string, string>("teamA", "teamB");
+
+            this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
+            this.mockDb.Setup(d => d.GetDeltaBetsByMatchId("m1")).Returns(new List<DeltaBet>());
+            this.mockBetMaker.Setup(b => b.UpdateDeltaBetsResult(It.IsAny<List<DeltaBet>>(), It.IsAny<Match>())).Returns(new List<DeltaBet>());
+            this.mockDb.Setup(d => d.GetAllUsers()).Returns(new List<ApplicationUser>());
+
+            var sut = this.CreateSut();
+            sut.UploadNewResult("m1", tuple);
+
+            this.mockBetMaker.Verify(b => b.UpdateDeltaBetsResult(It.IsAny<List<DeltaBet>>(), It.IsAny<Match>()), Times.Once);
         }
 
         [Fact]

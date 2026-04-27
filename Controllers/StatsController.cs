@@ -54,6 +54,7 @@ namespace TipTournament2._0.Controllers
 
             switch (match.Stage)
             {
+                case TournamentStage.RoundOf32: return "1. kolo playoff";
                 case TournamentStage.FirstRound: return "Osmifinále";
                 case TournamentStage.Quarterfinal: return "Čtvrtfinále";
                 case TournamentStage.Semifinal: return "Semifinále";

@@ -61,6 +61,20 @@ export class Matches extends React.Component<MatchesProps, MatchesSate> {
                     </div>
                 </div>
                 <div className="card">
+                    <div className="card-header" id="headingR32">
+                        <h5 className="mb-0">
+                            <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseR32" aria-expanded="false" aria-controls="collapseR32">
+                                1. kolo playoff
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseR32" className="collapse" aria-labelledby="headingR32" data-parent="#accordionExample">
+                        <div className="card-body">
+                            <MatchStages stage={TournamentStage.RoundOf32} isActive={TournamentStage.RoundOf32 == this.props.activeStage} />
+                        </div>
+                    </div>
+                </div>
+                <div className="card">
                     <div className="card-header" id="headingTwo">
                         <h5 className="mb-0">
                             <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -70,7 +84,7 @@ export class Matches extends React.Component<MatchesProps, MatchesSate> {
                     </div>
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                         <div className="card-body">
-                            <MatchStages stage={TournamentStage.FirstRound} isActive={TournamentStage.Group == this.props.activeStage} />
+                            <MatchStages stage={TournamentStage.FirstRound} isActive={TournamentStage.FirstRound == this.props.activeStage} />
                         </div>
                     </div>
                 </div>
