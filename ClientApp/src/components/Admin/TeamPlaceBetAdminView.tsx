@@ -1,13 +1,10 @@
-﻿import * as React from 'react';
-import { getAdminApi, getApi } from "../api/ApiFactory"
-import { Match, Bet, Team, TournamentStage, PlaceTeamBet } from "../../typings/index"
-import { Table } from 'reactstrap';
-import { Loader } from '../Loader'
-import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import { TeamCell } from '../TeamCell';
+import * as React from 'react';
+import { getAdminApi } from "../api/ApiFactory"
+import { ConfirmModal } from './ConfirmModal';
 
 interface TeamPlaceBetAdminViewState {
-    evaluated: boolean,
+    evaluated: boolean;
+    showConfirm: boolean;
 }
 
 interface TeamPlaceBetAdminViewProps {
@@ -19,29 +16,41 @@ export class TeamPlaceBetAdminView extends React.Component<TeamPlaceBetAdminView
         super(props);
         this.state = {
             evaluated: false,
+            showConfirm: false
         }
     }
 
     public render() {
         return (
-            <div>
-                {this.renderButton()}
+            <div className="groupItem">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => this.setState({ showConfirm: true })}
+                    >
+                        Vyhodnotit tymy
+                    </button>
+                    {this.state.evaluated &&
+                        <span className="admin-action-status">Vyhodnoceno</span>
+                    }
+                </div>
+                {this.state.showConfirm &&
+                    <ConfirmModal
+                        title="Vyhodnotit umisteni tymu"
+                        message="Opravdu chcete vyhodnotit sazky na umisteni tymu? Tato akce ovlivni bodovani."
+                        variant="danger"
+                        confirmText="Vyhodnotit"
+                        onConfirm={() => this.onTeamPlaceBetEvaluation()}
+                        onCancel={() => this.setState({ showConfirm: false })}
+                    />
+                }
             </div>
         );
     }
 
-    private renderButton() {
-        return (
-            <div>
-                <button onClick={() => this.onTeamPlaceBetEvaluation()}>Vyhodnotit tymy</button>
-                { this.state.evaluated ? <p>Vyhodnoceno</p> : <p>Nevyhodnoceno</p>}
-            </div>
-        );
-    }
-
-    public async onTeamPlaceBetEvaluation() {
+    private async onTeamPlaceBetEvaluation() {
+        this.setState({ showConfirm: false });
         await getAdminApi().evalateTeamPlaceBets();
         this.setState({ evaluated: true });
     }
 }
-

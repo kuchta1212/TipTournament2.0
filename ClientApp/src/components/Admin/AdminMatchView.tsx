@@ -43,7 +43,6 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
 
         return (
             <div>
-                <h1 id="tabelLabel">Výsledky</h1>
                 {contents}
             </div>
         );
@@ -114,13 +113,11 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                     <div id="collapse-r32-card" className="collapse" aria-labelledby="r32-card" data-parent="#accordionExample">
                         <div className="card-body">
                             <div className="groupList">
-                                <Table className="table table-striped opacity-table">
-                                    {
-                                        this.state.matches.filter(m => m.stage == TournamentStage.RoundOf32).map(m => {
-                                            return <DeltaBetAdminViewRow match={m} />
-                                        })
-                                    }
-                                </Table>
+                                {
+                                    this.state.matches.filter(m => m.stage == TournamentStage.RoundOf32).map(m => {
+                                        return <DeltaBetAdminViewRow key={m.id} match={m} />
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
@@ -138,13 +135,11 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                     <div id="collapse-first-card" className="collapse" aria-labelledby="first-card" data-parent="#accordionExample">
                         <div className="card-body">
                             <div className="groupList">
-                                <Table className="table table-striped opacity-table">
-                                    {
-                                        this.state.matches.filter(m => m.stage == TournamentStage.FirstRound).map(m => {
-                                            return <DeltaBetAdminViewRow match={m} />
-                                        })
-                                    }
-                                </Table>
+                                {
+                                    this.state.matches.filter(m => m.stage == TournamentStage.FirstRound).map(m => {
+                                        return <DeltaBetAdminViewRow key={m.id} match={m} />
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
@@ -162,13 +157,11 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                     <div id="collapse-querter-card" className="collapse" aria-labelledby="querter-card" data-parent="#accordionExample">
                         <div className="card-body">
                             <div className="groupList">
-                                <Table className="table table-striped opacity-table">
-                                    {
-                                        this.state.matches.filter(m => m.stage == TournamentStage.Quarterfinal).map(m => {
-                                            return <DeltaBetAdminViewRow match={m} />
-                                        })
-                                    }
-                                </Table>
+                                {
+                                    this.state.matches.filter(m => m.stage == TournamentStage.Quarterfinal).map(m => {
+                                        return <DeltaBetAdminViewRow key={m.id} match={m} />
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
@@ -186,13 +179,11 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                     <div id="collapse-semi-card" className="collapse" aria-labelledby="semi-card" data-parent="#accordionExample">
                         <div className="card-body">
                             <div className="groupList">
-                                <Table className="table table-striped opacity-table">
-                                    {
-                                        this.state.matches.filter(m => m.stage == TournamentStage.Semifinal).map(m => {
-                                            return <DeltaBetAdminViewRow match={m} />
-                                        })
-                                    }
-                                </Table>
+                                {
+                                    this.state.matches.filter(m => m.stage == TournamentStage.Semifinal).map(m => {
+                                        return <DeltaBetAdminViewRow key={m.id} match={m} />
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
@@ -210,13 +201,11 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                     <div id="collapse-final-card" className="collapse" aria-labelledby="final-card" data-parent="#accordionExample">
                         <div className="card-body">
                             <div className="groupList">
-                                <Table className="table table-striped opacity-table">
-                                    {
-                                        this.state.matches.filter(m => m.stage == TournamentStage.Final).map(m => {
-                                            return <DeltaBetAdminViewRow match={m} />
-                                        })
-                                    }
-                                </Table>
+                                {
+                                    this.state.matches.filter(m => m.stage == TournamentStage.Final).map(m => {
+                                        return <DeltaBetAdminViewRow key={m.id} match={m} />
+                                    })
+                                }
                             </div>
                         </div>
                     </div>

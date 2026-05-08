@@ -13,11 +13,11 @@ export interface IAdminApi {
 
     uploadMatchResult(result: Result, id: string): Promise<void>;
 
-    checkForUpdates(): Promise<number>;
-
-    loadMatches(): Promise<number>;
-
     payed(userId: string, payed: boolean): Promise<void>;
 
     evalateTeamPlaceBets(): Promise<void>;
+
+    setAdmin(userId: string, isAdmin: boolean): Promise<void>;
+
+    getUsersWithRoles(): Promise<any[]>;
 }

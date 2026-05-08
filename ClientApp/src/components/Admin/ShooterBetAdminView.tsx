@@ -1,14 +1,11 @@
-﻿import * as React from 'react';
-import { getAdminApi, getApi } from "../api/ApiFactory"
-import { Match, Bet, Team, TournamentStage, PlaceTeamBet } from "../../typings/index"
-import { Table } from 'reactstrap';
-import { Loader } from '../Loader'
-import { Dictionary, IDictionary } from "../../typings/Dictionary"
-import { TeamCell } from '../TeamCell';
+import * as React from 'react';
+import { getAdminApi } from "../api/ApiFactory"
+import { ConfirmModal } from './ConfirmModal';
 
 interface ShooterBetAdminViewState {
-    evaluated: boolean,
-    name: string
+    evaluated: boolean;
+    name: string;
+    showConfirm: boolean;
 }
 
 interface ShooterBetAdminViewProps {
@@ -20,34 +17,57 @@ export class ShooterBetAdminView extends React.Component<ShooterBetAdminViewProp
         super(props);
         this.state = {
             evaluated: false,
-            name: ""
+            name: "",
+            showConfirm: false
         }
     }
 
     public render() {
         return (
-            <div>
-                {this.renderButton()}
+            <div className="groupItem">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                            <label className="input-group-text">Jmeno strelce</label>
+                        </div>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Lewandowski / Mbappe / Messi..."
+                            value={this.state.name}
+                            onChange={(event) => this.setState({ name: event.target.value })}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+                        <button
+                            className="btn btn-primary"
+                            disabled={!this.state.name.trim()}
+                            onClick={() => this.setState({ showConfirm: true })}
+                        >
+                            Vyhodnotit
+                        </button>
+                        {this.state.evaluated &&
+                            <span className="admin-action-status">Vyhodnoceno</span>
+                        }
+                    </div>
+                </div>
+                {this.state.showConfirm &&
+                    <ConfirmModal
+                        title="Vyhodnotit nejlepsiho strelce"
+                        message={`Opravdu chcete nastavit "${this.state.name}" jako nejlepsiho strelce? Tato akce ovlivni bodovani.`}
+                        variant="danger"
+                        confirmText="Vyhodnotit"
+                        onConfirm={() => this.onTopShooterEvaluation()}
+                        onCancel={() => this.setState({ showConfirm: false })}
+                    />
+                }
             </div>
         );
     }
 
-    private renderButton() {
-        return (
-            <div>
-                <button onClick={() => this.onTopShooterEvaluation()}>Vyhodnotit top strelce</button>
-                <td> <input type="text" className="form-control" id="shootername" aria-describedby="basic-addon3" placeholder="Lewandowski/Mbappe/Messi...." onChange={(event) => this.onChange(event.target)} /></td>
-                { this.state.evaluated ? <p>Vyhodnoceno</p> : <p>Nevyhodnoceno</p>}
-            </div>
-        );
-    }
-
-    public async onTopShooterEvaluation() {
+    private async onTopShooterEvaluation() {
+        this.setState({ showConfirm: false });
         await getAdminApi().evaluateTopShooter(this.state.name);
         this.setState({ evaluated: true });
-    }
-
-    private onChange(event: any) {
-        this.setState({name: event.value})
     }
 }

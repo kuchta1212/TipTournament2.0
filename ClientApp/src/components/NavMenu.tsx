@@ -2,10 +2,12 @@ import * as React from 'react';
 import { Container, Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
+import authService from './api-authorization/AuthorizeService';
 import './NavMenu.css';
 
 interface INavMenuState {
-    drawerOpen: boolean
+    drawerOpen: boolean;
+    isAdmin: boolean;
 }
 
 interface INavMenuProps {
@@ -21,7 +23,8 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.state = {
-      drawerOpen: false
+      drawerOpen: false,
+      isAdmin: false
     };
   }
 
@@ -34,6 +37,22 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
   closeDrawer () {
     this.setState({ drawerOpen: false });
   }
+
+  componentDidMount() {
+    this._subscription = authService.subscribe(() => this.updateAdminState());
+    this.updateAdminState();
+  }
+
+  componentWillUnmount() {
+    authService.unsubscribe(this._subscription);
+  }
+
+  async updateAdminState() {
+    const isAdmin = await authService.isInRole('Admin');
+    this.setState({ isAdmin });
+  }
+
+  private _subscription: number = 0;
 
   render () {
     return (
@@ -61,6 +80,11 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
                 <NavItem>
                     <NavLink tag={Link} to="/stats">Statistiky</NavLink>
                 </NavItem>
+                {this.state.isAdmin && (
+                  <NavItem>
+                    <NavLink tag={Link} to="/admin">Admin</NavLink>
+                  </NavItem>
+                )}
                 <LoginMenu>
                 </LoginMenu>
               </ul>
@@ -78,6 +102,9 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
             <li><Link to="/tips" onClick={this.closeDrawer}>Sázky</Link></li>
             <li><Link to="/rules" onClick={this.closeDrawer}>Pravidla</Link></li>
             <li><Link to="/stats" onClick={this.closeDrawer}>Statistiky</Link></li>
+            {this.state.isAdmin && (
+              <li><Link to="/admin" onClick={this.closeDrawer}>Admin</Link></li>
+            )}
           </ul>
           <hr className="drawer-divider" />
           <ul className="drawer-nav">

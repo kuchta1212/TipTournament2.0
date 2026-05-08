@@ -108,12 +108,10 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
     private async getData() {
         let userId = window.location.pathname.startsWith('/user/') ? window.location.pathname.substring(6) : undefined;
-        // Call getTeamsForDeltaBet first — it triggers backend autofill for R32
         const teams = await getApi().getTeamsForDeltaBet(this.props.match.id, this.props.match.stage, userId);
-        // Re-fetch bet AFTER autofill may have created/updated it
         const bet = await getApi().getDeltaBet(this.props.match.id, userId);
         const hasTeams = teams.possibleHomeTeams?.some((t: any) => !!t.id) && teams.possibleAwayTeams?.some((t: any) => !!t.id);
-        if (!bet.id || (!bet.homeTeamBet || !bet.awayTeamBet)) {
+        if (!bet || !bet.id || (!bet.homeTeamBet || !bet.awayTeamBet)) {
             this.setState({ loading: false, teams: teams, isEditable: !this.props.isReadOnly && hasTeams });
         } else {
             this.setState({ bet: bet, loading: false, isEditable: false, teams: teams});
@@ -129,7 +127,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
 
     private renderCompact() {
         const hasBet = !!this.state.bet.homeTeamBet && !!this.state.bet.awayTeamBet;
-        if (!hasBet && this.state.isEditable) {
+        if (this.state.isEditable) {
             return this.renderCompactEditable();
         }
         return (
@@ -159,19 +157,33 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         {this.getTotalPointsWithBonus()}b
                     </div>
                 )}
+                {this.props.showResult && (this.props.match.home || this.props.match.away) && (
+                    <div className="delta-compact-actual">
+                        <span className="delta-compact-actual-label">Skutečně:</span>
+                        {this.props.match.home
+                            ? <><img src={process.env.PUBLIC_URL + this.props.match.home.iconPath} width="14" height="14" alt={this.props.match.home.name} /><span>{this.props.match.home.name}</span></>
+                            : <span className="delta-compact-tbd">TBD</span>}
+                        <span className="delta-compact-actual-vs">vs</span>
+                        {this.props.match.away
+                            ? <><img src={process.env.PUBLIC_URL + this.props.match.away.iconPath} width="14" height="14" alt={this.props.match.away.name} /><span>{this.props.match.away.name}</span></>
+                            : <span className="delta-compact-tbd">TBD</span>}
+                    </div>
+                )}
             </div>
         );
     }
 
     private renderCompactEditable() {
         const hasTeams = this.state.teams.possibleHomeTeams?.some((t: any) => !!t.id);
+        const homeDefault = this.state.selection.homeId ?? this.state.bet.homeTeamBet?.id ?? "default";
+        const awayDefault = this.state.selection.awayId ?? this.state.bet.awayTeamBet?.id ?? "default";
         return (
             <div className="delta-bet-compact delta-compact-editable">
                 {hasTeams ? (
                     <>
                         <select
                             className="delta-compact-select"
-                            defaultValue="default"
+                            defaultValue={homeDefault}
                             onChange={(e) => this.onSelect(e.target as any)}
                             id="inputFirstTeamSelect"
                         >
@@ -182,7 +194,7 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         </select>
                         <select
                             className="delta-compact-select"
-                            defaultValue="default"
+                            defaultValue={awayDefault}
                             onChange={(e) => this.onSelect(e.target as any)}
                             id="inputSecondTeamSelect"
                         >
@@ -341,7 +353,11 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
     }
 
     private modify() {
-        this.setState({ isEditable: true })
+        const selection: BetSelection = {
+            homeId: this.state.bet.homeTeamBet?.id,
+            awayId: this.state.bet.awayTeamBet?.id
+        };
+        this.setState({ isEditable: true, selection })
     }
 
     private async confirm() : Promise<void> {

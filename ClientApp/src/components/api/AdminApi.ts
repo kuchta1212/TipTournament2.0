@@ -30,15 +30,15 @@ export class AdminApi implements IAdminApi {
         await post(`${API_URL}/result?matchId=${id}`, result);
     }
 
-    checkForUpdates(): Promise<number> {
-        return convert<number>(get(`${API_URL}/matches/check/`));
-    }
-
-    loadMatches(): Promise<number> {
-        return convert<number>(get(`${API_URL}/matches/load/`));
-    }
-
     payed(userId: string, payed: boolean): Promise<void> {
         return convert<void>(post(`${API_URL}/${userId}/payed?payed=${payed}`));
+    }
+
+    setAdmin(userId: string, isAdmin: boolean): Promise<void> {
+        return convert<void>(post(`${API_URL}/${userId}/admin?isAdmin=${isAdmin}`));
+    }
+
+    getUsersWithRoles(): Promise<any[]> {
+        return convert<any[]>(get(`${API_URL}/users`));
     }
 }
