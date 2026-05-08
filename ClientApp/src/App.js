@@ -9,7 +9,7 @@ import { AdminPage } from './components/Admin/AdminPage'
 import { RulePage } from './components/RulePage'
 import { StatsPage } from './components/Stats/StatsPage'
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
-//import AdminAuthorizeRoute from './components/api-authorization/AdminAuthorizeRoute';
+import AdminAuthorizeRoute from './components/api-authorization/AdminAuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 
@@ -25,7 +25,7 @@ export default class App extends Component {
         <AuthorizeRoute exact path='/' component={MainPage} />
         <AuthorizeRoute exact path="/tips" component={BetsMainPage} />
         <AuthorizeRoute exact path="/bets/all" component={AllBets} />
-        <AuthorizeRoute exact path="/admin" component={AdminPage} />
+        <AdminAuthorizeRoute exact path="/admin" component={AdminPage} />
         <AuthorizeRoute exact path="/user/:userId" component={UserBetPage} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         <Route exact path="/rules" component={RulePage} />

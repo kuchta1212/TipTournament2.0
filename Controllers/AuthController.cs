@@ -3,6 +3,7 @@ namespace TipTournament2._0.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
     using System.Threading.Tasks;
     using TipTournament2._0.Models;
 
@@ -56,12 +57,14 @@ namespace TipTournament2._0.Controllers
                 return Ok(new { isAuthenticated = false });
             }
 
+            var roles = await _userManager.GetRolesAsync(user);
             return Ok(new
             {
                 isAuthenticated = true,
                 userId = user.Id,
                 userName = user.UserName,
-                didPayed = user.Payed
+                didPayed = user.Payed,
+                roles = roles.ToList()
             });
         }
 

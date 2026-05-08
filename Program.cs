@@ -74,6 +74,16 @@ builder.Services.AddTransient<ITeamGenerator, TeamGenerator>();
 
 var app = builder.Build();
 
+// Seed the "Admin" role on startup (idempotent)
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+}
+
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.UseStaticFiles();

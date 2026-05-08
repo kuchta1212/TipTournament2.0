@@ -25,7 +25,7 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
         super(props);
 
         if (!this.props.bets || this.props.bets.length == 0) {
-            this.state = { tips: [{ homeTeam: 0, awayTeam: 0 }], setted: false }
+            this.state = { tips: [{ homeTeam: undefined as any, awayTeam: undefined as any }], setted: false }
         } else {
             this.state = { tips: this.props.bets.map((bet) => { return { homeTeam: bet.tip.homeTeam, awayTeam: bet.tip.awayTeam }}) , setted: true }
         }
@@ -92,9 +92,9 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
                     <TeamDisplay team={this.props.match.home} />
                     {!this.isMatchLocked() ? (
                         <div className="match-card-score">
-                            <input className="score-input" type="number" min="0" max="99" value={!!this.state.tips[0].homeTeam ? this.state.tips[0].homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} />
+                            <input className="score-input" type="number" min="0" max="9" value={this.state.tips[0].homeTeam ?? ""} onChange={(event) => this.setHomeTip(event.target.value)} />
                             <span className="score-separator">:</span>
-                            <input className="score-input" type="number" min="0" max="99" value={!!this.state.tips[0].awayTeam ? this.state.tips[0].awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} />
+                            <input className="score-input" type="number" min="0" max="9" value={this.state.tips[0].awayTeam ?? ""} onChange={(event) => this.setAwayTip(event.target.value)} />
                         </div>
                     ) : (
                         <div className="match-card-score">
@@ -176,8 +176,8 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
                 <TeamCell team={this.props.match.away} />
                 {!this.isMatchLocked() ? (
                     <>
-                        <td><input type="number" min="0" max="99" value={!!this.state.tips[0].homeTeam ? this.state.tips[0].homeTeam : "0"} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
-                        <td><input type="number" min="0" max="99" value={!!this.state.tips[0].awayTeam ? this.state.tips[0].awayTeam : "0"} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
+                        <td><input type="number" min="0" max="9" value={this.state.tips[0].homeTeam ?? ""} onChange={(event) => this.setHomeTip(event.target.value)} /></td>
+                        <td><input type="number" min="0" max="9" value={this.state.tips[0].awayTeam ?? ""} onChange={(event) => this.setAwayTip(event.target.value)} /></td>
                         <td><button className="btn btn-secondary" onClick={() => this.uploadTip()}>Uložit</button></td>
                     </>
                 ) : (
@@ -188,22 +188,32 @@ export class MatchBetRow extends React.Component<MatchBetRowProps, MatchBetRowSt
         );
     }
 
+    private clampGoals(value: string): number {
+        const digits = (value || "").replace(/\D/g, '');
+        if (!digits) return 0;
+        return Number(digits[digits.length - 1]);
+    }
+
     private setHomeTip(tip: string) {
         let newTips = this.state.tips;
-        newTips[0] = { homeTeam: Number(tip), awayTeam: this.state.tips[0].awayTeam };
+        newTips[0] = { homeTeam: this.clampGoals(tip), awayTeam: this.state.tips[0].awayTeam };
         this.setState({ tips: newTips });
     }
 
     private setAwayTip(tip: string) {
         let newTips = this.state.tips;
-        newTips[0] = { homeTeam: this.state.tips[0].homeTeam, awayTeam: Number(tip) };
+        newTips[0] = { homeTeam: this.state.tips[0].homeTeam, awayTeam: this.clampGoals(tip) };
         this.setState({ tips: newTips });
     }
 
     private async uploadTip() {
         if (this.isMatchLocked()) return;
-        this.setState({ setted: true });
-        await getApi().uploadTip(this.state.tips[0], this.props.match.id);
+        const tip: Result = {
+            homeTeam: this.state.tips[0].homeTeam ?? 0,
+            awayTeam: this.state.tips[0].awayTeam ?? 0
+        };
+        this.setState({ setted: true, tips: [tip] });
+        await getApi().uploadTip(tip, this.props.match.id);
         if (this.props.onBetSaved) {
             this.props.onBetSaved();
         }

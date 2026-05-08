@@ -19,7 +19,7 @@ export class AuthorizeService {
             if (response.ok) {
                 const data = await response.json();
                 if (data.isAuthenticated) {
-                    this._user = { sub: data.userId, name: data.userName, didPayed: data.didPayed };
+                    this._user = { sub: data.userId, name: data.userName, didPayed: data.didPayed, roles: data.roles || [] };
                     this._isAuthenticated = true;
                     return this._user;
                 }
@@ -31,6 +31,11 @@ export class AuthorizeService {
         this._user = null;
         this._isAuthenticated = false;
         return null;
+    }
+
+    async isInRole(role) {
+        const user = await this.getUser();
+        return user && user.roles && user.roles.includes(role);
     }
 
     async getAccessToken() {

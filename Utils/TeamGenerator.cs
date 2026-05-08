@@ -37,70 +37,60 @@
         public DeltaBetTeams GenerateTeams(string matchId, bool isFirstRound, string userId)
         {
             return isFirstRound
-                ? this.GenerateTeamsFirstRound(matchId, userId)
-                : this.GenerateTeams(matchId, userId);
+                ? this.GenerateTeamsForR32(matchId)
+                : this.GenerateTeamsForLaterRounds(matchId, userId);
         }
 
-        private DeltaBetTeams GenerateTeamsFirstRound(string matchId, string userId)
+        // R32 is set directly by admin (no per-user prediction from group bets).
+        // Return the actual match teams (one per side) so any consumer sees the real participants.
+        private DeltaBetTeams GenerateTeamsForR32(string matchId)
         {
-            var matchOption = this.deltaStageOptions.Value.FirstRound.Where(f => f.MatchId == matchId).First();
-
-            var possibleHomeTeams = this.GetPossibleTeamsByTeamOption(matchOption.Home, userId);
-            var possibleAwayTeams = this.GetPossibleTeamsByTeamOption(matchOption.Away, userId);
-
-
-            return new DeltaBetTeams
-            {
-                PossibleHomeTeams = possibleHomeTeams,
-                PossibleAwayTeams = possibleAwayTeams
-            };
+            var match = this.dbContextWrapper.GetMatchById(matchId);
+            var home = new List<Team>();
+            var away = new List<Team>();
+            if (match?.HomeId != null) home.Add(this.dbContextWrapper.GetTeam(match.HomeId));
+            if (match?.AwayId != null) away.Add(this.dbContextWrapper.GetTeam(match.AwayId));
+            return new DeltaBetTeams { PossibleHomeTeams = home, PossibleAwayTeams = away };
         }
 
-        private DeltaBetTeams GenerateTeams(string matchId, string userId)
+        // R16+: each side's options = union of (user's bet teams for the feeder) + (actual match teams of the feeder), deduped by team id.
+        private DeltaBetTeams GenerateTeamsForLaterRounds(string matchId, string userId)
         {
             var matchOption = this.deltaStageOptions.Value.NextRounds.Where(f => f.MatchId == matchId).First();
 
-            var homeTeamBetOptions = this.dbContextWrapper.GetDeltaBetByMatchId(userId, matchOption.Matches[0]);
-            var awayTeamBetOptions = this.dbContextWrapper.GetDeltaBetByMatchId(userId, matchOption.Matches[1]);
-
-            // If no user bet exists for a feeder match (e.g. R32), use actual match teams
-            if (homeTeamBetOptions == null)
+            return new DeltaBetTeams
             {
-                homeTeamBetOptions = this.CreateBetFromMatchData(matchOption.Matches[0]);
-            }
-
-            if (awayTeamBetOptions == null)
-            {
-                awayTeamBetOptions = this.CreateBetFromMatchData(matchOption.Matches[1]);
-            }
-
-            if (homeTeamBetOptions == null || awayTeamBetOptions == null)
-            {
-                return new DeltaBetTeams() { PossibleAwayTeams = new List<Team>(), PossibleHomeTeams = new List<Team>() };
-            }
-
-            var result = new DeltaBetTeams()
-            {
-                PossibleHomeTeams = new List<Team>(new[] { homeTeamBetOptions?.HomeTeamBet ?? new Team(), homeTeamBetOptions?.AwayTeamBet ?? new Team() }),
-                PossibleAwayTeams = new List<Team>(new[] { awayTeamBetOptions?.HomeTeamBet ?? new Team(), awayTeamBetOptions?.AwayTeamBet ?? new Team() })
+                PossibleHomeTeams = this.GetCombinedFeederTeams(matchOption.Matches[0], userId),
+                PossibleAwayTeams = this.GetCombinedFeederTeams(matchOption.Matches[1], userId)
             };
-
-            return result;
         }
 
-        private DeltaBet CreateBetFromMatchData(string matchId)
+        private List<Team> GetCombinedFeederTeams(string feederMatchId, string userId)
         {
-            var match = this.dbContextWrapper.GetMatchById(matchId);
-            if (match.HomeId != null && match.AwayId != null)
+            var seen = new HashSet<string>();
+            var result = new List<Team>();
+
+            var userBet = this.dbContextWrapper.GetDeltaBetByMatchId(userId, feederMatchId);
+            if (userBet?.HomeTeamBet != null && seen.Add(userBet.HomeTeamBet.Id))
             {
-                return new DeltaBet
-                {
-                    HomeTeamBet = this.dbContextWrapper.GetTeam(match.HomeId),
-                    AwayTeamBet = this.dbContextWrapper.GetTeam(match.AwayId)
-                };
+                result.Add(userBet.HomeTeamBet);
+            }
+            if (userBet?.AwayTeamBet != null && seen.Add(userBet.AwayTeamBet.Id))
+            {
+                result.Add(userBet.AwayTeamBet);
             }
 
-            return null;
+            var match = this.dbContextWrapper.GetMatchById(feederMatchId);
+            if (match?.HomeId != null && seen.Add(match.HomeId))
+            {
+                result.Add(this.dbContextWrapper.GetTeam(match.HomeId));
+            }
+            if (match?.AwayId != null && seen.Add(match.AwayId))
+            {
+                result.Add(this.dbContextWrapper.GetTeam(match.AwayId));
+            }
+
+            return result;
         }
 
         private DeltaBetTeams GenerateTeamsFirstRound(string matchId)
@@ -182,44 +172,6 @@
             return deltaBet == null
                 ? new Team[0]
                 : new List<Team>() { deltaBet.HomeTeamBet, deltaBet.AwayTeamBet }.ToArray();
-        }
-
-        private List<Team> GetPossibleTeamsByTeamOption(TeamOption teamOption, string userId)
-        {
-            var result = new List<Team>();
-            if (teamOption.Type == TeamOptionType.Winner || teamOption.Type == TeamOptionType.Runner)
-            {
-                var groupBetResult = this.dbContextWrapper.GetGroupBetByGroupId(teamOption.GroupId, userId);
-                if (groupBetResult == null)
-                {
-                    return new List<Team>();
-                }
-
-                switch (teamOption.Type)
-                {
-                    case TeamOptionType.Winner:
-                        result.Add(groupBetResult.First);
-                        break;
-                    case TeamOptionType.Runner:
-                        result.Add(groupBetResult.Second);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                foreach (var groupId in teamOption.GroupIds)
-                {
-                    var groupBetResult = this.dbContextWrapper.GetGroupBetByGroupId(groupId, userId);
-                    if (groupBetResult != null)
-                    {
-                        result.Add(groupBetResult.Third);
-                    }
-                }
-            }
-
-            return result;
         }
 
         private List<Team> GetPossibleTeamsByTeamOption(TeamOption teamOption)

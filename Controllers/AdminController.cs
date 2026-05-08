@@ -1,6 +1,7 @@
 ﻿namespace TipTournament2._0.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
@@ -13,7 +14,7 @@
     using TipTournament2._0.Utils;
 
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/admin")]
 
     public class AdminController : Controller
@@ -23,14 +24,16 @@
         private readonly IResultCoordinatorFactory resultCoordinatorFactory;
         private readonly ITeamGenerator teamGenerator;
         private readonly GeneralOption generalConfig;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public AdminController(IDbContextWrapper context, IMatchClient matchClient, IResultCoordinatorFactory resultCoordinatorFactory, ITeamGenerator teamGenerator, Microsoft.Extensions.Options.IOptions<GeneralOption> generalOptions)
+        public AdminController(IDbContextWrapper context, IMatchClient matchClient, IResultCoordinatorFactory resultCoordinatorFactory, ITeamGenerator teamGenerator, Microsoft.Extensions.Options.IOptions<GeneralOption> generalOptions, UserManager<ApplicationUser> userManager)
         {
             this.matchClient = matchClient;
             this.context = context;
             this.resultCoordinatorFactory = resultCoordinatorFactory;
             this.teamGenerator = teamGenerator;
             this.generalConfig = generalOptions.Value;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -66,7 +69,18 @@
         [HttpGet("delta/teams")]
         public IActionResult GetPossibleTeams([FromQuery] string matchId, [FromQuery] TournamentStage stage)
         {
-            return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage));
+            try
+            {
+                return new OkObjectResult(this.teamGenerator.GenerateTeams(matchId, stage));
+            }
+            catch
+            {
+                return new OkObjectResult(new DeltaBetTeams
+                {
+                    PossibleHomeTeams = new System.Collections.Generic.List<Team>(),
+                    PossibleAwayTeams = new System.Collections.Generic.List<Team>()
+                });
+            }
         }
         
         [HttpPost("match")]
@@ -95,6 +109,47 @@
         {
             this.resultCoordinatorFactory.Create(TournamentStage.Lambda).UploadNewResult<string>(string.Empty, name);
             return new OkResult();
+        }
+
+        [HttpPost("{userId}/admin")]
+        public async Task<IActionResult> SetAdmin([FromRoute] string userId, [FromQuery] bool isAdmin)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (isAdmin)
+            {
+                await this.userManager.AddToRoleAsync(user, "Admin");
+            }
+            else
+            {
+                await this.userManager.RemoveFromRoleAsync(user, "Admin");
+            }
+
+            return new OkResult();
+        }
+
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsersWithRoles()
+        {
+            var users = this.context.GetUsers();
+            var result = new List<object>();
+            foreach (var user in users)
+            {
+                var roles = await this.userManager.GetRolesAsync(user);
+                result.Add(new
+                {
+                    id = user.Id,
+                    userName = user.UserName,
+                    payed = user.Payed,
+                    isAdmin = roles.Contains("Admin")
+                });
+            }
+
+            return new OkObjectResult(result);
         }
     }
 }

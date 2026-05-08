@@ -1,11 +1,13 @@
-﻿import * as React from 'react';
-import { getAdminApi, getApi } from "../api/ApiFactory"
-import { Bet, Match, Result } from "../../typings/index"
+import * as React from 'react';
+import { getAdminApi } from "../api/ApiFactory"
+import { Match, Result } from "../../typings/index"
 import { TeamCell } from '../TeamCell'
+import { ConfirmModal } from './ConfirmModal';
 
 interface MatchRowAdminViewState {
     withResult: boolean,
-    match: Match
+    match: Match,
+    showConfirm: boolean
 }
 
 interface MatchRowAdminViewProps {
@@ -19,20 +21,19 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
         const match = this.props.match;
         if (!match.ended) {
             match.result = {} as Result;
-            match.result.homeTeam = 0;
-            match.result.awayTeam = 0;
         }
 
         this.state = {
             withResult: this.props.match.ended,
-            match: match
+            match: match,
+            showConfirm: false
         }
     }
 
     public render() {
         return this.state.withResult
             ? this.renderMatchWithResult()
-            : this.renderMatchWithouResult()
+            : this.renderMatchWithoutResult()
     }
 
     private renderMatchWithResult() {
@@ -45,22 +46,38 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
         );
     }
 
-    private renderMatchWithouResult() {
+    private renderMatchWithoutResult() {
         return (
-            <div>
-                <TeamCell team={this.props.match.home } />
-                <TeamCell team={this.props.match.away } />
+            <tr>
+                <TeamCell team={this.props.match.home} />
+                <TeamCell team={this.props.match.away} />
                 <td>
-                    <input type="number" min="0" max="99" value={!!this.state.match.result?.homeTeam ? this.state.match.result.homeTeam : "0"} onChange={(event) => this.setHomeResult(event.target.value)} />
+                    <input type="number" className="score-input" min="0" max="9" value={this.state.match.result?.homeTeam ?? ""} onChange={(event) => this.setHomeResult(event.target.value)} />
                 </td>
                 <td>
-                    <input type="number" min="0" max="99" value={!!this.state.match.result?.awayTeam ? this.state.match.result.awayTeam : "0"} onChange={(event) => this.setAwayResult(event.target.value)} />
+                    <input type="number" className="score-input" min="0" max="9" value={this.state.match.result?.awayTeam ?? ""} onChange={(event) => this.setAwayResult(event.target.value)} />
                 </td>
                 <td>
-                    <button className="btn btn-secondary" onClick={() => this.uploadResult()}> Uložit </button>
+                    <button className="btn btn-primary btn-sm" onClick={() => this.setState({ showConfirm: true })}>Ulozit</button>
                 </td>
-            </div>
+                {this.state.showConfirm &&
+                    <ConfirmModal
+                        title="Ulozit vysledek"
+                        message={`Ulozit vysledek ${this.state.match.result?.homeTeam ?? 0} : ${this.state.match.result?.awayTeam ?? 0} pro tento zapas?`}
+                        variant="warning"
+                        confirmText="Ulozit"
+                        onConfirm={() => this.uploadResult()}
+                        onCancel={() => this.setState({ showConfirm: false })}
+                    />
+                }
+            </tr>
         );
+    }
+
+    private clampGoals(value: string): number {
+        const digits = (value || "").replace(/\D/g, '');
+        if (!digits) return 0;
+        return Number(digits[digits.length - 1]);
     }
 
     private setHomeResult(tip: string) {
@@ -68,8 +85,7 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
         if (!newMatch.result) {
             newMatch.result = {} as Result
         }
-        newMatch.result.homeTeam = Number(tip);
-
+        newMatch.result.homeTeam = this.clampGoals(tip);
         this.setState({ match: newMatch });
     }
 
@@ -78,16 +94,21 @@ export class MatchRowAdminView extends React.Component<MatchRowAdminViewProps, M
         if (!newMatch.result) {
             newMatch.result = {} as Result;
         }
-        newMatch.result.awayTeam = Number(tip);
+        newMatch.result.awayTeam = this.clampGoals(tip);
         this.setState({ match: newMatch });
     }
 
     private async uploadResult(): Promise<void> {
+        this.setState({ showConfirm: false });
         document.body.style.cursor = "wait";
-        await getAdminApi().uploadMatchResult(this.state.match.result, this.props.match.id);
+        const result: Result = {
+            homeTeam: this.state.match.result?.homeTeam ?? 0,
+            awayTeam: this.state.match.result?.awayTeam ?? 0
+        };
+        this.state.match.result = result;
+        await getAdminApi().uploadMatchResult(result, this.props.match.id);
         document.body.style.cursor = "pointer";
         this.state.match.ended = true;
         this.setState({ withResult: true })
     }
 }
-

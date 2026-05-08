@@ -84,9 +84,9 @@ export class RulePage extends React.Component<RulePageProps> {
                                 <td>Tip na celkového vítěze se zamkne s prvním zápasem turnaje.</td>
                             </tr>
                             <tr>
-                                <td><strong>Delta – Playoff</strong> (1. kolo playoff až finále)</td>
-                                <td>Deadline příslušného kola</td>
-                                <td>Každé kolo playoff (1. kolo playoff, osmifinále, čtvrtfinále, semifinále, finále) má vlastní uzávěrku. Tipy na dané kolo se zamknou před začátkem prvního zápasu kola.</td>
+                                <td><strong>Delta – Playoff</strong> (osmifinále až finále)</td>
+                                <td>Začátek 1. kola playoff</td>
+                                <td>Tipy na všechna kola playoff (osmifinále, čtvrtfinále, semifinále, finále) se zamknou společně se začátkem prvního zápasu 1. kola playoff (R32). 1. kolo playoff samotné se netipuje — týmy doplňuje administrátor.</td>
                             </tr>
                             <tr>
                                 <td><strong>Lambda</strong> (nejlepší střelec)</td>
@@ -185,26 +185,31 @@ export class RulePage extends React.Component<RulePageProps> {
 
                     <div className="rules-card">
                         <h2>Delta <span className="rules-badge">Vyřazovací fáze</span></h2>
-                        <p>Tipuješ účastníky jednotlivých kol playoff. Nezáleží na tom, jakou cestou se tým do kola dostal — důležité je, že tam je.</p>
+                        <p>Tipuješ účastníky jednotlivých kol playoff od osmifinále výš. Nezáleží na tom, jakou cestou se tým do kola dostal — důležité je, že tam je.</p>
                         <div className="rules-scoring">
                             <div className="rules-score-row">
                                 <span className="rules-points rules-points-2">2 b.</span>
-                                <span>Za každého správného účastníka kola (čtvrtfinále, semifinále, finále)</span>
+                                <span>Za každého správného účastníka kola (osmifinále, čtvrtfinále, semifinále, finále)</span>
                             </div>
                             <div className="rules-score-row">
                                 <span className="rules-points rules-points-3">3 b.</span>
-                                <span>Za správně tipnutého celkového vítěze</span>
+                                <span>Za správně tipnutého celkového vítěze (sekce <em>Delta – Vítěz</em>)</span>
                             </div>
                         </div>
                         <div className="rules-note">
-                            <strong>1. kolo playoff (R32)</strong> se neboduje. Je třeba doplnit postupující ze 3. míst dle{' '}
-                            <a href="https://cs.wikipedia.org/wiki/Mistrovstv%C3%AD_sv%C4%9Bta_ve_fotbale_2026" target="_blank" rel="noopener noreferrer">pravidel FIFA</a>.
+                            <strong>1. kolo playoff (R32)</strong> se nesází. Týmy postupující ze skupin (včetně 3. míst dle{' '}
+                            <a href="https://cs.wikipedia.org/wiki/Mistrovstv%C3%AD_sv%C4%9Bta_ve_fotbale_2026" target="_blank" rel="noopener noreferrer">pravidel FIFA</a>) doplní administrátor po skupinové fázi. Tvůj pavouk se naplňuje od osmifinále.
+                        </div>
+                        <div className="rules-note">
+                            <strong>Výběr týmů pro další kolo:</strong> Při tipování dalšího kola si vybíráš ze dvou zdrojů:
+                            týmy, které jsi sám tipoval v předchozím kole, <em>i</em> skutečné týmy, které do daného zápasu reálně postoupily (jakmile administrátor předchozí kolo potvrdí).
+                            Tipy můžeš upravovat až do uzávěrky.
                         </div>
                         <div className="rules-note">
                             <strong>Příklad:</strong> Za správně tipnutého vítěze turnaje můžeš získat celkem <strong>11 bodů</strong> (2 za osmifinále + 2 za čtvrtfinále + 2 za semifinále + 2 za finále + 3 za vítěze).
                         </div>
                         <div className="rules-note">
-                            <strong>Dixit bonus:</strong> Pokud správně tipneš účastníka kola a většina hráčů se mýlí, získáváš bonusové body:
+                            <strong>Dixit bonus:</strong> Stejný princip jako v Alfa+Beta — pokud tvůj tip vyšel a většina hráčů ne, dostáváš bonusové body. Bonus se aplikuje na každý zápas playoff (kromě 1. kola playoff, které se neboduje):
                         </div>
                         <div className="rules-scoring">
                             <div className="rules-score-row">
