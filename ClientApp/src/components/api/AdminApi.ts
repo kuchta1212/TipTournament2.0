@@ -41,4 +41,8 @@ export class AdminApi implements IAdminApi {
     getUsersWithRoles(): Promise<any[]> {
         return convert<any[]>(get(`${API_URL}/users`));
     }
+
+    toggleMedal(userId: string, tournament: number, place: number): Promise<{ assigned: boolean }> {
+        return convert<{ assigned: boolean }>(post(`${API_URL}/${userId}/medal`, { tournament, place }));
+    }
 }

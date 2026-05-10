@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { getAdminApi } from '../api/ApiFactory';
 import { UserRow } from './UserRow'
+import { UserMedal } from '../../typings';
 
 interface AdminUser {
     id: string;
     userName: string;
     payed: boolean;
     isAdmin: boolean;
+    medals: UserMedal[];
 }
 
 interface UserOverviewState {
@@ -41,6 +43,7 @@ export class UserOverview extends React.Component<UserOverviewProps, UserOvervie
                         user={user}
                         onPaymentChange={(payed) => this.handlePaymentChange(user.id, payed)}
                         onAdminChange={(isAdmin) => this.handleAdminChange(user.id, isAdmin)}
+                        onMedalsChange={(medals) => this.handleMedalsChange(user.id, medals)}
                     />
                 ))}
             </div>
@@ -49,7 +52,10 @@ export class UserOverview extends React.Component<UserOverviewProps, UserOvervie
 
     private async getData() {
         const users = await getAdminApi().getUsersWithRoles();
-        this.setState({ users: users, loading: false });
+        this.setState({
+            users: users.map(u => ({ ...u, medals: u.medals || [] })),
+            loading: false
+        });
     }
 
     private handlePaymentChange(userId: string, payed: boolean) {
@@ -61,6 +67,12 @@ export class UserOverview extends React.Component<UserOverviewProps, UserOvervie
     private handleAdminChange(userId: string, isAdmin: boolean) {
         this.setState(prev => ({
             users: prev.users.map(u => u.id === userId ? { ...u, isAdmin } : u)
+        }));
+    }
+
+    private handleMedalsChange(userId: string, medals: UserMedal[]) {
+        this.setState(prev => ({
+            users: prev.users.map(u => u.id === userId ? { ...u, medals } : u)
         }));
     }
 }

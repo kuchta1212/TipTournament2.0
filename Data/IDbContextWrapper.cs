@@ -110,5 +110,11 @@
         List<MatchBet> GetAllBetsWithIncludes();
 
         List<DeltaBet> GetAllDeltaBetsWithIncludes();
+
+        List<UserMedal> GetMedalsForUser(string userId);
+
+        Dictionary<string, List<UserMedal>> GetMedalsForUsers(IEnumerable<string> userIds);
+
+        bool ToggleUserMedal(string userId, Tournament tournament, MedalPlace place);
     }
 }

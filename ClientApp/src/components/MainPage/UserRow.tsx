@@ -2,6 +2,7 @@ import * as React from 'react';
 import { User } from "../../typings/index"
 import { NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { MedalIcon } from '../MedalIcon';
 
 interface UserRowProps {
     user: User,
@@ -21,7 +22,10 @@ export class UserRow extends React.Component<UserRowProps> {
         return (
             <React.Fragment>
                 <td className={className}>
-                    {beforeLimit ? <div className={this.getTextClassName()}>{this.getContent()}</div> : <NavLink tag={Link} className={this.getTextClassName()} to={this.getLink()}>{this.getContent()}</NavLink>}
+                    <div className="ranking-name-cell">
+                        {beforeLimit ? <div className={this.getTextClassName()}>{this.getContent()}</div> : <NavLink tag={Link} className={this.getTextClassName()} to={this.getLink()}>{this.getContent()}</NavLink>}
+                        {this.renderMedals()}
+                    </div>
                 </td>
                 <td className="detail-col">{this.props.user.alfaPoints}</td>
                 <td className="detail-col">{this.props.user.gamaPoints}</td>
@@ -30,6 +34,18 @@ export class UserRow extends React.Component<UserRowProps> {
                 <td className="detail-col">{this.props.user.omikronPoints}</td>
                 <td className="font-weight-bold">{this.props.user.totalPoints}</td>
             </React.Fragment>
+        );
+    }
+
+    private renderMedals() {
+        const medals = this.props.user.medals;
+        if (!medals || medals.length === 0) return null;
+        return (
+            <span className="ranking-medals">
+                {medals.map((m, i) => (
+                    <MedalIcon key={`${m.tournament}-${m.place}-${i}`} tournament={m.tournament} place={m.place} size={20} />
+                ))}
+            </span>
         );
     }
 

@@ -38,13 +38,13 @@ export class RulePage extends React.Component<RulePageProps> {
                             <li>V menu klikni na <strong>Sázky</strong></li>
                             <li>Vyplň všechny tipovací sekce</li>
                             <li>Body se sčítají po každém odehraném zápase</li>
-                            <li>Zaplatit startovné 200 Kč (QR kód níže)</li>
+                            <li>Zaplatit startovné 300 Kč (QR kód níže)</li>
                         </ol>
                     </div>
                     <div className="rules-card">
                         <div className="rules-card-icon">&#128176;</div>
                         <h2>Startovné</h2>
-                        <p>Startovné je <strong>200 Kč</strong>. Do předmětu platby napiš svoje uživatelské jméno.</p>
+                        <p>Startovné je <strong>300 Kč</strong>. Do předmětu platby napiš svoje uživatelské jméno.</p>
                         <div className="rules-qr">
                             <img src={process.env.PUBLIC_URL + '/icons/QR.jpg'} width="160" height="160" alt="QR Code pro platbu" />
                         </div>

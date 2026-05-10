@@ -951,6 +951,14 @@ code {
     white-space: nowrap;
 }
 
+.ranking-table thead th.detail-col,
+.ranking-table tbody td.detail-col {
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    text-align: center;
+    width: 1%;
+}
+
 .ranking-table thead th a {
     color: var(--text-secondary);
     text-decoration: none;
@@ -2238,6 +2246,45 @@ select option {
     flex-shrink: 0;
 }
 
+.admin-user-medals {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.admin-medal-chip {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    cursor: pointer;
+    line-height: 0;
+    transition: opacity var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.admin-medal-chip-off {
+    opacity: 0.32;
+    filter: grayscale(0.6);
+}
+
+.admin-medal-chip-off:hover {
+    opacity: 0.7;
+    filter: grayscale(0.3);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-medal-chip-on {
+    opacity: 1;
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-medal-chip-on:hover {
+    border-color: var(--danger);
+    background: var(--danger-bg);
+}
+
 @media (max-width: 767.98px) {
     .admin-user-row {
         flex-wrap: wrap;
@@ -2251,6 +2298,30 @@ select option {
         width: 100%;
         justify-content: flex-end;
     }
+
+    .admin-user-medals {
+        width: 100%;
+    }
+}
+
+/* ===== Medals (ranking display) ===== */
+.medal-icon {
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.ranking-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.ranking-medals {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
 }
 
 .admin-role-badge {

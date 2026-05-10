@@ -647,5 +647,45 @@
                     .ThenInclude(r => r.AdditionalResult)
                 .ToList();
         }
+
+        public List<UserMedal> GetMedalsForUser(string userId)
+        {
+            return this.dbContext.UserMedals.Where(m => m.UserId == userId).ToList();
+        }
+
+        public Dictionary<string, List<UserMedal>> GetMedalsForUsers(IEnumerable<string> userIds)
+        {
+            var ids = userIds.ToList();
+            return this.dbContext.UserMedals
+                .Where(m => ids.Contains(m.UserId))
+                .ToList()
+                .GroupBy(m => m.UserId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        // Adds the medal if it doesn't exist for this (user, tournament, place) triple, otherwise removes it.
+        // Returns true if the medal is now assigned, false if it was removed.
+        public bool ToggleUserMedal(string userId, Tournament tournament, MedalPlace place)
+        {
+            var existing = this.dbContext.UserMedals
+                .FirstOrDefault(m => m.UserId == userId && m.Tournament == tournament && m.Place == place);
+
+            if (existing != null)
+            {
+                this.dbContext.UserMedals.Remove(existing);
+                this.dbContext.SaveChanges();
+                return false;
+            }
+
+            this.dbContext.UserMedals.Add(new UserMedal
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserId = userId,
+                Tournament = tournament,
+                Place = place
+            });
+            this.dbContext.SaveChanges();
+            return true;
+        }
     }
 }
