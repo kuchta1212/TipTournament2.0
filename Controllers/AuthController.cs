@@ -24,10 +24,24 @@ namespace TipTournament2._0.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var result = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, isPersistent: true, lockoutOnFailure: false);
+            if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
+            {
+                return BadRequest(new { message = "Neplatné přihlašovací údaje." });
+            }
+
+            // Accept either username or email as login identifier
+            var user = request.UserName.Contains('@')
+                ? await _userManager.FindByEmailAsync(request.UserName)
+                : await _userManager.FindByNameAsync(request.UserName);
+
+            if (user == null)
+            {
+                return BadRequest(new { message = "Neplatné přihlašovací údaje." });
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(request.UserName);
                 return Ok(new { userName = user.UserName, didPayed = user.Payed });
             }
 
