@@ -61,7 +61,7 @@ export class Login extends Component {
                 <h2 className="text-light mb-4">Přihlášení</h2>
                 <form onSubmit={(e) => this.handleLogin(e)}>
                     <div className="form-group mb-3">
-                        <label htmlFor="username">Uživatelské jméno</label>
+                        <label htmlFor="username">Uživatelské jméno nebo email</label>
                         <input
                             type="text"
                             className="form-control"
