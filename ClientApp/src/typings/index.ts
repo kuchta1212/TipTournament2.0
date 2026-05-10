@@ -82,6 +82,24 @@ export interface User {
     lambdaPoints: number;
     omikronPoints: number;
     payed: boolean;
+    medals?: UserMedal[];
+}
+
+export enum MedalTournament {
+    E20 = 0,
+    E24 = 1,
+    WC22 = 2
+}
+
+export enum MedalPlace {
+    Gold = 0,
+    Silver = 1,
+    Bronze = 2
+}
+
+export interface UserMedal {
+    tournament: MedalTournament;
+    place: MedalPlace;
 }
 
 export interface AllBets {

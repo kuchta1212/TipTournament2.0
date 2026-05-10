@@ -136,20 +136,44 @@
         public async Task<IActionResult> GetUsersWithRoles()
         {
             var users = this.context.GetUsers();
+            var medalsByUser = this.context.GetMedalsForUsers(users.Select(u => u.Id));
             var result = new List<object>();
             foreach (var user in users)
             {
                 var roles = await this.userManager.GetRolesAsync(user);
+                medalsByUser.TryGetValue(user.Id, out var medals);
                 result.Add(new
                 {
                     id = user.Id,
                     userName = user.UserName,
                     payed = user.Payed,
-                    isAdmin = roles.Contains("Admin")
+                    isAdmin = roles.Contains("Admin"),
+                    medals = (medals ?? new List<UserMedal>())
+                        .Select(m => new { tournament = m.Tournament, place = m.Place })
+                        .ToList()
                 });
             }
 
             return new OkObjectResult(result);
         }
+
+        [HttpPost("{userId}/medal")]
+        public async Task<IActionResult> ToggleMedal([FromRoute] string userId, [FromBody] ToggleMedalRequest request)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var assigned = this.context.ToggleUserMedal(userId, request.Tournament, request.Place);
+            return new OkObjectResult(new { assigned });
+        }
+    }
+
+    public class ToggleMedalRequest
+    {
+        public Tournament Tournament { get; set; }
+        public MedalPlace Place { get; set; }
     }
 }

@@ -25,7 +25,9 @@
 
         public bool Payed { get; set; }
 
-        public static UiUser FromApplicationUser(ApplicationUser appUser)
+        public List<UiUserMedal> Medals { get; set; } = new List<UiUserMedal>();
+
+        public static UiUser FromApplicationUser(ApplicationUser appUser, List<UserMedal> medals = null)
         {
             return new UiUser()
             {
@@ -37,8 +39,17 @@
                 DeltaPoints = appUser.DeltaPoints,
                 LambdaPoints = appUser.LambdaPoints,
                 OmikronPoints = appUser.OmikronPoints,
-                Payed = appUser.Payed
+                Payed = appUser.Payed,
+                Medals = (medals ?? new List<UserMedal>())
+                    .Select(m => new UiUserMedal { Tournament = m.Tournament, Place = m.Place })
+                    .ToList()
             };
         }
+    }
+
+    public class UiUserMedal
+    {
+        public Tournament Tournament { get; set; }
+        public MedalPlace Place { get; set; }
     }
 }

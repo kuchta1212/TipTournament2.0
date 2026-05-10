@@ -25,16 +25,25 @@
         [HttpGet("users")]
         public IActionResult GetUsers([FromQuery] bool orderByPoints)
         {
-            return orderByPoints
-                ? new OkObjectResult(this.context.GetAllUsers().Select(u => UiUser.FromApplicationUser(u))
+            var users = this.context.GetAllUsers();
+            var medalsByUser = this.context.GetMedalsForUsers(users.Select(u => u.Id));
+            var uiUsers = users
+                .Select(u => UiUser.FromApplicationUser(u, medalsByUser.TryGetValue(u.Id, out var ms) ? ms : null))
+                .ToList();
+
+            if (orderByPoints)
+            {
+                uiUsers = uiUsers
                     .OrderByDescending(u => u.TotalPoints)
                     .ThenByDescending(u => u.AlfaPoints)
                     .ThenByDescending(u => u.GamaPoints)
                     .ThenByDescending(u => u.DeltaPoints)
                     .ThenByDescending(u => u.LambdaPoints)
                     .ThenByDescending(u => u.OmikronPoints)
-                .ToList())
-                : new OkObjectResult(this.context.GetAllUsers().Select(u => UiUser.FromApplicationUser(u)).ToList());
+                    .ToList();
+            }
+
+            return new OkObjectResult(uiUsers);
         }
 
         [HttpGet("user/payed")]

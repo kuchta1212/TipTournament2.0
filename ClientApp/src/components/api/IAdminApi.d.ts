@@ -20,4 +20,6 @@ export interface IAdminApi {
     setAdmin(userId: string, isAdmin: boolean): Promise<void>;
 
     getUsersWithRoles(): Promise<any[]>;
+
+    toggleMedal(userId: string, tournament: number, place: number): Promise<{ assigned: boolean }>;
 }

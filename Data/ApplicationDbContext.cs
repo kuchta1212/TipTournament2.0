@@ -38,6 +38,8 @@ namespace TipTournament2._0.Data
 
         public DbSet<DeltaBetResult> DeltaBetResults { get; set; }
 
+        public DbSet<UserMedal> UserMedals { get; set; }
+
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
