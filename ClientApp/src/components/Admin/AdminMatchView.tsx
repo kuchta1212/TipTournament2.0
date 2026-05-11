@@ -180,7 +180,9 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                         <div className="card-body">
                             <div className="groupList">
                                 {
-                                    this.state.matches.filter(m => m.stage == TournamentStage.Semifinal).map(m => {
+                                    // match_103 = 3rd-place playoff; sits at Semifinal stage in legacy DBs
+                                    // but isn't part of the betting bracket. Hide it here.
+                                    this.state.matches.filter(m => m.stage == TournamentStage.Semifinal && m.id !== 'match_103').map(m => {
                                         return <DeltaBetAdminViewRow key={m.id} match={m} />
                                     })
                                 }
