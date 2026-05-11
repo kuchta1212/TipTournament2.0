@@ -157,20 +157,43 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         {this.getTotalPointsWithBonus()}b
                     </div>
                 )}
-                {this.props.showResult && (this.props.match.home || this.props.match.away) && (
+                {this.shouldShowActual() && (
                     <div className="delta-compact-actual">
-                        <span className="delta-compact-actual-label">Skutečně:</span>
-                        {this.props.match.home
-                            ? <><img src={process.env.PUBLIC_URL + this.props.match.home.iconPath} width="14" height="14" alt={this.props.match.home.name} /><span>{this.props.match.home.name}</span></>
-                            : <span className="delta-compact-tbd">TBD</span>}
-                        <span className="delta-compact-actual-vs">vs</span>
-                        {this.props.match.away
-                            ? <><img src={process.env.PUBLIC_URL + this.props.match.away.iconPath} width="14" height="14" alt={this.props.match.away.name} /><span>{this.props.match.away.name}</span></>
-                            : <span className="delta-compact-tbd">TBD</span>}
+                        <div className="delta-compact-actual-label">Skutečnost:</div>
+                        <div className="delta-compact-team">
+                            {this.props.match.home
+                                ? <>
+                                    <img src={process.env.PUBLIC_URL + this.props.match.home.iconPath} width="18" height="18" alt={this.props.match.home.name} />
+                                    <span>{this.props.match.home.name}</span>
+                                  </>
+                                : <span className="delta-compact-tbd">TBD</span>}
+                        </div>
+                        <div className="delta-compact-team">
+                            {this.props.match.away
+                                ? <>
+                                    <img src={process.env.PUBLIC_URL + this.props.match.away.iconPath} width="18" height="18" alt={this.props.match.away.name} />
+                                    <span>{this.props.match.away.name}</span>
+                                  </>
+                                : <span className="delta-compact-tbd">TBD</span>}
+                        </div>
                     </div>
                 )}
             </div>
         );
+    }
+
+    private shouldShowActual(): boolean {
+        if (!this.props.showResult) return false;
+        const home = this.props.match.home;
+        const away = this.props.match.away;
+        if (!home && !away) return false;
+        const betHome = this.state.bet.homeTeamBet;
+        const betAway = this.state.bet.awayTeamBet;
+        const homeMatches = !!home && !!betHome && home.id === betHome.id;
+        const awayMatches = !!away && !!betAway && away.id === betAway.id;
+        // Hide when the user already nailed both sides
+        if (homeMatches && awayMatches) return false;
+        return true;
     }
 
     private renderCompactEditable() {

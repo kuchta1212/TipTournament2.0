@@ -210,10 +210,8 @@ INSERT INTO Matches (Id, HomeId, AwayId, StartTime, Ended, Stage, Round) VALUES
 ('match_101', NULL, NULL, '2026-07-14 19:00:00', 0, 4, 0),  -- W97 vs W98, Arlington UTC-5 → 14:00+5=19:00
 ('match_102', NULL, NULL, '2026-07-15 19:00:00', 0, 4, 0);  -- W99 vs W100, Atlanta UTC-4 → 15:00+4=19:00
 
--- Third place match (treated as Semifinal stage in app)
-INSERT INTO Matches (Id, HomeId, AwayId, StartTime, Ended, Stage, Round) VALUES
-('match_103', NULL, NULL, '2026-07-18 21:00:00', 0, 4, 0);  -- L101 vs L102, Miami UTC-4 → 17:00+4=21:00
-
 -- Final
+-- (Third-place playoff intentionally omitted - the betting bracket only covers
+--  Semifinal winners advancing to the Final; loser placement does not affect scoring.)
 INSERT INTO Matches (Id, HomeId, AwayId, StartTime, Ended, Stage, Round) VALUES
 ('match_104', NULL, NULL, '2026-07-19 19:00:00', 0, 5, 0);  -- W101 vs W102, East Rutherford UTC-4 → 15:00+4=19:00
