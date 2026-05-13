@@ -26,6 +26,7 @@ interface TournamentBracketState {
     sfMatches: Match[];
     finalMatches: Match[];
     refreshKey: number;
+    mobileExpanded: { [key: string]: boolean };
 }
 
 export class TournamentBracket extends React.Component<TournamentBracketProps, TournamentBracketState> {
@@ -38,8 +39,15 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
             qfMatches: [],
             sfMatches: [],
             finalMatches: [],
-            refreshKey: 0
+            refreshKey: 0,
+            mobileExpanded: { r32: false, r16: true, qf: false, sf: false, final: false }
         };
+    }
+
+    private toggleMobile(key: string) {
+        this.setState(prev => ({
+            mobileExpanded: { ...prev.mobileExpanded, [key]: !prev.mobileExpanded[key] }
+        }));
     }
 
     public componentDidMount() {
@@ -119,13 +127,13 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
                     </div>
                 </div>
 
-                {/* Mobile stacked view */}
+                {/* Mobile stacked view - collapsible per round */}
                 <div className="bracket-mobile">
-                    {this.renderMobileRound('1. kolo playoff', this.state.r32Matches, undefined, true)}
-                    {this.renderMobileRound('Osmifinále', this.state.r16Matches, this.state.refreshKey)}
-                    {this.renderMobileRound('Čtvrtfinále', this.state.qfMatches, this.state.refreshKey)}
-                    {this.renderMobileRound('Semifinále', this.state.sfMatches, this.state.refreshKey)}
-                    {this.renderMobileRound('Finále', this.state.finalMatches, this.state.refreshKey)}
+                    {this.renderMobileRound('1. kolo playoff', 'r32', this.state.r32Matches, undefined, true)}
+                    {this.renderMobileRound('Osmifinále', 'r16', this.state.r16Matches, this.state.refreshKey)}
+                    {this.renderMobileRound('Čtvrtfinále', 'qf', this.state.qfMatches, this.state.refreshKey)}
+                    {this.renderMobileRound('Semifinále', 'sf', this.state.sfMatches, this.state.refreshKey)}
+                    {this.renderMobileRound('Finále', 'final', this.state.finalMatches, this.state.refreshKey)}
                 </div>
             </div>
         );
@@ -157,22 +165,33 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
         );
     }
 
-    private renderMobileRound(title: string, matches: Match[], refreshKey?: number, displayOnly?: boolean) {
+    private renderMobileRound(title: string, key: string, matches: Match[], refreshKey?: number, displayOnly?: boolean) {
+        const expanded = !!this.state.mobileExpanded[key];
         return (
             <div className="bracket-mobile-round">
-                <h6 className="bracket-mobile-title">{title}</h6>
-                <div className="groupList">
-                    {matches.map(match => (
-                        <DeltaBetRow
-                            key={refreshKey != null ? `${match.id}-${refreshKey}` : match.id}
-                            match={match}
-                            isReadOnly={displayOnly ? true : this.props.isReadOnly}
-                            showResult={displayOnly ? false : this.props.showResult}
-                            displayOnly={displayOnly}
-                            onBetConfirmed={displayOnly ? undefined : this.onBetConfirmed}
-                        />
-                    ))}
-                </div>
+                <button
+                    type="button"
+                    className={`bracket-mobile-toggle ${expanded ? 'open' : ''}`}
+                    onClick={() => this.toggleMobile(key)}
+                    aria-expanded={expanded}
+                >
+                    <span>{title}</span>
+                    <span className="bracket-mobile-toggle-icon">{'▾'}</span>
+                </button>
+                {expanded && (
+                    <div className="groupList">
+                        {matches.map(match => (
+                            <DeltaBetRow
+                                key={refreshKey != null ? `${match.id}-${refreshKey}` : match.id}
+                                match={match}
+                                isReadOnly={displayOnly ? true : this.props.isReadOnly}
+                                showResult={displayOnly ? false : this.props.showResult}
+                                displayOnly={displayOnly}
+                                onBetConfirmed={displayOnly ? undefined : this.onBetConfirmed}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         );
     }

@@ -58,26 +58,28 @@ export class Ranking extends React.Component<RankingProps, RankingState> {
 
     private renderRanking() {
         return (
-            <table className="ranking-table">
-                <thead>
-                    <tr>
-                        <th>Jméno</th>
-                        <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.AlfaBeta)}>α+β</a></th>
-                        <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Gamma)}>γ</a></th>
-                        <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Delta)}>δ</a></th>
-                        <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Lambda)}>λ</a></th>
-                        <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Omikron)}>ο</a></th>
-                        <th><a href="#" onClick={(event) => this.sortingClick(SortBy.Total)}>Σ</a></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.getSortedData().map((user, index) => (
-                        <tr key={user.userName} className={this.props.currentUser === user.id ? 'ranking-current-user' : ''}>
-                            <UserRow user={user} index={index} currentUser={this.props.currentUser} />
+            <div className="ranking-table-scroll">
+                <table className="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>Jméno</th>
+                            <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.AlfaBeta)}>α+β</a></th>
+                            <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Gamma)}>γ</a></th>
+                            <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Delta)}>δ</a></th>
+                            <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Lambda)}>λ</a></th>
+                            <th className="detail-col"><a href="#" onClick={(event) => this.sortingClick(SortBy.Omikron)}>ο</a></th>
+                            <th><a href="#" onClick={(event) => this.sortingClick(SortBy.Total)}>Σ</a></th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {this.getSortedData().map((user, index) => (
+                            <tr key={user.userName} className={this.props.currentUser === user.id ? 'ranking-current-user' : ''}>
+                                <UserRow user={user} index={index} currentUser={this.props.currentUser} />
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 
