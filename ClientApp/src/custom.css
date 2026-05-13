@@ -683,6 +683,15 @@ code {
     font-size: var(--font-base);
     flex: 1;
     min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.match-card-team span,
+.match-card-team {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .match-card-team:first-child {
@@ -1938,6 +1947,23 @@ code {
     .detail-col {
         display: none !important;
     }
+
+    /* Ranking stays full-width with horizontal scroll on mobile so users
+       can still see Alfa/Gama/Delta/Lambda/Omikron columns by scrolling. */
+    .ranking-table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -12px;
+        padding: 0 12px;
+    }
+
+    .ranking-table-scroll .detail-col {
+        display: table-cell !important;
+    }
+
+    .ranking-table-scroll .ranking-table {
+        min-width: 560px;
+    }
 }
 
 @media (max-width: 575.98px) {
@@ -1948,10 +1974,6 @@ code {
 
     .match-card {
         padding: var(--space-md);
-    }
-
-    .match-card-teams {
-        gap: var(--space-sm);
     }
 
     .btn {
@@ -1965,15 +1987,149 @@ code {
         font-size: var(--font-md);
     }
 
+    /* Mobile: stack teams vertically so long names get the full card width.
+       Layout becomes:
+           Home team (icon + name, full row)
+           Away team (icon + name, full row)
+           score / tip line below, points badge top-right
+    */
     .main-match-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-xs);
         padding: var(--space-sm) var(--space-md);
-        gap: var(--space-xs) var(--space-sm);
+        position: relative;
+    }
+
+    .main-match-card .match-card-teams {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-xs);
+        margin-bottom: 0;
+    }
+
+    .main-match-card .match-card-team {
+        font-size: var(--font-base);
+        gap: var(--space-sm);
+        justify-content: flex-start !important;
+    }
+
+    .main-match-card .match-card-team img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .main-match-card .main-match-center {
+        text-align: left;
+        min-width: 0;
+        padding-right: 56px; /* leave room for the absolute-positioned points badge */
+    }
+
+    .main-match-card .main-match-scores {
+        align-items: flex-start;
+    }
+
+    /* Pull the points badge into the top-right corner so it doesn't steal
+       horizontal space from the team rows. */
+    .main-match-card .main-match-points-area {
+        position: absolute;
+        top: var(--space-sm);
+        right: var(--space-md);
+    }
+
+    .main-match-card .main-match-points {
+        min-width: 38px;
+        height: 38px;
+        padding: 0 var(--space-xs);
+    }
+
+    .main-match-card .main-match-points-value {
+        font-size: var(--font-md);
+        line-height: 38px;
+    }
+
+    /* The "match-card" variant (used in /tips list) also benefits from the
+       same single-line-per-team rule */
+    .match-card .match-card-teams {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-xs);
+    }
+
+    .match-card .match-card-team {
+        justify-content: flex-start !important;
     }
 
     .ranking-table thead th,
     .ranking-table tbody td {
         padding: 0.5rem 0.6rem;
     }
+}
+
+/* ===== Mobile bracket round toggle ===== */
+.bracket-mobile-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 0.6rem 0.9rem;
+    color: var(--text);
+    font-size: var(--font-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.bracket-mobile-toggle:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.bracket-mobile-toggle-icon {
+    transition: transform var(--transition-fast);
+    color: var(--text-secondary);
+}
+
+.bracket-mobile-toggle.open .bracket-mobile-toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* ===== Skutečnost block in full delta-bet-card (mobile bracket) ===== */
+.delta-bet-actual {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.delta-bet-actual-label {
+    font-size: var(--font-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.delta-bet-actual-teams {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    color: var(--text-secondary);
+}
+
+.delta-bet-actual-teams .match-card-team {
+    font-size: var(--font-sm);
+    font-weight: 500;
+    gap: var(--space-sm);
+    flex: none;
+    justify-content: flex-start;
 }
 
 /* Safe area for mobile */

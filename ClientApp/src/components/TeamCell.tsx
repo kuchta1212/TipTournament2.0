@@ -14,7 +14,7 @@ export class TeamCell extends React.Component<MatchRowProps> {
     public render() {
         return (
             <td className="team-cell">
-                {this.props.team.name} <img src={process.env.PUBLIC_URL + this.props.team.iconPath} width="25" height="25" alt={this.props.team.name} />
+                <img src={process.env.PUBLIC_URL + this.props.team.iconPath} width="25" height="25" alt={this.props.team.name} /> {this.props.team.name}
             </td>
         );
     }

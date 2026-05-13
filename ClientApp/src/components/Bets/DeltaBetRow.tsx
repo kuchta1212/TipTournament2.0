@@ -282,6 +282,29 @@ export class DeltaBetRow extends React.Component<DeltaBetProps, DeltaBetState> {
                         )}
                     </div>
                 ))}
+                {this.shouldShowActual() && (
+                    <div className="delta-bet-actual">
+                        <div className="delta-bet-actual-label">Skutečnost:</div>
+                        <div className="delta-bet-actual-teams">
+                            <div className="match-card-team">
+                                {this.props.match.home
+                                    ? <>
+                                        <img src={process.env.PUBLIC_URL + this.props.match.home.iconPath} width="22" height="22" alt={this.props.match.home.name} />
+                                        <span>{this.props.match.home.name}</span>
+                                      </>
+                                    : <span className="delta-compact-tbd">TBD</span>}
+                            </div>
+                            <div className="match-card-team">
+                                {this.props.match.away
+                                    ? <>
+                                        <img src={process.env.PUBLIC_URL + this.props.match.away.iconPath} width="22" height="22" alt={this.props.match.away.name} />
+                                        <span>{this.props.match.away.name}</span>
+                                      </>
+                                    : <span className="delta-compact-tbd">TBD</span>}
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div className="delta-bet-footer">
                     {this.props.showResult
                         ? <span className={`special-bet-result ${this.getResultBadgeClass()}`}>
