@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Match, Bet, BetResult } from '../../typings/index';
 import { getApi } from '../api/ApiFactory';
 
@@ -51,8 +52,9 @@ export class MatchBetsModal extends React.Component<MatchBetsModalProps, MatchBe
 
     public render() {
         const { match, onClose } = this.props;
+        const hasResult = !!match.result;
 
-        return (
+        return ReactDOM.createPortal(
             <div className="modal-bet-overlay" onClick={onClose}>
                 <div className="modal-bet-card" onClick={e => e.stopPropagation()}>
                     <button className="modal-bet-close" onClick={onClose}>&times;</button>
@@ -63,7 +65,7 @@ export class MatchBetsModal extends React.Component<MatchBetsModalProps, MatchBe
                             <span>{match.home.name}</span>
                         </div>
                         <div className="modal-bet-score">
-                            {match.result.homeTeam} : {match.result.awayTeam}
+                            {hasResult ? `${match.result.homeTeam} : ${match.result.awayTeam}` : 'vs'}
                         </div>
                         <div className="modal-bet-team">
                             <img src={process.env.PUBLIC_URL + match.away.iconPath} width="28" height="28" alt={match.away.name} />
@@ -80,10 +82,11 @@ export class MatchBetsModal extends React.Component<MatchBetsModalProps, MatchBe
                         {this.state.bets.map(bet => {
                             const isCurrentUser = bet.user?.id === this.props.currentUserId;
                             const points = this.getPoints(bet);
+                            const tip = bet.tip ? `${bet.tip.homeTeam}:${bet.tip.awayTeam}` : '—';
                             return (
                                 <div key={bet.id} className={`modal-bet-row ${isCurrentUser ? 'modal-bet-row-current' : ''}`}>
                                     <span className="modal-bet-player">{bet.user?.userName ?? '?'}</span>
-                                    <span className="modal-bet-tip">{bet.tip.homeTeam}:{bet.tip.awayTeam}</span>
+                                    <span className="modal-bet-tip">{tip}</span>
                                     <span className={`modal-bet-points ${this.getPointsClass(bet.result)}`}>
                                         {points}b
                                     </span>
@@ -92,7 +95,8 @@ export class MatchBetsModal extends React.Component<MatchBetsModalProps, MatchBe
                         })}
                     </div>
                 </div>
-            </div>
+            </div>,
+            document.body
         );
     }
 }
