@@ -2399,6 +2399,95 @@ select option {
     flex-shrink: 0;
 }
 
+.admin-user-recovery {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    flex-shrink: 0;
+}
+
+.admin-recovery-code {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    user-select: all;
+}
+
+.admin-recovery-code:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+}
+
+.admin-bulk-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+    background: var(--warning-bg);
+    border: 1px solid var(--warning);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-size: var(--font-sm);
+}
+
+.admin-bulk-result {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.admin-bulk-result-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-sm);
+}
+
+.admin-bulk-table {
+    width: 100%;
+    font-size: var(--font-sm);
+    border-collapse: collapse;
+}
+
+.admin-bulk-table thead th {
+    text-align: left;
+    padding: 0.35rem 0.6rem;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: var(--font-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.admin-bulk-table tbody td {
+    padding: 0.35rem 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-bulk-table tbody td code {
+    font-weight: 700;
+    color: var(--primary-lighter);
+    background: rgba(66, 153, 225, 0.12);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
+}
+
 .admin-user-medals {
     display: flex;
     gap: 0.25rem;

@@ -6,6 +6,7 @@ namespace TipTournament2._0.Controllers
     using System.Linq;
     using System.Threading.Tasks;
     using TipTournament2._0.Models;
+    using TipTournament2._0.Utils;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -86,15 +87,75 @@ namespace TipTournament2._0.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            var user = new ApplicationUser { UserName = request.Email, Email = request.Email };
+            var user = new ApplicationUser
+            {
+                UserName = request.Email,
+                Email = request.Email,
+                RecoveryCode = RecoveryCodeGenerator.Generate()
+            };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: true);
-                return Ok(new { userName = user.UserName, didPayed = user.Payed });
+                return Ok(new
+                {
+                    userName = user.UserName,
+                    didPayed = user.Payed,
+                    recoveryCode = user.RecoveryCode
+                });
             }
 
             return BadRequest(new { errors = result.Errors });
+        }
+
+        [HttpPost("recovery/reset")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RecoveryReset([FromBody] RecoveryResetRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Email)
+                || string.IsNullOrEmpty(request.RecoveryCode)
+                || string.IsNullOrEmpty(request.NewPassword))
+            {
+                return BadRequest(new { message = "Neplatné údaje." });
+            }
+
+            // Accept either email or username. Try email first (most users
+            // will type that), fall back to username — handles legacy accounts
+            // where NormalizedEmail may not be set.
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                user = await _userManager.FindByNameAsync(request.Email);
+            }
+            if (user == null)
+            {
+                // Last-resort case-insensitive scan against raw Email/UserName,
+                // for accounts where the Identity normalized fields are stale.
+                user = _userManager.Users.FirstOrDefault(u =>
+                    (u.Email != null && u.Email.ToLower() == request.Email.ToLower())
+                    || (u.UserName != null && u.UserName.ToLower() == request.Email.ToLower()));
+            }
+
+            if (user == null
+                || string.IsNullOrEmpty(user.RecoveryCode)
+                || !string.Equals(user.RecoveryCode, request.RecoveryCode, System.StringComparison.Ordinal))
+            {
+                return BadRequest(new { message = "Neplatné údaje." });
+            }
+
+            var removeResult = await _userManager.RemovePasswordAsync(user);
+            if (!removeResult.Succeeded)
+            {
+                return BadRequest(new { errors = removeResult.Errors });
+            }
+            var addResult = await _userManager.AddPasswordAsync(user, request.NewPassword);
+            if (!addResult.Succeeded)
+            {
+                return BadRequest(new { errors = addResult.Errors });
+            }
+
+            await _signInManager.SignInAsync(user, isPersistent: true);
+            return Ok(new { userName = user.UserName, didPayed = user.Payed });
         }
     }
 
@@ -108,5 +169,12 @@ namespace TipTournament2._0.Controllers
     {
         public string Email { get; set; }
         public string Password { get; set; }
+    }
+
+    public class RecoveryResetRequest
+    {
+        public string Email { get; set; }
+        public string RecoveryCode { get; set; }
+        public string NewPassword { get; set; }
     }
 }

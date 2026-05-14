@@ -13,7 +13,8 @@ export const LogoutActions = {
 export const LoginActions = {
   Login: 'login',
   LoginFailed: 'login-failed',
-  Register: 'register'
+  Register: 'register',
+  Recovery: 'recovery'
 };
 
 const prefix = '/authentication';
@@ -24,6 +25,7 @@ export const ApplicationPaths = {
   Login: `${prefix}/${LoginActions.Login}`,
   LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
   Register: `${prefix}/${LoginActions.Register}`,
+  Recovery: `${prefix}/${LoginActions.Recovery}`,
   LogOut: `${prefix}/${LogoutActions.Logout}`,
   LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`
 };

@@ -13,6 +13,7 @@
     using TipTournament2._0.Models;
     using TipTournament2._0.Utils;
 
+
     [ApiController]
     [Authorize(Roles = "Admin")]
     [Route("api/admin")]
@@ -148,6 +149,7 @@
                     userName = user.UserName,
                     payed = user.Payed,
                     isAdmin = roles.Contains("Admin"),
+                    recoveryCode = user.RecoveryCode,
                     medals = (medals ?? new List<UserMedal>())
                         .Select(m => new { tournament = m.Tournament, place = m.Place })
                         .ToList()
@@ -168,6 +170,41 @@
 
             var assigned = this.context.ToggleUserMedal(userId, request.Tournament, request.Place);
             return new OkObjectResult(new { assigned });
+        }
+
+        // Generates recovery codes for any user who doesn't have one yet.
+        // Returns the per-user plaintext codes so admin can email them out.
+        // Idempotent: users with existing codes are skipped.
+        [HttpPost("recovery-codes/missing")]
+        public async Task<IActionResult> GenerateMissingRecoveryCodes()
+        {
+            var users = this.context.GetUsers();
+            var generated = new List<object>();
+            foreach (var user in users)
+            {
+                if (string.IsNullOrEmpty(user.RecoveryCode))
+                {
+                    user.RecoveryCode = RecoveryCodeGenerator.Generate();
+                    await this.userManager.UpdateAsync(user);
+                    generated.Add(new { userName = user.UserName, email = user.Email, recoveryCode = user.RecoveryCode });
+                }
+            }
+            return new OkObjectResult(generated);
+        }
+
+        // Regenerates a single user's recovery code (overwrites the existing one).
+        [HttpPost("{userId}/recovery-code")]
+        public async Task<IActionResult> RegenerateRecoveryCode([FromRoute] string userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.RecoveryCode = RecoveryCodeGenerator.Generate();
+            await this.userManager.UpdateAsync(user);
+            return new OkObjectResult(new { recoveryCode = user.RecoveryCode });
         }
     }
 

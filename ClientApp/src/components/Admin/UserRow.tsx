@@ -10,12 +10,14 @@ interface AdminUser {
     payed: boolean;
     isAdmin: boolean;
     medals: UserMedal[];
+    recoveryCode?: string | null;
 }
 
 interface UserRowState {
     showPayConfirm: boolean;
     showAdminConfirm: boolean;
     showMedalConfirm: boolean;
+    showRegenConfirm: boolean;
     pendingPayValue: boolean;
     pendingAdminValue: boolean;
     pendingMedal: { tournament: MedalTournament; place: MedalPlace; willAssign: boolean } | null;
@@ -26,6 +28,7 @@ interface UserRowProps {
     onPaymentChange: (payed: boolean) => void;
     onAdminChange: (isAdmin: boolean) => void;
     onMedalsChange: (medals: UserMedal[]) => void;
+    onRecoveryCodeChange: (code: string) => void;
 }
 
 const ALL_MEDALS: { tournament: MedalTournament; place: MedalPlace }[] = [
@@ -47,6 +50,7 @@ export class UserRow extends React.Component<UserRowProps, UserRowState> {
             showPayConfirm: false,
             showAdminConfirm: false,
             showMedalConfirm: false,
+            showRegenConfirm: false,
             pendingPayValue: false,
             pendingAdminValue: false,
             pendingMedal: null,
@@ -82,6 +86,22 @@ export class UserRow extends React.Component<UserRowProps, UserRowState> {
                             </button>
                         );
                     })}
+                </div>
+                <div className="admin-user-recovery">
+                    <code
+                        className="admin-recovery-code"
+                        title={user.recoveryCode ? 'Kliknutim zkopirovat' : 'Zadny zachranny kod'}
+                        onClick={() => user.recoveryCode && navigator.clipboard?.writeText(user.recoveryCode)}
+                    >
+                        {user.recoveryCode || '— bez kódu —'}
+                    </code>
+                    <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={() => this.setState({ showRegenConfirm: true })}
+                        title="Vygenerovat novy zachranny kod"
+                    >
+                        ⟳
+                    </button>
                 </div>
                 <div className="admin-user-actions">
                     {user.payed
@@ -129,8 +149,24 @@ export class UserRow extends React.Component<UserRowProps, UserRowState> {
                         onCancel={() => this.setState({ showMedalConfirm: false, pendingMedal: null })}
                     />
                 }
+                {this.state.showRegenConfirm &&
+                    <ConfirmModal
+                        title="Novy zachranny kod"
+                        message={`Vygenerovat novy zachranny kod pro "${user.userName}"? Stary kod prestane platit.`}
+                        variant="warning"
+                        confirmText="Vygenerovat"
+                        onConfirm={() => this.confirmRegen()}
+                        onCancel={() => this.setState({ showRegenConfirm: false })}
+                    />
+                }
             </div>
         );
+    }
+
+    private async confirmRegen() {
+        this.setState({ showRegenConfirm: false });
+        const result = await getAdminApi().regenerateRecoveryCode(this.props.user.id);
+        this.props.onRecoveryCodeChange(result.recoveryCode);
     }
 
     private hasMedal(tournament: MedalTournament, place: MedalPlace): boolean {
