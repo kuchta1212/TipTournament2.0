@@ -22,4 +22,8 @@ export interface IAdminApi {
     getUsersWithRoles(): Promise<any[]>;
 
     toggleMedal(userId: string, tournament: number, place: number): Promise<{ assigned: boolean }>;
+
+    generateMissingRecoveryCodes(): Promise<{ userName: string; email: string; recoveryCode: string }[]>;
+
+    regenerateRecoveryCode(userId: string): Promise<{ recoveryCode: string }>;
 }

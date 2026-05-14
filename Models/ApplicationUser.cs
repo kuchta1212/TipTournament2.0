@@ -21,5 +21,10 @@
         public int OmikronPoints { get; set; }
 
         public bool Payed { get; set; }
+
+        // Plain-text recovery code for password reset. Admin can read this from
+        // the admin UI and share it with users (no email pipeline). Acceptable
+        // tradeoff for a small private friend pool — see auth flow design.
+        public string RecoveryCode { get; set; }
     }
 }

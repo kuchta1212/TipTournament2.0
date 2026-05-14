@@ -45,4 +45,14 @@ export class AdminApi implements IAdminApi {
     toggleMedal(userId: string, tournament: number, place: number): Promise<{ assigned: boolean }> {
         return convert<{ assigned: boolean }>(post(`${API_URL}/${userId}/medal`, { tournament, place }));
     }
+
+    generateMissingRecoveryCodes(): Promise<{ userName: string; email: string; recoveryCode: string }[]> {
+        return convert<{ userName: string; email: string; recoveryCode: string }[]>(
+            post(`${API_URL}/recovery-codes/missing`)
+        );
+    }
+
+    regenerateRecoveryCode(userId: string): Promise<{ recoveryCode: string }> {
+        return convert<{ recoveryCode: string }>(post(`${API_URL}/${userId}/recovery-code`));
+    }
 }
