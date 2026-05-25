@@ -84,7 +84,7 @@ export class Matches extends React.Component<MatchesProps, MatchesSate> {
                     </div>
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                         <div className="card-body">
-                            <MatchStages stage={TournamentStage.FirstRound} isActive={TournamentStage.FirstRound == this.props.activeStage} />
+                            <MatchStages stage={TournamentStage.RoundOf16} isActive={TournamentStage.RoundOf16 == this.props.activeStage} />
                         </div>
                     </div>
                 </div>

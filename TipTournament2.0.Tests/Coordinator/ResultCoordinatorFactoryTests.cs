@@ -49,7 +49,7 @@ namespace TipTournament2._0.Tests.Coordinator
 
         [Theory]
         [InlineData(TournamentStage.RoundOf32)]
-        [InlineData(TournamentStage.FirstRound)]
+        [InlineData(TournamentStage.RoundOf16)]
         [InlineData(TournamentStage.Quarterfinal)]
         [InlineData(TournamentStage.Semifinal)]
         [InlineData(TournamentStage.Final)]

@@ -87,7 +87,7 @@
         [HttpPost("match")]
         public IActionResult SetTeamsForMatch([FromQuery] string matchId, [FromQuery] string homeTeamId, [FromQuery] string awayTeamId)
         {
-            this.resultCoordinatorFactory.Create(TournamentStage.FirstRound).UploadNewResult(matchId, new Tuple<string, string>(homeTeamId, awayTeamId));
+            this.resultCoordinatorFactory.Create(TournamentStage.RoundOf16).UploadNewResult(matchId, new Tuple<string, string>(homeTeamId, awayTeamId));
             return new OkResult();
         }
 

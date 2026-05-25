@@ -32,6 +32,8 @@ namespace TipTournament2._0.Controllers
             var endedMatchIds = new HashSet<string>(endedMatches.Select(m => m.Id));
             var betsOnEndedMatches = allBets.Where(b => endedMatchIds.Contains(b.Match.Id)).ToList();
 
+            var tournamentStarted = DateTime.UtcNow >= this.context.GetTournamentStartTime();
+
             var result = new
             {
                 RankingOverTime = ComputeRankingOverTime(allBets, allDeltaBets, endedMatches, users),
@@ -41,10 +43,74 @@ namespace TipTournament2._0.Controllers
                 BiggestUpsets = ComputeBiggestUpsets(betsOnEndedMatches, endedMatches),
                 MostPredictableMatches = ComputeMostPredictable(betsOnEndedMatches, endedMatches),
                 JokerEfficiency = ComputeJokerEfficiency(betsOnEndedMatches),
-                AveragePointsPerMatch = ComputeAveragePoints(users, betsOnEndedMatches)
+                AveragePointsPerMatch = ComputeAveragePoints(users, betsOnEndedMatches),
+                TournamentStarted = tournamentStarted,
+                WinnerBets = tournamentStarted ? ComputeWinnerBets() : new List<object>(),
+                ShooterBets = tournamentStarted ? ComputeShooterBets() : new List<object>(),
+                CzechiaPlacementBets = tournamentStarted ? ComputeCzechiaPlacements() : new List<object>()
             };
 
             return new OkObjectResult(result);
+        }
+
+        private object ComputeWinnerBets()
+        {
+            var bets = this.context.GetOmikronBets(true);
+            var teams = this.context.GetAllTeams().ToDictionary(t => t.Id, t => t);
+            return bets
+                .Where(b => b.teamId != null && teams.ContainsKey(b.teamId))
+                .GroupBy(b => b.teamId)
+                .Select(g => new
+                {
+                    TeamId = g.Key,
+                    TeamName = teams[g.Key].Name,
+                    TeamIcon = teams[g.Key].IconPath,
+                    Count = g.Count()
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(10)
+                .ToList();
+        }
+
+        private object ComputeShooterBets()
+        {
+            return this.context.GetShooterBets()
+                .Where(b => !string.IsNullOrWhiteSpace(b.ShoterName))
+                .GroupBy(b => b.ShoterName)
+                .Select(g => new { Name = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count)
+                .Take(10)
+                .ToList();
+        }
+
+        private object ComputeCzechiaPlacements()
+        {
+            return this.context.GetOmikronBets(false)
+                .Where(b => b.teamId == "czechia")
+                .GroupBy(b => b.StageBet)
+                .Select(g => new
+                {
+                    Stage = (int)g.Key,
+                    StageLabel = GetStageLabel(g.Key),
+                    Count = g.Count()
+                })
+                .OrderBy(x => x.Stage)
+                .ToList();
+        }
+
+        private static string GetStageLabel(TournamentStage stage)
+        {
+            switch (stage)
+            {
+                case TournamentStage.Group: return "Skupiny";
+                case TournamentStage.RoundOf32: return "1. kolo playoff";
+                case TournamentStage.RoundOf16: return "Osmifinále";
+                case TournamentStage.Quarterfinal: return "Čtvrtfinále";
+                case TournamentStage.Semifinal: return "Semifinále";
+                case TournamentStage.Final: return "Finále";
+                case TournamentStage.Winner: return "Vítěz";
+                default: return stage.ToString();
+            }
         }
 
         private static string GetPhaseLabel(Match match)
@@ -55,7 +121,7 @@ namespace TipTournament2._0.Controllers
             switch (match.Stage)
             {
                 case TournamentStage.RoundOf32: return "1. kolo playoff";
-                case TournamentStage.FirstRound: return "Osmifinále";
+                case TournamentStage.RoundOf16: return "Osmifinále";
                 case TournamentStage.Quarterfinal: return "Čtvrtfinále";
                 case TournamentStage.Semifinal: return "Semifinále";
                 case TournamentStage.Final: return "Finále";

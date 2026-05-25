@@ -79,10 +79,10 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
             <div className="accordion" id="accordionExample">
                     <CardBet component={<Bets users={undefined} deadlines={this.state.deadlines} />} stage={TournamentStage.Group} text="Alfa + Beta - Skupinová fáze" tooltip="Alfa: Jeden bod za správně určeného vítěze (1,0,2). Beta: Další 3 body za přesně trefený výsledek (tedy celkem 4 body za přesně trefený výsledek)" />
                     <CardBet component={<GamaBets isReadOnly={tournamentStarted} />} stage={TournamentStage.Group} text="Gama - Skupiny" deadlinePassed={tournamentStarted} tooltip="OKRUH GAMA: Pořadí ve skupinách - 1 bod za každé přesně trefené umístění" deadlineText={this.getDeadlineText(TournamentStage.Group)} />
-                    <CardBet component={<TournamentBracket isReadOnly={knockoutLocked} showResult={false} />} stage={TournamentStage.FirstRound} text="Delta - Pavouk" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného účastníka kola (osmifinále, čtvrtfinále, semifinále, finále) a další 3 body za trefeného vítěze (za vítěze tedy celkem 11 bodů: 2+2+2+2+3=11)" deadlineText={this.getDeadlineText(TournamentStage.RoundOf32)} />
+                    <CardBet component={<TournamentBracket isReadOnly={knockoutLocked} showResult={false} />} stage={TournamentStage.RoundOf16} text="Delta - Pavouk" deadlinePassed={knockoutLocked} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného účastníka kola (osmifinále, čtvrtfinále, semifinále, finále) a další 3 body za trefeného vítěze (za vítěze tedy celkem 11 bodů: 2+2+2+2+3=11)" deadlineText={this.getDeadlineText(TournamentStage.RoundOf32)} />
                     <CardBet component={<TeamPlaceBet isWinnerBet={true} isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Winner} text="Delta - Vítěz" deadlinePassed={tournamentStarted} tooltip="OKRUH DELTA: Pořadí playoff - 2 body za každého trefeného účastníka kola (osmifinále, čtvrtfinále, semifinále, finále) a další 3 body za trefeného vítěze (za vítěze tedy celkem 11 bodů: 2+2+2+2+3=11)" deadlineText={this.getDeadlineText(TournamentStage.Winner)} />
                     <CardBet component={<BestShooterBet isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Lambda} text="Lambda - Nejlepší střelec" deadlinePassed={tournamentStarted} tooltip="OKRUH LAMBDA: Nejlepší střelec turnaje za 7 bodů. Pouze příjmení! Na špatně napsané příjmení nebude brán zřetel." deadlineText={this.getDeadlineText(TournamentStage.Lambda)} />
-                    <CardBet component={<TeamPlaceBet isWinnerBet={false} isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Omikron} text="Omikron - Sázka na tým" deadlinePassed={tournamentStarted} tooltip="OKRUH OMIKRON: Konečné umístění Česka. Skupinová fáze a 1. kolo playoff je za 3b, osmifinále za 3b, čtvrtfinále za 5b, semifinále za 8b, finále za 12b a vítězství za 15b." deadlineText={this.getDeadlineText(TournamentStage.Omikron)} />
+                    <CardBet component={<TeamPlaceBet isWinnerBet={false} isReadOnly={tournamentStarted} showResult={false} />} stage={TournamentStage.Omikron} text="Omikron - Sázka na tým" deadlinePassed={tournamentStarted} tooltip="OKRUH OMIKRON: Konečné umístění Česka. Skupinová fáze a 1. kolo playoff je za 3b, osmifinále za 5b, čtvrtfinále za 8b, semifinále za 12b, finále za 15b a vítězství za 18b." deadlineText={this.getDeadlineText(TournamentStage.Omikron)} />
             </div>
         );
     }
@@ -100,13 +100,13 @@ export class BetsMainPage extends React.Component<BetsMainPageProps, BetsMainPag
 
             const stageNames: { [key: number]: string } = {
                 [TournamentStage.RoundOf32]: "1. kolo playoff",
-                [TournamentStage.FirstRound]: "osmifinále",
+                [TournamentStage.RoundOf16]: "osmifinále",
                 [TournamentStage.Quarterfinal]: "čtvrtfinále",
                 [TournamentStage.Semifinal]: "semifinále",
                 [TournamentStage.Final]: "finále"
             };
 
-            for (const stageKey of [TournamentStage.RoundOf32, TournamentStage.FirstRound, TournamentStage.Quarterfinal, TournamentStage.Semifinal, TournamentStage.Final]) {
+            for (const stageKey of [TournamentStage.RoundOf32, TournamentStage.RoundOf16, TournamentStage.Quarterfinal, TournamentStage.Semifinal, TournamentStage.Final]) {
                 const deadline = this.state.deadlines.stageDeadlines[TournamentStage[stageKey]];
                 if (deadline) {
                     const deadlineDate = new Date(deadline);

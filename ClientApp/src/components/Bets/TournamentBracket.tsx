@@ -57,7 +57,7 @@ export class TournamentBracket extends React.Component<TournamentBracketProps, T
     private async getData() {
         const [r32, r16, qf, sf, final_] = await Promise.all([
             getApi().getMatches(TournamentStage.RoundOf32),
-            getApi().getMatches(TournamentStage.FirstRound),
+            getApi().getMatches(TournamentStage.RoundOf16),
             getApi().getMatches(TournamentStage.Quarterfinal),
             getApi().getMatches(TournamentStage.Semifinal),
             getApi().getMatches(TournamentStage.Final)

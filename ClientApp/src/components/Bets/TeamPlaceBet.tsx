@@ -83,7 +83,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
                 <div className="special-bet-footer">
                     {this.props.showResult
                         ? <span className={`special-bet-result ${this.getResultClass()}`}>
-                            Body: {this.state.bet.isCorrect ? 3 : 0}
+                            Body: {this.state.bet.isCorrect ? this.getPointsForBet() : 0}
                           </span>
                         : this.props.isReadOnly
                             ? null
@@ -122,7 +122,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
                             <option key="default-id" value="default">Vyber fázi turnaje</option>
                             <option key={TournamentStage.Group.toString()} value={TournamentStage.Group.toString()}>{this.stageToString(TournamentStage.Group)}</option>
                             <option key={TournamentStage.RoundOf32.toString()} value={TournamentStage.RoundOf32.toString()}>{this.stageToString(TournamentStage.RoundOf32)}</option>
-                            <option key={TournamentStage.FirstRound.toString()} value={TournamentStage.FirstRound.toString()}>{this.stageToString(TournamentStage.FirstRound)}</option>
+                            <option key={TournamentStage.RoundOf16.toString()} value={TournamentStage.RoundOf16.toString()}>{this.stageToString(TournamentStage.RoundOf16)}</option>
                             <option key={TournamentStage.Quarterfinal.toString()} value={TournamentStage.Quarterfinal.toString()}>{this.stageToString(TournamentStage.Quarterfinal)}</option>
                             <option key={TournamentStage.Semifinal.toString()} value={TournamentStage.Semifinal.toString()}>{this.stageToString(TournamentStage.Semifinal)}</option>
                             <option key={TournamentStage.Final.toString()} value={TournamentStage.Final.toString()}>{this.stageToString(TournamentStage.Final)}</option>
@@ -154,6 +154,27 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
         return this.state.bet.isCorrect ? "special-bet-result-success" : "special-bet-result-fail";
     }
 
+    private getPointsForBet(): number {
+        if (this.props.isWinnerBet) return 3;
+        switch (this.state.bet.stageBet) {
+            case TournamentStage.Group:
+            case TournamentStage.RoundOf32:
+                return 3;
+            case TournamentStage.RoundOf16:
+                return 5;
+            case TournamentStage.Quarterfinal:
+                return 8;
+            case TournamentStage.Semifinal:
+                return 12;
+            case TournamentStage.Final:
+                return 15;
+            case TournamentStage.Winner:
+                return 18;
+            default:
+                return 0;
+        }
+    }
+
     private getClass(): string {
         if (!this.props.showResult) return "";
         return this.state.bet.isCorrect ? "border-success" : "border-fail";
@@ -163,7 +184,7 @@ export class TeamPlaceBet extends React.Component<TeamPlaceBetProps, TeamPlaceBe
         switch (stage) {
             case TournamentStage.Group: return "Skupina";
             case TournamentStage.RoundOf32: return "1. kolo playoff";
-            case TournamentStage.FirstRound: return "Osmifinále";
+            case TournamentStage.RoundOf16: return "Osmifinále";
             case TournamentStage.Quarterfinal: return "Čtvrtfinále";
             case TournamentStage.Semifinal: return "Semifinále";
             case TournamentStage.Final: return "Finále";

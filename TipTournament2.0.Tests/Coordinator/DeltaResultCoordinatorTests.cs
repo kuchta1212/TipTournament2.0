@@ -60,9 +60,9 @@ namespace TipTournament2._0.Tests.Coordinator
         }
 
         [Fact]
-        public void UploadNewResult_FirstRound_EvaluatesDeltaBets()
+        public void UploadNewResult_RoundOf16_EvaluatesDeltaBets()
         {
-            var match = new Match { Id = "m1", Stage = TournamentStage.FirstRound };
+            var match = new Match { Id = "m1", Stage = TournamentStage.RoundOf16 };
             var tuple = new Tuple<string, string>("teamA", "teamB");
 
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);

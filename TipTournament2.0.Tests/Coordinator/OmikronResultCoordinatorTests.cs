@@ -15,11 +15,12 @@ namespace TipTournament2._0.Tests.Coordinator
     {
         [Theory]
         [InlineData(TournamentStage.Group, 3)]
-        [InlineData(TournamentStage.FirstRound, 3)]
-        [InlineData(TournamentStage.Quarterfinal, 5)]
-        [InlineData(TournamentStage.Semifinal, 8)]
-        [InlineData(TournamentStage.Final, 12)]
-        [InlineData(TournamentStage.Winner, 15)]
+        [InlineData(TournamentStage.RoundOf32, 3)]
+        [InlineData(TournamentStage.RoundOf16, 5)]
+        [InlineData(TournamentStage.Quarterfinal, 8)]
+        [InlineData(TournamentStage.Semifinal, 12)]
+        [InlineData(TournamentStage.Final, 15)]
+        [InlineData(TournamentStage.Winner, 18)]
         public void RecalculatePoints_CorrectBetForStage_AddsExpectedPoints(TournamentStage stage, int expectedPoints)
         {
             var mockDb = new Mock<IDbContextWrapper>();

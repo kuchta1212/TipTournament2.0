@@ -164,7 +164,7 @@ INSERT INTO Matches (Id, HomeId, AwayId, StartTime, Ended, Stage, Round, GroupId
 -- ============================================
 -- KNOCKOUT MATCHES (32 matches)
 -- Home/Away NULL for TBD matches
--- Stage: 1 = RoundOf32, 2 = FirstRound (R16),
+-- Stage: 1 = RoundOf32, 2 = RoundOf16,
 --        3 = Quarterfinal, 4 = Semifinal, 5 = Final
 -- ============================================
 

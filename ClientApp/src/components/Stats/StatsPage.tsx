@@ -203,6 +203,72 @@ export class StatsPage extends React.Component<{}, StatsPageState> {
                         }
                     </div>
 
+                    {/* Pre-tournament: Winner bets */}
+                    <div className="stats-card">
+                        <h2>Tip na vítěze</h2>
+                        {!stats.tournamentStarted
+                            ? <p className="stats-empty">Dostupné po startu turnaje</p>
+                            : stats.winnerBets.length === 0
+                                ? <p className="stats-empty">Zatím žádné tipy</p>
+                                : <table className="stats-table">
+                                    <thead>
+                                        <tr><th>Tým</th><th>Počet</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {stats.winnerBets.map((w, i) => (
+                                            <tr key={i}>
+                                                <td>
+                                                    {w.teamIcon && <img src={w.teamIcon} alt="" width="16" height="16" style={{ marginRight: 4 }} />}
+                                                    {w.teamName}
+                                                </td>
+                                                <td className="stats-value">{w.count}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                        }
+                    </div>
+
+                    {/* Pre-tournament: Top shooter bets */}
+                    <div className="stats-card">
+                        <h2>Tip na nejlepšího střelce</h2>
+                        {!stats.tournamentStarted
+                            ? <p className="stats-empty">Dostupné po startu turnaje</p>
+                            : stats.shooterBets.length === 0
+                                ? <p className="stats-empty">Zatím žádné tipy</p>
+                                : <table className="stats-table">
+                                    <thead>
+                                        <tr><th>Střelec</th><th>Počet</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {stats.shooterBets.map((s, i) => (
+                                            <tr key={i}><td>{s.name}</td><td className="stats-value">{s.count}</td></tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                        }
+                    </div>
+
+                    {/* Pre-tournament: Czechia placement */}
+                    <div className="stats-card">
+                        <h2>Kam dojde Česko</h2>
+                        {!stats.tournamentStarted
+                            ? <p className="stats-empty">Dostupné po startu turnaje</p>
+                            : stats.czechiaPlacementBets.length === 0
+                                ? <p className="stats-empty">Zatím žádné tipy</p>
+                                : <table className="stats-table">
+                                    <thead>
+                                        <tr><th>Fáze</th><th>Počet</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {stats.czechiaPlacementBets.map((c, i) => (
+                                            <tr key={i}><td>{c.stageLabel}</td><td className="stats-value">{c.count}</td></tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                        }
+                    </div>
+
                     {/* Average points per match */}
                     <div className="stats-card">
                         <h2>Průměr bodů na zápas</h2>

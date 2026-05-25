@@ -10,6 +10,9 @@ export class Api implements IApi {
     getDeadlines(): Promise<DeadlineInfo> {
         return convert<DeadlineInfo>(get(`${API_URL}/bets/deadlines`));
     }
+    getNextUnsetMatch(): Promise<Match | null> {
+        return convert<Match | null>(get(`${API_URL}/bets/next-unset`));
+    }
     uploadShooterBet(bet: string): Promise<TopShooterBet> {
         return convert<TopShooterBet>(post(`${API_URL}/bets/shooter?name=${bet}`));
     }

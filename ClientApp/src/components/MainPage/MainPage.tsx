@@ -53,7 +53,7 @@ export class MainPage extends React.Component<MainPageProps, MainPageState> {
         }
 
         if (today < new Date(2022, 12, 9)) {
-            return TournamentStage.FirstRound;
+            return TournamentStage.RoundOf16;
         }
 
         if (today < new Date(2022, 12, 13)) {
