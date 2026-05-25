@@ -29,53 +29,47 @@
         {
             var teamIds = this.omikronStageOptions.Value.TeamIds;
 
-            var results = this.GetResults(TournamentStage.FirstRound, TournamentStage.Group, teamIds.ToList<string>());
+            var results = this.GetResults(TournamentStage.RoundOf32, TournamentStage.Group, teamIds.ToList<string>());
             if (results.Count < teamIds.Length)
             {
-                results.AddRange(this.GetResults(TournamentStage.Quarterfinal, TournamentStage.FirstRound, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
+                results.AddRange(this.GetResults(TournamentStage.RoundOf16, TournamentStage.RoundOf32, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                 if (results.Count < teamIds.Length)
                 {
-                    results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
+                    results.AddRange(this.GetResults(TournamentStage.Quarterfinal, TournamentStage.RoundOf16, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                     if (results.Count < teamIds.Length)
                     {
-                        results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
+                        results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                         if (results.Count < teamIds.Length)
                         {
-                            results.AddRange(this.GetResults(TournamentStage.Semifinal, TournamentStage.Quarterfinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
+                            results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
 
                             if (results.Count < teamIds.Length)
                             {
-                                results.AddRange(this.GetResults(TournamentStage.Final, TournamentStage.Semifinal, teamIds.ToList().Except(results.Select(r => r.teamId).ToList<string>()).ToList()));
-
-                                if (results.Count < teamIds.Length)
+                                var final = this.dbContextWrapper.GetMatchById(this.generalConfig.FinalMatchId);
+                                if (final.Result.IsHomeTeamWinner())
                                 {
-                                    var final = this.dbContextWrapper.GetMatchById(this.generalConfig.FinalMatchId);
-                                    if (final.Result.IsHomeTeamWinner())
+                                    if (teamIds.Contains(final.HomeId))
                                     {
-                                        if (teamIds.Contains(final.HomeId))
-                                        {
-                                            results.Add(new SpecificTeamPlaceBet() { teamId = final.HomeId, StageBet = TournamentStage.Winner });
-                                        }
-                                        else if(teamIds.Contains(final.AwayId))
-                                        {
-                                            results.Add(new SpecificTeamPlaceBet() { teamId = final.HomeId, StageBet = TournamentStage.Final });
-                                        }
+                                        results.Add(new SpecificTeamPlaceBet() { teamId = final.HomeId, StageBet = TournamentStage.Winner });
                                     }
-                                    else
+                                    else if (teamIds.Contains(final.AwayId))
                                     {
-                                        if (teamIds.Contains(final.HomeId))
-                                        {
-                                            results.Add(new SpecificTeamPlaceBet() { teamId = final.HomeId, StageBet = TournamentStage.Final });
-                                        }
-                                        else if (teamIds.Contains(final.AwayId))
-                                        {
-                                            results.Add(new SpecificTeamPlaceBet() { teamId = final.HomeId, StageBet = TournamentStage.Winner });
-                                        }
+                                        results.Add(new SpecificTeamPlaceBet() { teamId = final.AwayId, StageBet = TournamentStage.Final });
                                     }
-                                       
+                                }
+                                else
+                                {
+                                    if (teamIds.Contains(final.HomeId))
+                                    {
+                                        results.Add(new SpecificTeamPlaceBet() { teamId = final.HomeId, StageBet = TournamentStage.Final });
+                                    }
+                                    else if (teamIds.Contains(final.AwayId))
+                                    {
+                                        results.Add(new SpecificTeamPlaceBet() { teamId = final.AwayId, StageBet = TournamentStage.Winner });
+                                    }
                                 }
                             }
                         }
@@ -87,7 +81,6 @@
             var updatedBets = this.betResultMaker.UpdateOmikronBets(bets, results);
             this.dbContextWrapper.UpdateOmikronBets(updatedBets);
             this.RecalculatePoints();
-
         }
 
         private List<SpecificTeamPlaceBet> GetResults(TournamentStage current, TournamentStage previous, List<string> teamIds)
@@ -155,16 +148,18 @@
             switch (stage)
             {
                 case TournamentStage.Group:
-                case TournamentStage.FirstRound:
+                case TournamentStage.RoundOf32:
                     return 3;
-                case TournamentStage.Quarterfinal:
+                case TournamentStage.RoundOf16:
                     return 5;
-                case TournamentStage.Semifinal:
+                case TournamentStage.Quarterfinal:
                     return 8;
-                case TournamentStage.Final:
+                case TournamentStage.Semifinal:
                     return 12;
-                case TournamentStage.Winner:
+                case TournamentStage.Final:
                     return 15;
+                case TournamentStage.Winner:
+                    return 18;
                 default:
                     return 3;
             }

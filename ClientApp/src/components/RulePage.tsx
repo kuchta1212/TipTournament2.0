@@ -254,18 +254,22 @@ export class RulePage extends React.Component<RulePageProps> {
                             </div>
                             <div className="rules-score-block">
                                 <span className="rules-points-big">5</span>
-                                <span>Čtvrtfinále</span>
+                                <span>Osmifinále</span>
                             </div>
                             <div className="rules-score-block">
                                 <span className="rules-points-big">8</span>
-                                <span>Semifinále</span>
+                                <span>Čtvrtfinále</span>
                             </div>
                             <div className="rules-score-block">
                                 <span className="rules-points-big">12</span>
-                                <span>Finále</span>
+                                <span>Semifinále</span>
                             </div>
                             <div className="rules-score-block">
                                 <span className="rules-points-big">15</span>
+                                <span>Finále</span>
+                            </div>
+                            <div className="rules-score-block">
+                                <span className="rules-points-big">18</span>
                                 <span>Vítěz</span>
                             </div>
                         </div>

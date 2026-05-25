@@ -60,7 +60,7 @@ ASP.NET Identity + IdentityServer4 for OIDC. `ProfileService` extends JWT claims
 
 ## Tournament Domain Model
 
-**TournamentStage** enum drives most business logic: Group, FirstRound, Quarterfinal, Semifinal, Final, Winner, Lambda, Omikron.
+**TournamentStage** enum drives most business logic: Group, RoundOf32, RoundOf16, Quarterfinal, Semifinal, Final, Winner, Lambda, Omikron.
 
 **Bet types**: MatchBets (match results), GroupBets (group winners/runners-up), DeltaBets (knockout predictions), TeamPlaceBets (placement predictions), TopShooterBets (top scorer).
 

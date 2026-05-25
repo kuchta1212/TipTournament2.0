@@ -1,4 +1,4 @@
-﻿namespace TipTournament2._0.Utils
+namespace TipTournament2._0.Utils
 {
     using System;
     using System.Collections.Generic;

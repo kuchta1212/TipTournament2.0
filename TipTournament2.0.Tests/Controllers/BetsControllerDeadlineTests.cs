@@ -54,7 +54,7 @@ namespace TipTournament2._0.Tests.Controllers
         }
 
         [Fact]
-        public void GetDeadlines_AllKnockoutStagesShareFirstRoundDeadline()
+        public void GetDeadlines_AllKnockoutStagesShareRoundOf32Deadline()
         {
             var tournamentStart = new DateTime(2024, 6, 14, 21, 0, 0);
             var firstRoundStart = new DateTime(2024, 6, 29, 21, 0, 0);
@@ -66,14 +66,14 @@ namespace TipTournament2._0.Tests.Controllers
             var deadlines = result.Value as DeadlineInfo;
 
             Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.RoundOf32)]);
-            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.FirstRound)]);
+            Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.RoundOf16)]);
             Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Quarterfinal)]);
             Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Semifinal)]);
             Assert.Equal(firstRoundStart, deadlines.StageDeadlines[nameof(TournamentStage.Final)]);
         }
 
         [Fact]
-        public void GetDeadlines_NoFirstRoundMatches_ReturnsMaxValueForKnockout()
+        public void GetDeadlines_NoRoundOf32Matches_ReturnsMaxValueForKnockout()
         {
             this.mockDb.Setup(d => d.GetTournamentStartTime()).Returns(new DateTime(2024, 6, 14, 21, 0, 0));
             this.mockDb.Setup(d => d.GetStageStartTime(TournamentStage.RoundOf32)).Throws(new InvalidOperationException());
@@ -157,7 +157,7 @@ namespace TipTournament2._0.Tests.Controllers
 
         #endregion
 
-        #region UploadDeltaBet (knockout deadline = FirstRound start)
+        #region UploadDeltaBet (knockout deadline = RoundOf32 start)
 
         [Fact]
         public void UploadDeltaBet_MatchNotFound_ReturnsBadRequest()
@@ -171,7 +171,7 @@ namespace TipTournament2._0.Tests.Controllers
         }
 
         [Fact]
-        public void UploadDeltaBet_FirstRoundStarted_ReturnsBadRequest()
+        public void UploadDeltaBet_RoundOf32Started_ReturnsBadRequest()
         {
             var match = new Match { Id = "m1", Stage = TournamentStage.Quarterfinal };
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
@@ -185,7 +185,7 @@ namespace TipTournament2._0.Tests.Controllers
         }
 
         [Fact]
-        public void UploadDeltaBet_FirstRoundNotStarted_ReturnsOk()
+        public void UploadDeltaBet_RoundOf32NotStarted_ReturnsOk()
         {
             var match = new Match { Id = "m1", Stage = TournamentStage.Quarterfinal };
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);
@@ -200,11 +200,11 @@ namespace TipTournament2._0.Tests.Controllers
 
         [Theory]
         [InlineData(TournamentStage.RoundOf32)]
-        [InlineData(TournamentStage.FirstRound)]
+        [InlineData(TournamentStage.RoundOf16)]
         [InlineData(TournamentStage.Quarterfinal)]
         [InlineData(TournamentStage.Semifinal)]
         [InlineData(TournamentStage.Final)]
-        public void UploadDeltaBet_AllKnockoutStagesUseFirstRoundDeadline(TournamentStage stage)
+        public void UploadDeltaBet_AllKnockoutStagesUseRoundOf32Deadline(TournamentStage stage)
         {
             var match = new Match { Id = "m1", Stage = stage };
             this.mockDb.Setup(d => d.GetMatchById("m1")).Returns(match);

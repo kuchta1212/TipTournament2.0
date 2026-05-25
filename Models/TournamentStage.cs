@@ -11,7 +11,7 @@ namespace TipTournament2._0.Models
 
         RoundOf32,
 
-        FirstRound,
+        RoundOf16,
 
         Quarterfinal,
 

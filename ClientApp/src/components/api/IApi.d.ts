@@ -3,6 +3,7 @@ import { IDictionary } from "../../typings/Dictionary"
 
 export interface IApi {
     getDeadlines(): Promise<DeadlineInfo>;
+    getNextUnsetMatch(): Promise<Match | null>;
     uploadShooterBet(bet: string): Promise<TopShooterBet>;
     getShooterBet(userId: string | undefined): Promise<TopShooterBet>;
     getTeamsForTeamPlaceBet(isWinnerBet: boolean): Promise<Team[]>

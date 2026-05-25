@@ -136,7 +136,7 @@ export class AdminMatchView extends React.Component<AdminMatchViewProps, AdminMa
                         <div className="card-body">
                             <div className="groupList">
                                 {
-                                    this.state.matches.filter(m => m.stage == TournamentStage.FirstRound).map(m => {
+                                    this.state.matches.filter(m => m.stage == TournamentStage.RoundOf16).map(m => {
                                         return <DeltaBetAdminViewRow key={m.id} match={m} />
                                     })
                                 }

@@ -122,7 +122,7 @@ export interface UpdateStatus {
 export enum TournamentStage {
     Group = 0,
     RoundOf32 = 1,
-    FirstRound = 2,
+    RoundOf16 = 2,
     Quarterfinal = 3,
     Semifinal = 4,
     Final = 5,
@@ -199,6 +199,28 @@ export interface StatsResponse {
     mostPredictableMatches: MatchPercentageStat[];
     jokerEfficiency: JokerEfficiencyStat[];
     averagePointsPerMatch: PlayerAverageStat[];
+    tournamentStarted: boolean;
+    winnerBets: TeamCountStat[];
+    shooterBets: ShooterCountStat[];
+    czechiaPlacementBets: StagePlacementStat[];
+}
+
+export interface TeamCountStat {
+    teamId: string;
+    teamName: string;
+    teamIcon: string;
+    count: number;
+}
+
+export interface ShooterCountStat {
+    name: string;
+    count: number;
+}
+
+export interface StagePlacementStat {
+    stage: number;
+    stageLabel: string;
+    count: number;
 }
 
 export interface RankingOverTimeEntry {

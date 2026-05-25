@@ -66,7 +66,7 @@ namespace TipTournament2._0.Tests.Controllers
         }
 
         [Theory]
-        [InlineData(TournamentStage.FirstRound)]
+        [InlineData(TournamentStage.RoundOf16)]
         [InlineData(TournamentStage.Quarterfinal)]
         [InlineData(TournamentStage.Semifinal)]
         [InlineData(TournamentStage.Final)]

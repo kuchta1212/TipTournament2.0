@@ -40,7 +40,7 @@
                     }
                     return new GroupMatchesResultCoordinator(this.matchClient, this.dbContextWrapper, this.betResultMaker);
                 case TournamentStage.RoundOf32:
-                case TournamentStage.FirstRound:
+                case TournamentStage.RoundOf16:
                 case TournamentStage.Quarterfinal:
                 case TournamentStage.Semifinal:
                 case TournamentStage.Final:

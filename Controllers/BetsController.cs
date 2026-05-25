@@ -39,6 +39,31 @@ namespace TipTournament2._0.Controllers
             return new OkObjectResult(this.context.GetBetsForUser(userId));
         }
 
+        [HttpGet("next-unset")]
+        public IActionResult GetNextUnsetMatch()
+        {
+            var userId = this.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new OkObjectResult(null);
+            }
+
+            var bettedMatchIds = new HashSet<string>(
+                this.context.GetBetsForUser(userId)
+                    .Where(b => b.Tip != null)
+                    .Select(b => b.Match.Id));
+
+            var now = DateTime.UtcNow;
+            var next = this.context.GetMatches()
+                .Where(m => m.Stage == TournamentStage.Group)
+                .Where(m => !bettedMatchIds.Contains(m.Id))
+                .Where(m => DateTime.SpecifyKind(m.StartTime, DateTimeKind.Utc) > now)
+                .OrderBy(m => m.StartTime)
+                .FirstOrDefault();
+
+            return new OkObjectResult(next);
+        }
+
         [HttpGet("deadlines")]
         public IActionResult GetDeadlines()
         {
@@ -62,7 +87,7 @@ namespace TipTournament2._0.Controllers
             }
 
             stageDeadlines[nameof(TournamentStage.RoundOf32)] = knockoutDeadline;
-            stageDeadlines[nameof(TournamentStage.FirstRound)] = knockoutDeadline;
+            stageDeadlines[nameof(TournamentStage.RoundOf16)] = knockoutDeadline;
             stageDeadlines[nameof(TournamentStage.Quarterfinal)] = knockoutDeadline;
             stageDeadlines[nameof(TournamentStage.Semifinal)] = knockoutDeadline;
             stageDeadlines[nameof(TournamentStage.Final)] = knockoutDeadline;
@@ -318,7 +343,7 @@ namespace TipTournament2._0.Controllers
                     case TournamentStage.Omikron:
                         return this.IsTournamentOpen();
                     case TournamentStage.RoundOf32:
-                    case TournamentStage.FirstRound:
+                    case TournamentStage.RoundOf16:
                     case TournamentStage.Quarterfinal:
                     case TournamentStage.Semifinal:
                     case TournamentStage.Final:
