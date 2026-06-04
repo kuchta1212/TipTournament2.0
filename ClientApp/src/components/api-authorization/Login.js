@@ -10,6 +10,7 @@ export class Login extends Component {
 
         this.state = {
             message: undefined,
+            userName: '',
             email: '',
             password: '',
             recoveryCode: '',
@@ -100,7 +101,7 @@ export class Login extends Component {
     }
 
     renderRegisterForm() {
-        const { email, password, isLoading, message } = this.state;
+        const { userName, email, password, isLoading, message } = this.state;
 
         if (isLoading) {
             return (
@@ -116,6 +117,18 @@ export class Login extends Component {
                 <h2 className="mb-4">Registrace</h2>
                 {message && <div className="alert alert-danger" role="alert">{message}</div>}
                 <form onSubmit={(e) => this.handleRegister(e)}>
+                    <div className="form-group mb-3">
+                        <label htmlFor="userName">Uživatelské jméno</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="userName"
+                            value={userName}
+                            onChange={(e) => this.setState({ userName: e.target.value })}
+                            autoComplete="username"
+                            required
+                        />
+                    </div>
                     <div className="form-group mb-3">
                         <label htmlFor="email">Email</label>
                         <input
@@ -287,7 +300,7 @@ export class Login extends Component {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
-                body: JSON.stringify({ email: this.state.email, password: this.state.password })
+                body: JSON.stringify({ userName: this.state.userName, email: this.state.email, password: this.state.password })
             });
 
             if (response.ok) {

@@ -87,9 +87,14 @@ namespace TipTournament2._0.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
+            if (string.IsNullOrWhiteSpace(request.UserName))
+            {
+                return BadRequest(new { message = "Uživatelské jméno je povinné." });
+            }
+
             var user = new ApplicationUser
             {
-                UserName = request.Email,
+                UserName = request.UserName,
                 Email = request.Email,
                 RecoveryCode = RecoveryCodeGenerator.Generate()
             };
@@ -167,6 +172,7 @@ namespace TipTournament2._0.Controllers
 
     public class RegisterRequest
     {
+        public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
