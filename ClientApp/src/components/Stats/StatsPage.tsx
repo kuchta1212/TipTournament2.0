@@ -76,11 +76,11 @@ export class StatsPage extends React.Component<{}, StatsPageState> {
                             ? <p className="stats-empty">Zatím žádné dixity</p>
                             : <table className="stats-table">
                                 <thead>
-                                    <tr><th>Hráč</th><th>Počet</th></tr>
+                                    <tr><th>Hráč</th><th>Počet</th><th>Body</th></tr>
                                 </thead>
                                 <tbody>
                                     {stats.dixitLegends.map((d, i) => (
-                                        <tr key={i}><td>{d.userName}</td><td className="stats-value">{d.count}</td></tr>
+                                        <tr key={i}><td>{d.userName}</td><td className="stats-value">{d.count}</td><td className="stats-value">{d.points}</td></tr>
                                     ))}
                                 </tbody>
                             </table>

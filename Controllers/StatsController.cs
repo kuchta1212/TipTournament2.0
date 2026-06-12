@@ -235,10 +235,10 @@ namespace TipTournament2._0.Controllers
         private object ComputeDixitLegends(List<MatchBet> betsOnEnded)
         {
             return betsOnEnded
-                .Where(b => b.DixitBonus == 3)
+                .Where(b => b.DixitBonus > 0)
                 .GroupBy(b => b.User.UserName)
-                .Select(g => new { UserName = g.Key, Count = g.Count() })
-                .OrderByDescending(x => x.Count)
+                .Select(g => new { UserName = g.Key, Count = g.Count(), Points = g.Sum(b => b.DixitBonus) })
+                .OrderByDescending(x => x.Points)
                 .ToList();
         }
 
