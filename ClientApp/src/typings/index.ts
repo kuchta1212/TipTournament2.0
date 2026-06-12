@@ -194,7 +194,7 @@ export interface StatsResponse {
     rankingOverTime: RankingOverTimeEntry[];
     matchNoOneGuessed: MatchStatEntry[];
     exactScoreHeroes: PlayerCountStat[];
-    dixitLegends: PlayerCountStat[];
+    dixitLegends: DixitLegendStat[];
     biggestUpsets: MatchPercentageStat[];
     mostPredictableMatches: MatchPercentageStat[];
     jokerEfficiency: JokerEfficiencyStat[];
@@ -247,6 +247,12 @@ export interface MatchStatEntry {
 export interface PlayerCountStat {
     userName: string;
     count: number;
+}
+
+export interface DixitLegendStat {
+    userName: string;
+    count: number;
+    points: number;
 }
 
 export interface MatchPercentageStat {

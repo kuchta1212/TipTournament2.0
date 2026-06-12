@@ -72,6 +72,9 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
             <div className="d-none d-sm-flex flex-sm-row-reverse flex-grow-1">
               <ul className="navbar-nav flex-grow">
                 <NavItem>
+                  <NavLink tag={Link} to="/">Domů</NavLink>
+                </NavItem>
+                <NavItem>
                   <NavLink tag={Link} to="/tips">Sázky</NavLink>
                 </NavItem>
                 <NavItem>
@@ -99,6 +102,7 @@ export class NavMenu extends React.Component<INavMenuProps, INavMenuState> {
         <nav className={`drawer ${this.state.drawerOpen ? 'open' : ''}`}>
           <Link to="/" className="drawer-brand" onClick={this.closeDrawer}>Tipovačka MS 2026</Link>
           <ul className="drawer-nav">
+            <li><Link to="/" onClick={this.closeDrawer}>Domů</Link></li>
             <li><Link to="/tips" onClick={this.closeDrawer}>Sázky</Link></li>
             <li><Link to="/rules" onClick={this.closeDrawer}>Pravidla</Link></li>
             <li><Link to="/stats" onClick={this.closeDrawer}>Statistiky</Link></li>
