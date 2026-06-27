@@ -7,8 +7,8 @@ import './../../custom.css';
 
 // Bracket match ordering (derived from appsettings DeltaStage.Next config)
 // Top-to-bottom order ensures connected matches are adjacent
-const R32_ORDER = ['match_77', 'match_78', 'match_76', 'match_73', 'match_74', 'match_75', 'match_79', 'match_80', 'match_88', 'match_86', 'match_82', 'match_81', 'match_83', 'match_84', 'match_85', 'match_87'];
-const R16_ORDER = ['match_89', 'match_90', 'match_91', 'match_92', 'match_93', 'match_94', 'match_95', 'match_96'];
+const R32_ORDER = ['match_74', 'match_77', 'match_73', 'match_75', 'match_83', 'match_84', 'match_81', 'match_82', 'match_76', 'match_78', 'match_79', 'match_80', 'match_86', 'match_88', 'match_85', 'match_87'];
+const R16_ORDER = ['match_89', 'match_90', 'match_93', 'match_94', 'match_91', 'match_92', 'match_95', 'match_96'];
 const QF_ORDER = ['match_97', 'match_98', 'match_99', 'match_100'];
 const SF_ORDER = ['match_101', 'match_102'];
 const FINAL_ORDER = ['match_104'];
