@@ -46,8 +46,17 @@
             var finalBetsList = new List<DeltaBet>();
             foreach (var bet in bets)
             {
-                var additionalHomeTeamCorrect = bet.HomeTeamBetId == match.HomeId || bet.HomeTeamBetId == match.AwayId;
-                var addtionalAwayTeamCorrect = bet.AwayTeamBetId == match.AwayId || bet.AwayTeamBetId == match.HomeId;
+                // Additional points reward a predicted team that reached this match through a different part
+                // of the bracket. When the bet belongs to this same match (the final), a team that landed in
+                // the exact slot it was predicted for went the correct way and is already scored by the
+                // regular evaluation, so it must not earn additional points.
+                var isSameMatch = bet.MatchId == match.Id;
+
+                var homeTeamReached = bet.HomeTeamBetId == match.HomeId || bet.HomeTeamBetId == match.AwayId;
+                var awayTeamReached = bet.AwayTeamBetId == match.AwayId || bet.AwayTeamBetId == match.HomeId;
+
+                var additionalHomeTeamCorrect = homeTeamReached && !(isSameMatch && bet.HomeTeamBetId == match.HomeId);
+                var addtionalAwayTeamCorrect = awayTeamReached && !(isSameMatch && bet.AwayTeamBetId == match.AwayId);
 
                 if (additionalHomeTeamCorrect || addtionalAwayTeamCorrect)
                 {

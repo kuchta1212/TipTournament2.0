@@ -256,12 +256,57 @@ namespace TipTournament2._0.Tests.Calculator
         }
 
         [Fact]
-        public void UpdateAdditionalDeltaBetsResult_OnlyHomeMatchesHome_Returns2Points()
+        public void UpdateAdditionalDeltaBetsResult_DifferentMatchHomeTeamReached_Returns2Points()
         {
-            var match = new Match { HomeId = "teamA", AwayId = "teamB" };
+            var match = new Match { Id = "match_2", HomeId = "teamA", AwayId = "teamB" };
             var bets = new List<DeltaBet>
             {
-                new DeltaBet { HomeTeamBetId = "teamA", AwayTeamBetId = "teamC", Result = null }
+                new DeltaBet { MatchId = "match_1", HomeTeamBetId = "teamA", AwayTeamBetId = "teamC", Result = null }
+            };
+
+            var updated = this.sut.UpdateAdditionalDeltaBetsResult(bets, match);
+
+            Assert.Single(updated);
+            Assert.Equal(2, updated[0].Result.AdditionalResult.Points);
+            Assert.True(updated[0].Result.AdditionalResult.IsHomeTeamCorrect);
+            Assert.False(updated[0].Result.AdditionalResult.IsAwayTeamCorrect);
+        }
+
+        [Fact]
+        public void UpdateAdditionalDeltaBetsResult_SameMatchCorrectSlots_ExcludedFromResult()
+        {
+            var match = new Match { Id = "match_final", HomeId = "teamA", AwayId = "teamB" };
+            var bets = new List<DeltaBet>
+            {
+                new DeltaBet { MatchId = "match_final", HomeTeamBetId = "teamA", AwayTeamBetId = "teamB", Result = null }
+            };
+
+            var updated = this.sut.UpdateAdditionalDeltaBetsResult(bets, match);
+
+            Assert.Empty(updated);
+        }
+
+        [Fact]
+        public void UpdateAdditionalDeltaBetsResult_SameMatchHomeCorrectSlotAwayMissing_ExcludedFromResult()
+        {
+            var match = new Match { Id = "match_final", HomeId = "teamA", AwayId = "teamB" };
+            var bets = new List<DeltaBet>
+            {
+                new DeltaBet { MatchId = "match_final", HomeTeamBetId = "teamA", AwayTeamBetId = "teamC", Result = null }
+            };
+
+            var updated = this.sut.UpdateAdditionalDeltaBetsResult(bets, match);
+
+            Assert.Empty(updated);
+        }
+
+        [Fact]
+        public void UpdateAdditionalDeltaBetsResult_SameMatchHomeCrossedToAway_Returns2Points()
+        {
+            var match = new Match { Id = "match_final", HomeId = "teamA", AwayId = "teamB" };
+            var bets = new List<DeltaBet>
+            {
+                new DeltaBet { MatchId = "match_final", HomeTeamBetId = "teamB", AwayTeamBetId = "teamC", Result = null }
             };
 
             var updated = this.sut.UpdateAdditionalDeltaBetsResult(bets, match);
@@ -289,10 +334,10 @@ namespace TipTournament2._0.Tests.Calculator
         [Fact]
         public void UpdateAdditionalDeltaBetsResult_InitializesNestedResults()
         {
-            var match = new Match { HomeId = "teamA", AwayId = "teamB" };
+            var match = new Match { Id = "match_final", HomeId = "teamA", AwayId = "teamB" };
             var bets = new List<DeltaBet>
             {
-                new DeltaBet { HomeTeamBetId = "teamA", AwayTeamBetId = "teamB", Result = null }
+                new DeltaBet { MatchId = "match_final", HomeTeamBetId = "teamB", AwayTeamBetId = "teamA", Result = null }
             };
 
             var updated = this.sut.UpdateAdditionalDeltaBetsResult(bets, match);
